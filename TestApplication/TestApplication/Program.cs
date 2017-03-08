@@ -7,6 +7,7 @@ namespace TestApplication
         static void Main(string[] args)
         {
             Console.WriteLine("He, I'm here!");
+            Console.Beep();
         }
     }
 }
