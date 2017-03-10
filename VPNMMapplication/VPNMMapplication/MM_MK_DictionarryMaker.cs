@@ -83,9 +83,11 @@ namespace VPNMMapplication
                     for (int i = 0; i < collectionOfNames.Count(); i++)
                     {
                         if (i % 2 == 0 || i == 0)
-                            MM_MK_Dictionary.Add(collectionOfNames.ElementAt(i).InnerText + " резерв", collectionOfDNS.ElementAt(i).InnerText.Trim());
+                            MM_MK_Dictionary.Add(collectionOfNames.ElementAt(i).InnerText + " резерв", 
+                                collectionOfDNS.ElementAt(i).InnerText.Trim()+ ".onlinemm.corp.tander.ru");
                         else
-                            MM_MK_Dictionary.Add(collectionOfNames.ElementAt(i).InnerText, collectionOfDNS.ElementAt(i).InnerText.Trim());
+                            MM_MK_Dictionary.Add(collectionOfNames.ElementAt(i).InnerText, 
+                                collectionOfDNS.ElementAt(i).InnerText.Trim()+ ".onlinemm.corp.tander.ru");
                     }
                 }
 
