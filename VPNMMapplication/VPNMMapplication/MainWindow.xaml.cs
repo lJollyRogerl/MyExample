@@ -33,22 +33,18 @@ namespace VPNMMapplication
         {
             try
             {
+                //грузим страницу
                 string htmlText = File.ReadAllText(@"vpnmm\manage.htm", Encoding.UTF8);
-                HtmlDocument htmlDoc = new HtmlDocument();
-                htmlDoc.LoadHtml(htmlText);
-                HtmlNodeCollection collection = htmlDoc.DocumentNode.SelectNodes("//b");
-                var doneCollection = from c in collection
-                                     where (c.InnerText.StartsWith("МД") || c.InnerText.StartsWith("МК"))
-                                     select c;
-                if (doneCollection != null)
+                MM_MK_DictionarryMaker maker = new MM_MK_DictionarryMaker(htmlText, true);
+
+                //Выводим на текстбокс всю выборку имен ММ/МК
+                
+                foreach (var mm_mk in maker.MM_MK_Dictionary)
                 {
-                    foreach (HtmlNode node in doneCollection)
-                    {
-                        readyObjects += node.InnerText;
-                        readyObjects += "\n";
-                    }
-                    txtAllText.Text = readyObjects;
+                    readyObjects += mm_mk.Key+" - "+mm_mk.Value;
+                    readyObjects += "\n";
                 }
+                txtAllText.Text = readyObjects;
             }
             catch (Exception ex)
             {
@@ -58,30 +54,5 @@ namespace VPNMMapplication
             
         }
 
-        public string getRequest(string url)
-        {
-            try
-            {
-                var httpWebRequest = (HttpWebRequest)WebRequest.Create(url);
-                httpWebRequest.AllowAutoRedirect = false;//Запрещаем автоматический редирект
-                httpWebRequest.Method = "GET"; //Можно не указывать, по умолчанию используется GET.
-                //httpWebRequest.Referer = "http://google.com"; // Реферер. Тут можно указать любой URL
-            using (var httpWebResponse = (HttpWebResponse)httpWebRequest.GetResponse())
-                {
-                    using (var stream = httpWebResponse.GetResponseStream())
-                    {
-                        using (var reader = new StreamReader(stream,
-                       Encoding.GetEncoding(httpWebResponse.CharacterSet)))
-                        {
-                            return reader.ReadToEnd();
-                        }
-                    }
-                }
-            }
-            catch
-            {
-                return String.Empty;
-            }
-        }
     }
 }

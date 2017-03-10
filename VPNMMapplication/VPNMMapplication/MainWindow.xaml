@@ -10,6 +10,6 @@
         <ToolBar x:Name="toolBarMyBar" DockPanel.Dock="Top"  Height="50">
             <Button x:Name="btnLoad" Content="Load" Height="40" Width="75" Click="btnLoad_Click"/>
         </ToolBar>
-        <TextBox x:Name="txtAllText" AcceptsReturn="True" AcceptsTab="True" /> 
+        <TextBox x:Name="txtAllText" AcceptsReturn="True" AcceptsTab="True" VerticalScrollBarVisibility="Auto"/> 
     </DockPanel>
 </Window>
