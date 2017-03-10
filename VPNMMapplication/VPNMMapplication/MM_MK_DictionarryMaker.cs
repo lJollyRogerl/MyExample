@@ -15,27 +15,25 @@ namespace VPNMMapplication
     {
         //Строка с html содержимым
         public string HtmlString { get; set; }
+        //Коллекция название ММ/DNS-имя
         public Dictionary<string, string> MM_MK_Dictionary { get; set; } = new Dictionary<string, string>();
 
-        //Первое значение - строка, с загруженным в нее HTML - второе значение укажите true
-        public MM_MK_DictionarryMaker(string htmlText, bool IsThereHTMLNodes = false)
+        //Конструктор для загрузки из файла на локальной машине
+        public MM_MK_DictionarryMaker(string fileAddress, Encoding fileEncoding)
         {
-            if (IsThereHTMLNodes == false)
-                throw new Exception("Если первое значение - строка, с загруженным в нее HTML - второе значение укажите true." +
-                    " В противном случае - воспользуйтесь конструктором принимающим один параметр - URL ссылку в виде строки");
-            else
+            try
             {
+                string htmlText = File.ReadAllText(fileAddress, fileEncoding);
                 HtmlString = htmlText;
-                LoadDictionary();
-                
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                HtmlString = String.Empty;
             }
         }
 
-        private async void LoadDictionary()
-        {
-            await AsyncLoadDictionary();
-        }
-
+        //Конструктор для загрузки по URL
         public MM_MK_DictionarryMaker(string htmlURL)
         {
             try
@@ -48,8 +46,7 @@ namespace VPNMMapplication
                     {
                         using (var stream = httpWebResponse.GetResponseStream())
                         {
-                            using (var reader = new StreamReader(stream,
-                           Encoding.GetEncoding(httpWebResponse.CharacterSet)))
+                            using (var reader = new StreamReader(stream, Encoding.GetEncoding(httpWebResponse.CharacterSet)))
                             {
                                 HtmlString = reader.ReadToEnd();
                             }
@@ -64,11 +61,12 @@ namespace VPNMMapplication
         }
 
         //Загружаем небходимые имена и DNS из HTML, а так же создаем словарь.
-        async Task AsyncLoadDictionary()
+        public async Task LoadDictionaryAsync()
         {
-            try
+            await Task.Run(() => 
             {
-                
+                try
+                {
                     HtmlDocument htmlDoc = new HtmlDocument();
                     htmlDoc.LoadHtml(HtmlString);
 
@@ -89,13 +87,13 @@ namespace VPNMMapplication
                         else
                             MM_MK_Dictionary.Add(collectionOfNames.ElementAt(i).InnerText, collectionOfDNS.ElementAt(i).InnerText.Trim());
                     }
-             }            
-            
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-            
+                }
+
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+            });
         }
     }
 }

@@ -29,16 +29,15 @@ namespace VPNMMapplication
             InitializeComponent();
         }
 
-        private void btnLoad_Click(object sender, RoutedEventArgs e)
+        private async void btnLoad_Click(object sender, RoutedEventArgs e)
         {
             try
             {
                 //грузим страницу
-                string htmlText = File.ReadAllText(@"vpnmm\manage.htm", Encoding.UTF8);
-                MM_MK_DictionarryMaker maker = new MM_MK_DictionarryMaker(htmlText, true);
+                MM_MK_DictionarryMaker maker = new MM_MK_DictionarryMaker(@"vpnmm\manage.htm", Encoding.UTF8);
+                await maker.LoadDictionaryAsync();
 
                 //Выводим на текстбокс всю выборку имен ММ/МК
-                
                 foreach (var mm_mk in maker.MM_MK_Dictionary)
                 {
                     readyObjects += mm_mk.Key+" - "+mm_mk.Value;
