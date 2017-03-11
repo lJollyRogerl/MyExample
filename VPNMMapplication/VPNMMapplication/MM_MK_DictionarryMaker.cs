@@ -17,7 +17,8 @@ namespace VPNMMapplication
         public string HtmlString { get; set; }
         //Коллекция название ММ/DNS-имя
         public Dictionary<string, string> MM_MK_Dictionary { get; set; } = new Dictionary<string, string>();
-
+        //Прогресс загрузки и наполнения коллекции
+        public ProgressInfo ProgressOfLoading { get; set; } = new ProgressInfo();
         //Конструктор для загрузки из файла на локальной машине
         public MM_MK_DictionarryMaker(string fileAddress, Encoding fileEncoding)
         {
@@ -43,17 +44,17 @@ namespace VPNMMapplication
                 httpWebRequest.Method = "GET"; //Можно не указывать, по умолчанию используется GET.
                 //httpWebRequest.Referer = "http://google.com"; // Реферер. Тут можно указать любой URL
                 using (var httpWebResponse = (HttpWebResponse)httpWebRequest.GetResponse())
+                {
+                    using (var stream = httpWebResponse.GetResponseStream())
                     {
-                        using (var stream = httpWebResponse.GetResponseStream())
+                        using (var reader = new StreamReader(stream, Encoding.GetEncoding(httpWebResponse.CharacterSet)))
                         {
-                            using (var reader = new StreamReader(stream, Encoding.GetEncoding(httpWebResponse.CharacterSet)))
-                            {
-                                HtmlString = reader.ReadToEnd();
-                            }
+                            HtmlString = reader.ReadToEnd();
                         }
                     }
+                }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
                 HtmlString = String.Empty;
@@ -63,7 +64,7 @@ namespace VPNMMapplication
         //Загружаем небходимые имена и DNS из HTML, а так же создаем словарь.
         public async Task LoadDictionaryAsync()
         {
-            await Task.Run(() => 
+            await Task.Run(() =>
             {
                 try
                 {
@@ -83,11 +84,16 @@ namespace VPNMMapplication
                     for (int i = 0; i < collectionOfNames.Count(); i++)
                     {
                         if (i % 2 == 0 || i == 0)
-                            MM_MK_Dictionary.Add(collectionOfNames.ElementAt(i).InnerText + " резерв", 
-                                collectionOfDNS.ElementAt(i).InnerText.Trim()+ ".onlinemm.corp.tander.ru");
+                            MM_MK_Dictionary.Add(collectionOfNames.ElementAt(i).InnerText + " резерв",
+                                collectionOfDNS.ElementAt(i).InnerText.Trim() + ".onlinemm.corp.tander.ru");
                         else
-                            MM_MK_Dictionary.Add(collectionOfNames.ElementAt(i).InnerText, 
-                                collectionOfDNS.ElementAt(i).InnerText.Trim()+ ".onlinemm.corp.tander.ru");
+                            MM_MK_Dictionary.Add(collectionOfNames.ElementAt(i).InnerText,
+                                collectionOfDNS.ElementAt(i).InnerText.Trim() + ".onlinemm.corp.tander.ru");
+
+                        //Изменяем значение текущего прогресса и уведомляем об этом пользователя
+                        ProgressOfLoading.TotalSteps = collectionOfNames.Count();
+                        ProgressOfLoading.CurrentStep = i;
+                        OnProgressChanged(ProgressOfLoading);
                     }
                 }
 
@@ -97,5 +103,8 @@ namespace VPNMMapplication
                 }
             });
         }
+
+        //Событие, указывающее на изменение статуса прогресса загрузки
+        public event Action<ProgressInfo> OnProgressChanged;
     }
 }

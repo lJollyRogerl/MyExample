@@ -24,6 +24,7 @@ namespace VPNMMapplication
     public partial class MainWindow : Window
     {
         string readyObjects = "";
+        MM_MK_DictionarryMaker maker;
         public MainWindow()
         {
             InitializeComponent();
@@ -34,7 +35,6 @@ namespace VPNMMapplication
             try
             {
                 //грузим страницу
-                MM_MK_DictionarryMaker maker = new MM_MK_DictionarryMaker(@"vpnmm\manage.htm", Encoding.UTF8);
                 await maker.LoadDictionaryAsync();
 
                 //Выводим на текстбокс всю выборку имен ММ/МК
@@ -53,5 +53,22 @@ namespace VPNMMapplication
             
         }
 
+        private void mainWindow_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            lblStatus.Width = mainWindow.Width / 3 * 1;
+            progressBar.Width = mainWindow.Width / 3 * 2;
+        }
+
+        private void mainWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            maker = new MM_MK_DictionarryMaker(@"vpnmm\manage.htm", Encoding.UTF8);
+            maker.OnProgressChanged += Maker_OnProgressChanged;
+        }
+
+        private void Maker_OnProgressChanged(ProgressInfo obj)
+        {
+            progressBar.Maximum = obj.TotalSteps;
+            progressBar.Value = obj.CurrentStep;
+        }
     }
 }
