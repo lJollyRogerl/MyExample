@@ -4,9 +4,30 @@
              xmlns:local="clr-namespace:VPNMMapplication"
              StartupUri="SplashScreen.xaml">
     <Application.Resources>
-        <!--<Style TargetType="Label">
-            <Setter Property = "Foreground" Value="Red"/>
-            <Setter Property = "FontWeight" Value="Heavy"/>
-        </Style>-->
+        <ControlTemplate x:Key="FolderButton" TargetType="Button">
+            <Grid x:Name="templateBtn" Width="25">
+                <Grid.Background>
+                    <ImageBrush ImageSource="pics/folder.png"/>
+                </Grid.Background>
+            </Grid>
+            <ControlTemplate.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter TargetName="templateBtn" Property="RenderTransformOrigin" Value="0.5,0.5"/>
+                    <Setter TargetName="templateBtn" Property="RenderTransform">
+                        <Setter.Value>
+                            <ScaleTransform ScaleX="1.1" ScaleY="1.1"/>
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter TargetName="templateBtn" Property="RenderTransformOrigin" Value="0.5,0.5"/>
+                    <Setter TargetName="templateBtn" Property="RenderTransform">
+                        <Setter.Value>
+                            <ScaleTransform ScaleX="0.9" ScaleY="0.9"/>
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
     </Application.Resources>
 </Application>

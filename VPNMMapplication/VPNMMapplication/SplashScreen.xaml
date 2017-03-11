@@ -5,10 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:VPNMMapplication"
         mc:Ignorable="d"
-        Title="Добро пожаловать!" Height="300" Width="300" Icon="pics/ico.png">
+        Title="Добро пожаловать!" Height="365" Width="300" Icon="pics/ico.png">
     <StackPanel>
-        <Label Content="Пожалуйста, выбирете способ загрузки." Margin="10"/>
-        <GroupBox x:Name="gbLoadWithHttpRequest" Margin="15" >
+        <Label Content="Пожалуйста, выбирете способ загрузки." Margin="5"/>
+        <GroupBox x:Name="gbLoadWithHttpRequest" Margin="5" >
             <StackPanel>
                 <RadioButton x:Name="radioHttpLoad" Content="Загрузка в режиме онлайн" Margin="10" IsEnabled="True"/>
                 <StackPanel x:Name="stackPanelLogin" Orientation="Horizontal" Margin="10" IsEnabled="False">
@@ -21,9 +21,16 @@
                 </StackPanel>
             </StackPanel>
         </GroupBox>
-        <GroupBox x:Name="gbLoadWithLocalHtmlPage" Margin="15" >
-            
+        <GroupBox x:Name="gbLoadWithLocalHtmlPage" Margin="5" >
+            <StackPanel>
+                <RadioButton x:Name="radioHttpPage" Content="Загрузка в режиме оффлайн" Margin="10" IsEnabled="True"/>
+                <StackPanel x:Name="stackPanelOfflineLoad" Orientation="Horizontal" Margin="10" IsEnabled="False">
+                    <Label x:Name="lblPathToHtml" Content="Файл:"/>
+                    <TextBox x:Name="txtPathToHtmlFile" Width="140"/>
+                    <Button x:Name="btnPickFile" Template="{StaticResource FolderButton}"/>
+                </StackPanel>
+            </StackPanel>
         </GroupBox>
-
+        <Button x:Name="btnLoad" Height="30" Width="70" Content="Загрузить" Margin="5"/>
     </StackPanel>
 </Window>

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -24,9 +25,16 @@ namespace VPNMMapplication
             InitializeComponent();
         }
 
-        private void StackPanel_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            DragMove();
-        }
+        //private void btnPickFile_Click(object sender, EventArgs e)
+        //{
+        //    OpenFileDialog openFile = new OpenFileDialog();
+        //    openFile.Filter = "html страница (*.html) | *.html";
+        //    if (openFile.ShowDialog() == DialogResult.OK)
+        //    {
+        //        pathToFile = openFile.FileName;
+        //        load = new LoadFromFile(pathToFile);
+        //        txtBox.Text = pathToFile;
+        //    }
+        //}
     }
 }
