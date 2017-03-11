@@ -1,20 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using HtmlAgilityPack;
-using System.Net;
-using System.IO;
 
 namespace VPNMMapplication
 {
@@ -32,11 +18,15 @@ namespace VPNMMapplication
 
         private async void btnLoad_Click(object sender, RoutedEventArgs e)
         {
+            btnLoad.IsEnabled = false;
             try
             {
+                //Перед нечалом загрузки - включаем видимость прогресс бара
+                VisibleProgressOn();
                 //грузим страницу
                 await maker.LoadDictionaryAsync();
-
+                //После загрузки - выключаем видимость прогресс бара
+                VisibleProgressOff();
                 //Выводим на текстбокс всю выборку имен ММ/МК
                 foreach (var mm_mk in maker.MM_MK_Dictionary)
                 {
@@ -45,12 +35,12 @@ namespace VPNMMapplication
                 }
                 txtAllText.Text = readyObjects;
             }
+
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
             }
-           
-            
+            btnLoad.IsEnabled = true;
         }
 
         private void mainWindow_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -67,8 +57,25 @@ namespace VPNMMapplication
 
         private void Maker_OnProgressChanged(ProgressInfo obj)
         {
-            progressBar.Maximum = obj.TotalSteps;
-            progressBar.Value = obj.CurrentStep;
+            this.Dispatcher.Invoke(() => 
+            {
+                progressBar.Maximum = obj.TotalSteps;
+                progressBar.Value = obj.CurrentStep;
+                lblStatus.Content = "Обработка "+obj.CurrentMM_MK.ToString();
+
+            });
+        }
+
+        public void VisibleProgressOn()
+        {
+            progressBar.Visibility = Visibility.Visible;
+            lblStatus.Visibility = Visibility.Visible;
+        }
+
+        public void VisibleProgressOff()
+        {
+            progressBar.Visibility = Visibility.Hidden;
+            lblStatus.Visibility = Visibility.Hidden;
         }
     }
 }

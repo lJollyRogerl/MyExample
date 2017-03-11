@@ -12,9 +12,9 @@
         <ToolBar x:Name="toolBarMyBar" DockPanel.Dock="Top"  Height="50">
             <Button x:Name="btnLoad" Content="Load" Height="40" Width="75" Click="btnLoad_Click"/>
         </ToolBar>
-        <StatusBar DockPanel.Dock="Bottom" Height="20">
-            <Label x:Name="lblStatus"/>
-            <ProgressBar x:Name="progressBar" Height="13" IsEnabled="False"/>
+        <StatusBar DockPanel.Dock="Bottom" Height="25">
+            <Label x:Name="lblStatus" Foreground="Gray" FontSize="10" Height="22"/>
+            <ProgressBar x:Name="progressBar" Height="13" Visibility="Hidden"/>
         </StatusBar>
         <TextBox x:Name="txtAllText" AcceptsReturn="True" AcceptsTab="True" VerticalScrollBarVisibility="Auto"/> 
     </DockPanel>

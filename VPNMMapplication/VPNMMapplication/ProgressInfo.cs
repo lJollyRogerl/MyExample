@@ -10,5 +10,6 @@ namespace VPNMMapplication
     {
         public int TotalSteps { get; set; }
         public int CurrentStep { get; set; }
+        public string CurrentMM_MK { get; set; }
     }
 }

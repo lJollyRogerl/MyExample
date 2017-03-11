@@ -68,6 +68,7 @@ namespace VPNMMapplication
             {
                 try
                 {
+                    MM_MK_Dictionary.Clear();
                     HtmlDocument htmlDoc = new HtmlDocument();
                     htmlDoc.LoadHtml(HtmlString);
 
@@ -93,6 +94,7 @@ namespace VPNMMapplication
                         //Изменяем значение текущего прогресса и уведомляем об этом пользователя
                         ProgressOfLoading.TotalSteps = collectionOfNames.Count();
                         ProgressOfLoading.CurrentStep = i;
+                        ProgressOfLoading.CurrentMM_MK = collectionOfNames.ElementAt(i).InnerText;
                         OnProgressChanged(ProgressOfLoading);
                     }
                 }
