@@ -5,21 +5,24 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:VPNMMapplication"
         mc:Ignorable="d"
-        Title="SplashScreen" Height="300" Width="300">
+        Title="Добро пожаловать!" Height="300" Width="300" Icon="pics/ico.png">
     <StackPanel>
         <Label Content="Пожалуйста, выбирете способ загрузки." Margin="10"/>
-        <GroupBox x:Name="gbLoadWithHttpRequest" Margin="15">
+        <GroupBox x:Name="gbLoadWithHttpRequest" Margin="15" >
             <StackPanel>
-                <RadioButton x:Name="radioHttpLoad" Content="Загрузка в режиме онлайн" Margin="10"/>
-                <StackPanel x:Name="stackPanelLogin" Orientation="Horizontal" Margin="10">
+                <RadioButton x:Name="radioHttpLoad" Content="Загрузка в режиме онлайн" Margin="10" IsEnabled="True"/>
+                <StackPanel x:Name="stackPanelLogin" Orientation="Horizontal" Margin="10" IsEnabled="False">
                     <Label x:Name="lblLogin" Content="Логин:" Width="60"/>
                     <TextBox x:Name="txtLogin" Width="150"/>
                 </StackPanel>
-                <StackPanel x:Name="stackPanelPassword" Orientation="Horizontal" Margin="10">
+                <StackPanel x:Name="stackPanelPassword" Orientation="Horizontal" Margin="10" IsEnabled="False">
                     <Label x:Name="lblPswd" Content="Пароль:" Width="60"/>
                     <PasswordBox x:Name="pbPassword" Width="150"/>
                 </StackPanel>
             </StackPanel>
+        </GroupBox>
+        <GroupBox x:Name="gbLoadWithLocalHtmlPage" Margin="15" >
+            
         </GroupBox>
 
     </StackPanel>
