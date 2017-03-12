@@ -9,7 +9,14 @@ namespace VPNMMapplication
     /// </summary>
     public partial class SplashScreen : Window
     {
+        //путь к файлу для локальной загрузки
         string pathToFile;
+        //Создатель коллекции название ММ - его DNS
+        MM_MK_DictionarryMaker maker;
+        //основное окно. Создается после выбора загрузки
+        MainWindow mainWindow;
+        //Ссылка на страницу, с которой будет производиться загрузка
+        string url;
         public SplashScreen()
         {
             InitializeComponent();
@@ -49,7 +56,7 @@ namespace VPNMMapplication
             try
             {
                 System.Windows.Forms.OpenFileDialog openFile = new System.Windows.Forms.OpenFileDialog();
-                openFile.Filter = "html страница (*.html) | *.html";
+                openFile.Filter = "html страница (*.html, *.htm) | *.html; *.htm";
                 if (openFile.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 {
                     pathToFile = openFile.FileName;
@@ -59,6 +66,32 @@ namespace VPNMMapplication
             catch (System.Exception ex)
             {
                 System.Windows.MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            DragMove();
+        }
+
+        private void btnLoad_Click(object sender, RoutedEventArgs e)
+        {
+            //Если загрузка идет через HttpWebRequest
+            if (radioHttpLoad.IsChecked == true)
+            {
+                maker = new MM_MK_DictionarryMaker(url, txtLogin.Text, pbPassword.Password);
+                mainWindow = new MainWindow(maker);
+                this.Close();
+                mainWindow.Show();
+            }
+
+            //Если загруженна локальная страница
+            if (radioHttpPage.IsChecked == true)
+            {
+                maker = new MM_MK_DictionarryMaker(pathToFile);
+                mainWindow = new MainWindow(maker);
+                mainWindow.Show();
+                this.Close();
             }
         }
     }

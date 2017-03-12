@@ -20,11 +20,11 @@ namespace VPNMMapplication
         //Прогресс загрузки и наполнения коллекции
         public ProgressInfo ProgressOfLoading { get; set; } = new ProgressInfo();
         //Конструктор для загрузки из файла на локальной машине
-        public MM_MK_DictionarryMaker(string fileAddress, Encoding fileEncoding)
+        public MM_MK_DictionarryMaker(string fileAddress)
         {
             try
             {
-                string htmlText = File.ReadAllText(fileAddress, fileEncoding);
+                string htmlText = File.ReadAllText(fileAddress, Encoding.UTF8);
                 HtmlString = htmlText;
             }
             catch (Exception ex)
@@ -35,7 +35,7 @@ namespace VPNMMapplication
         }
 
         //Конструктор для загрузки по URL
-        public MM_MK_DictionarryMaker(string htmlURL)
+        public MM_MK_DictionarryMaker(string htmlURL, string login, string password)
         {
             try
             {

@@ -5,20 +5,21 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:VPNMMapplication"
         mc:Ignorable="d"
-        Title="Добро пожаловать!" Height="400" Width="300" Icon="pics/ico.png">
+        Title="Добро пожаловать!" Height="435" Width="310" Icon="pics/ico.png" ResizeMode="NoResize" WindowStartupLocation="CenterScreen"
+        MouseLeftButtonDown="Window_MouseLeftButtonDown">
     <StackPanel>
-        <Label Content="Пожалуйста, выбирете способ загрузки." Margin="5"/>
+        <Label Content="Пожалуйста, выбирете способ загрузки." Margin="15" FontSize="13" FontWeight="Bold"/>
         <GroupBox x:Name="gbLoadWithHttpRequest" Margin="5">
             <StackPanel>
                 <RadioButton x:Name="radioHttpLoad" Content="Загрузка в режиме онлайн" 
                              Margin="10" IsEnabled="True" GroupName="groupRadio" Checked="radioHttpLoad_Checked"/>
                 <StackPanel x:Name="stackPanelLogin" Orientation="Horizontal" Margin="10" IsEnabled="False">
                     <Label x:Name="lblLogin" Content="Логин:" Width="60"/>
-                    <TextBox x:Name="txtLogin" Width="150" Margin="5"/>
+                    <TextBox x:Name="txtLogin" Width="170" Margin="5"/>
                 </StackPanel>
                 <StackPanel x:Name="stackPanelPassword" Orientation="Horizontal" Margin="10" IsEnabled="False">
                     <Label x:Name="lblPswd" Content="Пароль:" Width="60"/>
-                    <PasswordBox x:Name="pbPassword" Width="150" Margin="5"/>
+                    <PasswordBox x:Name="pbPassword" Width="170" Margin="5"/>
                 </StackPanel>
             </StackPanel>
         </GroupBox>
@@ -28,11 +29,15 @@
                              GroupName="groupRadio" Checked="radioHttpLoad_Checked"/>
                 <StackPanel x:Name="stackPanelOfflineLoad" Orientation="Horizontal" Margin="10" IsEnabled="False">
                     <Label x:Name="lblPathToHtml" Content="Файл:"/>
-                    <TextBox x:Name="txtPathToHtmlFile" Width="140" Margin="5" GotFocus="btnPickFile_Click"/>
+                    <TextBox x:Name="txtPathToHtmlFile" Width="160" Margin="5" GotFocus="btnPickFile_Click"/>
                     <Button x:Name="btnPickFile" Template="{StaticResource FolderButton}" Click="btnPickFile_Click" />
                 </StackPanel>
             </StackPanel>
         </GroupBox>
-        <Button x:Name="btnLoad" Height="30" Width="70" Content="Загрузить" Margin="5"/>
+        <Button x:Name="btnLoad" Height="30" Width="70" Content="Загрузить" Margin="5" Click="btnLoad_Click">
+            <Button.Effect>
+                <DropShadowEffect Opacity="0.5" ShadowDepth="4"/>
+            </Button.Effect>
+        </Button>
     </StackPanel>
 </Window>

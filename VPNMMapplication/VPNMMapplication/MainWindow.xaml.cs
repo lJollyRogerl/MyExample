@@ -15,32 +15,15 @@ namespace VPNMMapplication
         {
             InitializeComponent();
         }
-
-        private async void btnLoad_Click(object sender, RoutedEventArgs e)
+        public MainWindow(MM_MK_DictionarryMaker dictionaryMaker)
         {
-            btnLoad.IsEnabled = false;
-            try
-            {
-                //Перед нечалом загрузки - включаем видимость прогресс бара
-                VisibleProgressOn();
-                //грузим страницу
-                await maker.LoadDictionaryAsync();
-                //После загрузки - выключаем видимость прогресс бара
-                VisibleProgressOff();
-                //Выводим на текстбокс всю выборку имен ММ/МК
-                foreach (var mm_mk in maker.MM_MK_Dictionary)
-                {
-                    readyObjects += mm_mk.Key+" - "+mm_mk.Value;
-                    readyObjects += "\n";
-                }
-                txtAllText.Text = readyObjects;
-            }
+            maker = dictionaryMaker;
+            InitializeComponent();
+        }
 
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-            btnLoad.IsEnabled = true;
+        private void btnLoad_Click(object sender, RoutedEventArgs e)
+        {
+            LoadAsync();
         }
 
         private void mainWindow_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -51,8 +34,8 @@ namespace VPNMMapplication
 
         private void mainWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            maker = new MM_MK_DictionarryMaker(@"vpnmm\manage.htm", Encoding.UTF8);
             maker.OnProgressChanged += Maker_OnProgressChanged;
+            LoadAsync();
         }
 
         private void Maker_OnProgressChanged(ProgressInfo obj)
@@ -76,6 +59,33 @@ namespace VPNMMapplication
         {
             progressBar.Visibility = Visibility.Hidden;
             lblStatus.Visibility = Visibility.Hidden;
+        }
+
+        private async void LoadAsync()
+        {
+            btnLoad.IsEnabled = false;
+            try
+            {
+                //Перед нечалом загрузки - включаем видимость прогресс бара
+                VisibleProgressOn();
+                //грузим страницу
+                await maker.LoadDictionaryAsync();
+                //После загрузки - выключаем видимость прогресс бара
+                VisibleProgressOff();
+                //Выводим на текстбокс всю выборку имен ММ/МК
+                foreach (var mm_mk in maker.MM_MK_Dictionary)
+                {
+                    readyObjects += mm_mk.Key + " - " + mm_mk.Value;
+                    readyObjects += "\n";
+                }
+                txtAllText.Text = readyObjects;
+            }
+
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            btnLoad.IsEnabled = true;
         }
     }
 }
