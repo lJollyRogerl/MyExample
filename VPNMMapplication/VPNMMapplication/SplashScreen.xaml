@@ -28,7 +28,7 @@
                              GroupName="groupRadio" Checked="radioHttpLoad_Checked"/>
                 <StackPanel x:Name="stackPanelOfflineLoad" Orientation="Horizontal" Margin="10" IsEnabled="False">
                     <Label x:Name="lblPathToHtml" Content="Файл:"/>
-                    <TextBox x:Name="txtPathToHtmlFile" Width="140" Margin="5"/>
+                    <TextBox x:Name="txtPathToHtmlFile" Width="140" Margin="5" GotFocus="btnPickFile_Click"/>
                     <Button x:Name="btnPickFile" Template="{StaticResource FolderButton}" Click="btnPickFile_Click" />
                 </StackPanel>
             </StackPanel>
