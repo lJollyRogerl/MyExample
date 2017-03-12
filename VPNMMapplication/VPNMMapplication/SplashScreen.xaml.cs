@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 //using System.Windows.Forms;
 using System.Windows.Input;
 
@@ -16,11 +17,14 @@ namespace VPNMMapplication
         //основное окно. Создается после выбора загрузки
         MainWindow mainWindow;
         //Ссылка на страницу, с которой будет производиться загрузка
-        string url;
+        string url = @"https://vpnmm.corp.tander.ru/ovpnmm/manage.cgi?unrollf=";
         public SplashScreen()
         {
             InitializeComponent();
+            LoadFilials();
         }
+
+        
 
         private void radioHttpLoad_Checked(object sender, RoutedEventArgs e)
         {
@@ -31,6 +35,7 @@ namespace VPNMMapplication
             {
                 stackPanelLogin.IsEnabled = true;
                 stackPanelPassword.IsEnabled = true;
+                stackPanelComboBox.IsEnabled = true;
                 stackPanelOfflineLoad.IsEnabled = false;
                 gbLoadWithHttpRequest.Header = "Необходимо пройти доменную авторизацию";
                 gbLoadWithLocalHtmlPage.Header = "";
@@ -40,6 +45,7 @@ namespace VPNMMapplication
             {
                 stackPanelLogin.IsEnabled = false;
                 stackPanelPassword.IsEnabled = false;
+                stackPanelComboBox.IsEnabled = false;
                 stackPanelOfflineLoad.IsEnabled = true;
                 gbLoadWithHttpRequest.Header = "";
                 gbLoadWithLocalHtmlPage.Header = "Необходимо загрузить сохраненный *.html";
@@ -79,6 +85,7 @@ namespace VPNMMapplication
             //Если загрузка идет через HttpWebRequest
             if (radioHttpLoad.IsChecked == true)
             {
+                url += comboBoxChooseFilial.SelectedItem.ToString();
                 maker = new MM_MK_DictionarryMaker(url, txtLogin.Text, pbPassword.Password);
                 mainWindow = new MainWindow(maker);
                 this.Close();
@@ -93,6 +100,12 @@ namespace VPNMMapplication
                 mainWindow.Show();
                 this.Close();
             }
+        }
+        private void LoadFilials()
+        {
+            comboBoxChooseFilial.Items.Add("Нижне-Тагильский");
+            comboBoxChooseFilial.Items.Add("Пермский");
+            comboBoxChooseFilial.Items.Add("Уфимский");
         }
     }
 }
