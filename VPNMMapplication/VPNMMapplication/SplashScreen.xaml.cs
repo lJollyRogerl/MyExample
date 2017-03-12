@@ -106,6 +106,7 @@ namespace VPNMMapplication
             comboBoxChooseFilial.Items.Add("Нижне-Тагильский");
             comboBoxChooseFilial.Items.Add("Пермский");
             comboBoxChooseFilial.Items.Add("Уфимский");
+            comboBoxChooseFilial.SelectedIndex = 0;
         }
     }
 }
