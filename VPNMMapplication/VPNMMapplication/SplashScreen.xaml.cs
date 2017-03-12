@@ -1,17 +1,8 @@
-﻿using Microsoft.Win32;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
+
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
+using System.Windows.Forms;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace VPNMMapplication
 {
@@ -20,21 +11,46 @@ namespace VPNMMapplication
     /// </summary>
     public partial class SplashScreen : Window
     {
+        string pathToFile;
         public SplashScreen()
         {
             InitializeComponent();
         }
 
-        //private void btnPickFile_Click(object sender, EventArgs e)
-        //{
-        //    OpenFileDialog openFile = new OpenFileDialog();
-        //    openFile.Filter = "html страница (*.html) | *.html";
-        //    if (openFile.ShowDialog() == DialogResult.OK)
-        //    {
-        //        pathToFile = openFile.FileName;
-        //        load = new LoadFromFile(pathToFile);
-        //        txtBox.Text = pathToFile;
-        //    }
-        //}
+        private void radioHttpLoad_Checked(object sender, RoutedEventArgs e)
+        {
+            //Если выбрана загрузка по http - включаем поля авторизации.
+            //Если выбрана локальная загрузка - включаем поля для загрузки из файла .http
+            //Остальне поля - отключаем
+            if (radioHttpLoad.IsChecked == true)
+            {
+                stackPanelLogin.IsEnabled = true;
+                stackPanelPassword.IsEnabled = true;
+                stackPanelOfflineLoad.IsEnabled = false;
+                gbLoadWithHttpRequest.Header = "Необходимо пройти доменную авторизацию";
+                gbLoadWithLocalHtmlPage.Header = "";
+            }
+
+            if (radioHttpPage.IsChecked == true)
+            {
+                stackPanelLogin.IsEnabled = false;
+                stackPanelPassword.IsEnabled = false;
+                stackPanelOfflineLoad.IsEnabled = true;
+                gbLoadWithHttpRequest.Header = "";
+                gbLoadWithLocalHtmlPage.Header = "Необходимо загрузить сохраненный *.html";
+            }
+        }
+
+        private void btnPickFile_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            System.Windows.Forms.MessageBox.Show("sdd");
+            //OpenFileDialog openFile = new OpenFileDialog();
+            //openFile.Filter = "html страница (*.html) | *.html";
+            //if (openFile.ShowDialog() == DialogResult.OK)
+            //{
+            //    pathToFile = openFile.FileName;
+            //    txtPathToHtmlFile.Text = pathToFile;
+            //}
+        }
     }
 }
