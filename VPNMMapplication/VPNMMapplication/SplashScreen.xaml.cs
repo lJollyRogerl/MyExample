@@ -1,7 +1,5 @@
-﻿
-
-using System.Windows;
-using System.Windows.Forms;
+﻿using System.Windows;
+//using System.Windows.Forms;
 using System.Windows.Input;
 
 namespace VPNMMapplication
@@ -41,16 +39,27 @@ namespace VPNMMapplication
             }
         }
 
-        private void btnPickFile_MouseDown(object sender, MouseButtonEventArgs e)
+        private void btnPickFile_Click(object sender, RoutedEventArgs e)
         {
-            System.Windows.Forms.MessageBox.Show("sdd");
-            //OpenFileDialog openFile = new OpenFileDialog();
-            //openFile.Filter = "html страница (*.html) | *.html";
-            //if (openFile.ShowDialog() == DialogResult.OK)
-            //{
-            //    pathToFile = openFile.FileName;
-            //    txtPathToHtmlFile.Text = pathToFile;
-            //}
+            RunFileDialog();
+        }
+
+        private void RunFileDialog()
+        {
+            try
+            {
+                System.Windows.Forms.OpenFileDialog openFile = new System.Windows.Forms.OpenFileDialog();
+                openFile.Filter = "html страница (*.html) | *.html";
+                if (openFile.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                {
+                    pathToFile = openFile.FileName;
+                    txtPathToHtmlFile.Text = openFile.SafeFileName;
+                }
+            }
+            catch (System.Exception ex)
+            {
+                System.Windows.MessageBox.Show(ex.Message);
+            }
         }
     }
 }

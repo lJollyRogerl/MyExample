@@ -14,11 +14,11 @@
                              Margin="10" IsEnabled="True" GroupName="groupRadio" Checked="radioHttpLoad_Checked"/>
                 <StackPanel x:Name="stackPanelLogin" Orientation="Horizontal" Margin="10" IsEnabled="False">
                     <Label x:Name="lblLogin" Content="Логин:" Width="60"/>
-                    <TextBox x:Name="txtLogin" Width="150"/>
+                    <TextBox x:Name="txtLogin" Width="150" Margin="5"/>
                 </StackPanel>
                 <StackPanel x:Name="stackPanelPassword" Orientation="Horizontal" Margin="10" IsEnabled="False">
                     <Label x:Name="lblPswd" Content="Пароль:" Width="60"/>
-                    <PasswordBox x:Name="pbPassword" Width="150"/>
+                    <PasswordBox x:Name="pbPassword" Width="150" Margin="5"/>
                 </StackPanel>
             </StackPanel>
         </GroupBox>
@@ -28,8 +28,8 @@
                              GroupName="groupRadio" Checked="radioHttpLoad_Checked"/>
                 <StackPanel x:Name="stackPanelOfflineLoad" Orientation="Horizontal" Margin="10" IsEnabled="False">
                     <Label x:Name="lblPathToHtml" Content="Файл:"/>
-                    <TextBox x:Name="txtPathToHtmlFile" Width="140" MouseDown="btnPickFile_MouseDown"/>
-                    <Button x:Name="btnPickFile" Template="{StaticResource FolderButton}" MouseDown="btnPickFile_MouseDown"/>
+                    <TextBox x:Name="txtPathToHtmlFile" Width="140" Margin="5"/>
+                    <Button x:Name="btnPickFile" Template="{StaticResource FolderButton}" Click="btnPickFile_Click" />
                 </StackPanel>
             </StackPanel>
         </GroupBox>
