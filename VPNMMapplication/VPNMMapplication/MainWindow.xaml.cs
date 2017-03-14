@@ -35,7 +35,8 @@ namespace VPNMMapplication
         private void mainWindow_Loaded(object sender, RoutedEventArgs e)
         {
             maker.OnProgressChanged += Maker_OnProgressChanged;
-            LoadAsync();
+            txtAllText.Text = maker.HtmlString;
+            //LoadAsync();
         }
 
         private void Maker_OnProgressChanged(ProgressInfo obj)
