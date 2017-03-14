@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Net;
+using System.Net.Http;
 using System.Text;
 
 namespace TestApplication
@@ -10,9 +11,9 @@ namespace TestApplication
         static void Main(string[] args)
         {
 
-
-            HttpWebResponse result = Post();
-            CheckAutorisation(result);
+            SomeFunc();
+            //HttpWebResponse result = Post();
+            //CheckAutorisation(result);
             //string site = "http://www.professorweb.ru";
 
             //HttpWebRequest req = (HttpWebRequest)HttpWebRequest.Create(site);
@@ -25,6 +26,21 @@ namespace TestApplication
             //}
             //login_password
             //login_username
+        }
+
+        private static void SomeFunc()
+        {
+            CookieContainer cookies = new CookieContainer();
+            HttpClientHandler handler = new HttpClientHandler();
+            NetworkCredential credentials = new NetworkCredential(@"ya.dmitrievgleb@yandex.ru", @"hbllbe271090");
+            handler.Credentials = credentials;
+            handler.CookieContainer = cookies;
+            HttpClient client = new HttpClient(handler);
+
+            Uri site = new Uri(@"https://www.italki.com");
+            client.GetStringAsync(site);
+            //var response1 = client.SendAsync(new HttpRequestMessage(HttpMethod.Get, site)).Result;
+            Console.WriteLine();
         }
 
         private static void CheckAutorisation(HttpWebResponse result)
