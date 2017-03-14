@@ -1,4 +1,6 @@
 ﻿using System;
+using System.IO;
+using System.Text;
 using System.Windows;
 //using System.Windows.Forms;
 using System.Windows.Input;
@@ -17,7 +19,6 @@ namespace VPNMMapplication
         //основное окно. Создается после выбора загрузки
         MainWindow mainWindow;
         //Ссылка на страницу, с которой будет производиться загрузка
-        string url = @"https://vpnmm.corp.tander.ru/ovpnmm/manage.cgi?unrollf=";
         public SplashScreen()
         {
             InitializeComponent();
@@ -82,23 +83,31 @@ namespace VPNMMapplication
 
         private void btnLoad_Click(object sender, RoutedEventArgs e)
         {
-            //Если загрузка идет через HttpWebRequest
-            if (radioHttpLoad.IsChecked == true)
+            try
             {
-                url += comboBoxChooseFilial.SelectedItem.ToString();
-                maker = new MM_MK_DictionarryMaker(url, txtLogin.Text, pbPassword.Password);
-                mainWindow = new MainWindow(maker);
-                this.Close();
-                mainWindow.Show();
-            }
+                //Если загрузка идет через HttpWebRequest
+                if (radioHttpLoad.IsChecked == true)
+                {
+                    HTMLWithAutorization htmlGetter = new HTMLWithAutorization(txtLogin.Text, pbPassword.Password);
+                    maker = new MM_MK_DictionarryMaker(htmlGetter.HTML);
+                    mainWindow = new MainWindow(maker);
+                    mainWindow.Show();
+                    this.Close();
+                }
 
-            //Если загруженна локальная страница
-            if (radioHttpPage.IsChecked == true)
+                //Если загруженна локальная страница
+                if (radioHttpPage.IsChecked == true)
+                {
+                    string htmlText = File.ReadAllText(pathToFile, Encoding.UTF8);
+                    maker = new MM_MK_DictionarryMaker(htmlText);
+                    mainWindow = new MainWindow(maker);
+                    mainWindow.Show();
+                    this.Close();
+                }
+            }
+            catch (Exception ex)
             {
-                maker = new MM_MK_DictionarryMaker(pathToFile);
-                mainWindow = new MainWindow(maker);
-                mainWindow.Show();
-                this.Close();
+                MessageBox.Show(ex.Message, "Ошибка!");
             }
         }
         private void LoadFilials()
