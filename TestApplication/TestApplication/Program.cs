@@ -3,6 +3,8 @@ using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace TestApplication
 {
@@ -28,7 +30,15 @@ namespace TestApplication
             //login_username
         }
 
-        private static void SomeFunc()
+        private static async void SomeFunc()
+        {
+            
+            string answer = await getString();
+            Console.WriteLine("done");
+            Console.WriteLine(answer);
+        }
+
+        private static async Task<string> getString()
         {
             CookieContainer cookies = new CookieContainer();
             HttpClientHandler handler = new HttpClientHandler();
@@ -36,12 +46,20 @@ namespace TestApplication
             handler.Credentials = credentials;
             handler.CookieContainer = cookies;
             HttpClient client = new HttpClient(handler);
-
             Uri site = new Uri(@"https://www.italki.com");
-            client.GetStringAsync(site);
-            //var response1 = client.SendAsync(new HttpRequestMessage(HttpMethod.Get, site)).Result;
-            Console.WriteLine();
-        }
+            Stream myStream = await client.GetStreamAsync(site);
+            var byteArray = new byte[myStream.Length];
+            myStream.Read(byteArray, 0, byteArray.Length);
+            StreamReader sr = new StreamReader(myStream, Encoding.UTF8);
+            string answer = sr.ReadToEnd();
+            Console.WriteLine(answer);
+            if(answer == null)
+                Console.WriteLine("Answer is null");
+            myStream.Close();
+            sr.Close();
+            return answer;
+            //string str = ((StreamReader)myStream).ReadToEnd();
+        } 
 
         private static void CheckAutorisation(HttpWebResponse result)
         {

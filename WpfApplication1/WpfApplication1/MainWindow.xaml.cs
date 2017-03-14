@@ -43,5 +43,10 @@ namespace WpfApplication1
                 System.Windows.MessageBox.Show(ex.Message);
             }
         }
+
+        private void button_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
