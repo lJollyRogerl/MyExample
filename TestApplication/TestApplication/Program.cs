@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Net.Http;
@@ -13,7 +14,7 @@ namespace TestApplication
         static void Main(string[] args)
         {
 
-            SomeFunc();
+            FuncTwo();
             //HttpWebResponse result = Post();
             //CheckAutorisation(result);
             //string site = "http://www.professorweb.ru";
@@ -28,6 +29,54 @@ namespace TestApplication
             //}
             //login_password
             //login_username
+        }
+
+        private static void FuncTwo()
+        {
+            // Creates an HttpWebRequest for the specified URL. 
+            Uri uri = new Uri(@"https://vk.com");
+            CookieContainer cookieContainer = new CookieContainer();
+            HttpWebRequest myHttpWebRequest = (HttpWebRequest)WebRequest.Create(uri);
+            myHttpWebRequest.CookieContainer = cookieContainer;
+            // Sends the HttpWebRequest and waits for response.
+            HttpWebResponse myHttpWebResponse = (HttpWebResponse)myHttpWebRequest.GetResponse();
+
+            // Displays all the headers present in the response received from the URI.
+            Console.WriteLine("\r\nSet-cookie header: ");
+            // Displays each header and it's key associated with the response.
+            //for (int i = 0; i < myHttpWebResponse.Headers.Count; ++i)
+            //    Console.WriteLine("\nHeader Name:{0}, Value :{1}", myHttpWebResponse.Headers.Keys[i], myHttpWebResponse.Headers[i]);
+            Console.WriteLine(myHttpWebResponse.Headers["Set-Cookie"]);
+            try
+            {
+                Console.WriteLine("\nNow we'll be trying to sepatrete each cook from those set.\n");
+                foreach (Cookie cook in cookieContainer.GetCookies(uri))
+                {
+                    Console.WriteLine($"Name = {cook.Name}, Value = {cook.Value}");
+                }
+                //string[] cookieVal = null;
+                //if (myHttpWebResponse.Headers["Set-Cookie"] != null)
+                //    cookieVal = myHttpWebResponse.Headers["Set-Cookie"].Split(new char[] { ';' });
+
+                //Console.WriteLine("There is cookie values:");
+                //Dictionary<string, string> dic = new Dictionary<string, string>();
+                //foreach (var item in cookieVal)
+                //{
+                //    string[] str = item.Split('=');
+                //    dic.Add(str[0], str[1]);
+                //}
+                //foreach (var dicUnit in dic)
+                //{
+                //    Console.WriteLine($"Key = {dicUnit.Key}, value = {dicUnit.Value}");
+                //}
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            
+            // Releases the resources of the response.
+            myHttpWebResponse.Close();
         }
 
         private static async void SomeFunc()
