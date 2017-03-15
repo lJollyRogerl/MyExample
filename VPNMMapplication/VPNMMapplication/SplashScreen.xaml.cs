@@ -12,6 +12,7 @@ namespace VPNMMapplication
     /// </summary>
     public partial class SplashScreen : Window
     {
+        iFilial filial;
         //путь к файлу для локальной загрузки
         string pathToFile;
         //Создатель коллекции название ММ - его DNS
@@ -88,7 +89,7 @@ namespace VPNMMapplication
                 //Если загрузка идет через HttpWebRequest
                 if (radioHttpLoad.IsChecked == true)
                 {
-                    HTMLWithAutorization htmlGetter = new HTMLWithAutorization(txtLogin.Text, pbPassword.Password);
+                    HTMLWithAutorization htmlGetter = new HTMLWithAutorization(txtLogin.Text, pbPassword.Password, comboBoxChooseFilial.SelectedItem.ToString());
                     maker = new MM_MK_DictionarryMaker(htmlGetter.HTML);
                     mainWindow = new MainWindow(maker);
                     mainWindow.Show();
@@ -112,10 +113,10 @@ namespace VPNMMapplication
         }
         private void LoadFilials()
         {
-            comboBoxChooseFilial.Items.Add("Нижне-Тагильский");
-            comboBoxChooseFilial.Items.Add("Пермский");
-            comboBoxChooseFilial.Items.Add("Уфимский");
+            iFilial fil = new Ural_Zapad();
+            comboBoxChooseFilial.ItemsSource = (((Ural_Zapad)fil).Filial);
             comboBoxChooseFilial.SelectedIndex = 0;
         }
+
     }
 }

@@ -13,8 +13,9 @@ namespace TestApplication
     {
         static void Main(string[] args)
         {
-
-            FuncTwo();
+            Form1 ff = new Form1();
+            ff.ShowDialog();
+            //FuncTwo();
             //HttpWebResponse result = Post();
             //CheckAutorisation(result);
             //string site = "http://www.professorweb.ru";
@@ -30,6 +31,8 @@ namespace TestApplication
             //login_password
             //login_username
         }
+
+        
 
         private static void FuncTwo()
         {

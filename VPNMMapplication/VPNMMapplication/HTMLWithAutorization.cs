@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HtmlAgilityPack;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -12,15 +13,18 @@ namespace VPNMMapplication
     {
         public string Login { get; set; }
         public string PSWRD { get; set; }
-        private const string URL = @"https://vpnmm.corp.tander.ru/ovpn/login.cgi";
+        public string Filial { get; set; }
+        private const string URL = @"https://vpnmm.corp.tander.ru/ovpn/";
+        Encoding encode = Encoding.GetEncoding("utf-8");
 
         //Очень важная часть, т.к. в этих куках будет храниться подтверждение удачно авторизации
         private CookieContainer cookies = new CookieContainer();
 
-        public HTMLWithAutorization(string login, string password)
+        public HTMLWithAutorization(string login, string password, string filial)
         {
             Login = login;
             PSWRD = password;
+            Filial = filial;
         }
         public string HTML
         {
@@ -39,13 +43,7 @@ namespace VPNMMapplication
                     System.Windows.MessageBox.Show("Авторизация неудалась.", "Ошибка!");
                     return null;
                 }
-
-                //string[] cookieVal = null;
-                //if (result.Headers["Set-Cookie"] != null)
-                //    cookieVal = result.Headers["Set-Cookie"].Split(new char[] { ',' });
-
                 Stream ReceiveStream = response.GetResponseStream();
-                Encoding encode = Encoding.GetEncoding("utf-8");
                 StreamReader sr = new StreamReader(ReceiveStream, encode);
                 //То что нам вернул сервер не попытку авторизации
                 string answer = sr.ReadToEnd();
@@ -53,35 +51,20 @@ namespace VPNMMapplication
                 ReceiveStream.Close();
                 response.Close();
 
-                if (answer == "плохой ответ")
-                {
-                    System.Windows.MessageBox.Show("Авторизация неудалась.", "Ошибка!");
-                    return null; 
-                }
-                else
-                {
-                    //CookieContainer cookie = new CookieContainer();
-                    //foreach (string cook in cookieVal)
-                    //{
-                    //    string[] cookieArray = cook.Split(new char[] { ';' });
-                    //    if (cookieArray.Length < 2)
-                    //        continue;
-                    //    cookie.Add(new Cookie(cookieArray[0].Split(new char[] { '=' })[0], cookieArray[0].Split(new char[] { '=' })[1],
-                    //cookieArray[1].Split(new char[] { '=' })[1], cookieArray.Length > 2 ? cookieArray[2].Split(new char[] { '=' })[1] : ""));
-                    //}
+                return DoRequestWithCookie("manage.cgi", "whitey");
 
-                    HttpWebRequest req1 = (HttpWebRequest)HttpWebRequest.Create(URL);
-                    req1.UserAgent = "Mozilla/4.0+(compatible;+MSIE+5.01;+Windows+NT+5.0)";
-                    //Вот оно - важное дополнение.
-                    req1.CookieContainer = cookies;
-                    req1.Method = "GET";
-                    HttpWebResponse result1 = (HttpWebResponse)req1.GetResponse();
-                    Stream ReceiveStream1 = result1.GetResponseStream();
-                    StreamReader sr1 = new StreamReader(ReceiveStream1, encode);
-                    string html = sr1.ReadToEnd();
-                    result1.Close();
-                    return html;
-                }
+                //if (answer == "плохой ответ")
+                //{
+                //    System.Windows.MessageBox.Show("Авторизация неудалась.", "Ошибка!");
+                //    return null; 
+                //}
+                //else
+                //{
+                //    string FormParams = $"unrollr=Урал-Западный";
+                //    DoRequestWithCookie(FormParams);
+                //    FormParams = $"unrollf={Filial}";
+                //    return DoRequestWithCookie(FormParams);
+                //}
 
 
             }
@@ -93,12 +76,43 @@ namespace VPNMMapplication
 
         }
 
+        private string DoRequestWithCookie(string addToUrl, string nextLink)
+        {
+            string html = GetResponseInHTML(URL + addToUrl);
+            HtmlDocument doc = new HtmlDocument();
+            doc.LoadHtml(html);
+            HtmlNode node = doc.DocumentNode.SelectSingleNode($"//a[@class='{nextLink}']");
+            if (node != null)
+            {
+                return DoRequestWithCookie(node.Attributes["href"].Value, "blackey");
+            }
+            else
+            {
+                return html;
+            }
+        }
+
+        private string GetResponseInHTML(string url)
+        {
+            HttpWebRequest req = (HttpWebRequest)HttpWebRequest.Create(url);
+            req.UserAgent = "Mozilla/4.0+(compatible;+MSIE+5.01;+Windows+NT+5.0)";
+            req.AllowAutoRedirect = false;
+            req.ContentType = "application/x-www-form-urlencoded";
+            //Вот оно - важное дополнение.
+            req.CookieContainer = cookies;
+            req.Method = "POST";
+            HttpWebResponse response = (HttpWebResponse)req.GetResponse();
+            Stream ReceiveStream1 = response.GetResponseStream();
+            StreamReader sr1 = new StreamReader(ReceiveStream1, encode);
+            return sr1.ReadToEnd();
+        }
+
         private HttpWebResponse Post(string login, string password)
         {
             try
             {
                 HttpWebResponse result = null;
-                HttpWebRequest req = (HttpWebRequest)HttpWebRequest.Create(URL);
+                HttpWebRequest req = (HttpWebRequest)HttpWebRequest.Create(URL+ "login.cgi");
                 //cookies - глобальная переменная
                 req.CookieContainer = cookies;
                 req.Method = "POST";
