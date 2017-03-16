@@ -1,9 +1,11 @@
 ﻿using HtmlAgilityPack;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -51,7 +53,10 @@ namespace VPNMMapplication
                 ReceiveStream.Close();
                 response.Close();
 
-                return DoRequestWithCookie("manage.cgi", "whitey");
+
+                GetResponseInHTML(URL + "manage.cgi?unrollr=Урал-Западный");
+                return GetResponseInHTML(URL + "manage.cgi?unrollf=Нижне-Тагильский");
+
 
                 //if (answer == "плохой ответ")
                 //{
@@ -76,34 +81,18 @@ namespace VPNMMapplication
 
         }
 
-        private string DoRequestWithCookie(string addToUrl, string nextLink)
-        {
-            string html = GetResponseInHTML(URL + addToUrl);
-            HtmlDocument doc = new HtmlDocument();
-            doc.LoadHtml(html);
-            HtmlNode node = doc.DocumentNode.SelectSingleNode($"//a[@class='{nextLink}']");
-            if (node != null)
-            {
-                return DoRequestWithCookie(node.Attributes["href"].Value, "blackey");
-            }
-            else
-            {
-                return html;
-            }
-        }
-
         private string GetResponseInHTML(string url)
         {
             HttpWebRequest req = (HttpWebRequest)HttpWebRequest.Create(url);
-            req.UserAgent = "Mozilla/4.0+(compatible;+MSIE+5.01;+Windows+NT+5.0)";
             req.AllowAutoRedirect = false;
             req.ContentType = "application/x-www-form-urlencoded";
-            //Вот оно - важное дополнение.
+            //Важное дополнение.
             req.CookieContainer = cookies;
-            req.Method = "POST";
+            req.Method = "GET";
             HttpWebResponse response = (HttpWebResponse)req.GetResponse();
             Stream ReceiveStream1 = response.GetResponseStream();
             StreamReader sr1 = new StreamReader(ReceiveStream1, encode);
+            BugFix_CookieDomain(cookies);
             return sr1.ReadToEnd();
         }
 
@@ -123,9 +112,11 @@ namespace VPNMMapplication
                 SomeBytes = Encoding.UTF8.GetBytes(FormParams);
                 req.ContentLength = SomeBytes.Length;
                 Stream newStream = req.GetRequestStream();
+                BugFix_CookieDomain(cookies);
                 newStream.Write(SomeBytes, 0, SomeBytes.Length);
                 newStream.Close();
                 result = (HttpWebResponse)req.GetResponse();
+                BugFix_CookieDomain(cookies);
                 return result;
             }
             catch (Exception ex)
@@ -134,6 +125,28 @@ namespace VPNMMapplication
                 return null;
             }
 
+        }
+
+        private void BugFix_CookieDomain(CookieContainer cookies)
+        {
+            Type containerType = typeof(CookieContainer);
+            var table = (Hashtable)containerType.InvokeMember("m_domainTable",
+                                                                BindingFlags.NonPublic |
+                                                                BindingFlags.GetField |
+                                                                BindingFlags.Instance,
+                                                                null,
+                                                                cookies,
+                                                                new object[] { });
+            var keys = new ArrayList(table.Keys);
+            foreach (string keyObj in keys)
+            {
+                string key = (keyObj);
+                if (key[0] == '.')
+                {
+                    string newKey = key.Remove(0, 1);
+                    table[newKey] = table[keyObj];
+                }
+            }
         }
     }
 }
