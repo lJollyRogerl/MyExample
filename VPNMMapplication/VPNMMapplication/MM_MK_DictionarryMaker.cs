@@ -20,46 +20,12 @@ namespace VPNMMapplication
         //Прогресс загрузки и наполнения коллекции
         public ProgressInfo ProgressOfLoading { get; set; } = new ProgressInfo();
         //Конструктор для загрузки из файла на локальной машине
-        public MM_MK_DictionarryMaker(string fileAddress)
+        public MM_MK_DictionarryMaker(string htmlText)
         {
-            try
-            {
-                string htmlText = File.ReadAllText(fileAddress, Encoding.UTF8);
                 HtmlString = htmlText;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-                HtmlString = String.Empty;
-            }
         }
 
-        //Конструктор для загрузки по URL
-        public MM_MK_DictionarryMaker(string htmlURL, string login, string password)
-        {
-            try
-            {
-                var httpWebRequest = (HttpWebRequest)WebRequest.Create(htmlURL);
-                httpWebRequest.AllowAutoRedirect = false;//Запрещаем автоматический редирект
-                httpWebRequest.Method = "GET"; //Можно не указывать, по умолчанию используется GET.
-                //httpWebRequest.Referer = "http://google.com"; // Реферер. Тут можно указать любой URL
-                using (var httpWebResponse = (HttpWebResponse)httpWebRequest.GetResponse())
-                {
-                    using (var stream = httpWebResponse.GetResponseStream())
-                    {
-                        using (var reader = new StreamReader(stream, Encoding.GetEncoding(httpWebResponse.CharacterSet)))
-                        {
-                            HtmlString = reader.ReadToEnd();
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-                HtmlString = String.Empty;
-            }
-        }
+
 
         //Загружаем небходимые имена и DNS из HTML, а так же создаем словарь.
         public async Task LoadDictionaryAsync()

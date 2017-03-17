@@ -1,4 +1,8 @@
-﻿using System.Windows;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Text;
+using System.Windows;
 //using System.Windows.Forms;
 using System.Windows.Input;
 
@@ -9,6 +13,9 @@ namespace VPNMMapplication
     /// </summary>
     public partial class SplashScreen : Window
     {
+        //переменная для хранения данных о филлиалах и регионах. 
+        //Сериализуется/десериализуется в ListOfFillials.xml
+        private Divisions divisions = new Divisions();
         //путь к файлу для локальной загрузки
         string pathToFile;
         //Создатель коллекции название ММ - его DNS
@@ -16,11 +23,14 @@ namespace VPNMMapplication
         //основное окно. Создается после выбора загрузки
         MainWindow mainWindow;
         //Ссылка на страницу, с которой будет производиться загрузка
-        string url;
         public SplashScreen()
         {
             InitializeComponent();
+            divisions.DivisionLoad();
+            LoadFilials();
         }
+
+        
 
         private void radioHttpLoad_Checked(object sender, RoutedEventArgs e)
         {
@@ -31,6 +41,7 @@ namespace VPNMMapplication
             {
                 stackPanelLogin.IsEnabled = true;
                 stackPanelPassword.IsEnabled = true;
+                stackPanelComboBox.IsEnabled = true;
                 stackPanelOfflineLoad.IsEnabled = false;
                 gbLoadWithHttpRequest.Header = "Необходимо пройти доменную авторизацию";
                 gbLoadWithLocalHtmlPage.Header = "";
@@ -40,6 +51,7 @@ namespace VPNMMapplication
             {
                 stackPanelLogin.IsEnabled = false;
                 stackPanelPassword.IsEnabled = false;
+                stackPanelComboBox.IsEnabled = false;
                 stackPanelOfflineLoad.IsEnabled = true;
                 gbLoadWithHttpRequest.Header = "";
                 gbLoadWithLocalHtmlPage.Header = "Необходимо загрузить сохраненный *.html";
@@ -76,23 +88,49 @@ namespace VPNMMapplication
 
         private void btnLoad_Click(object sender, RoutedEventArgs e)
         {
-            //Если загрузка идет через HttpWebRequest
-            if (radioHttpLoad.IsChecked == true)
+            try
             {
-                maker = new MM_MK_DictionarryMaker(url, txtLogin.Text, pbPassword.Password);
-                mainWindow = new MainWindow(maker);
-                this.Close();
-                mainWindow.Show();
-            }
+                //Если загрузка идет через HttpWebRequest
+                if (radioHttpLoad.IsChecked == true)
+                {
+                    HTMLWithAutorization htmlGetter = new HTMLWithAutorization(txtLogin.Text, pbPassword.Password, comboBoxChooseFilial.SelectedItem.ToString());
+                    maker = new MM_MK_DictionarryMaker(htmlGetter.HTML);
+                    mainWindow = new MainWindow(maker);
+                    mainWindow.Show();
+                    this.Close();
+                }
 
-            //Если загруженна локальная страница
-            if (radioHttpPage.IsChecked == true)
+                //Если загруженна локальная страница
+                if (radioHttpPage.IsChecked == true)
+                {
+                    string htmlText = File.ReadAllText(pathToFile, Encoding.UTF8);
+                    maker = new MM_MK_DictionarryMaker(htmlText);
+                    mainWindow = new MainWindow(maker);
+                    mainWindow.Show();
+                    this.Close();
+                }
+            }
+            catch (Exception ex)
             {
-                maker = new MM_MK_DictionarryMaker(pathToFile);
-                mainWindow = new MainWindow(maker);
-                mainWindow.Show();
-                this.Close();
+                MessageBox.Show(ex.Message, "Ошибка!");
             }
         }
+        private void LoadFilials()
+        {
+            //SerializeDivisions.AddFillial(divisions, new Filial("Нижне-Тагильский", new Region("Урал-Западный")));
+            //SerializeDivisions.AddFillial(divisions, new Filial("Пермский", new Region("Урал-Западный")));
+            //SerializeDivisions.AddFillial(divisions, new Filial("Серовский", new Region("Урал-Западный")));
+            List<String> filialNames = new List<string>();
+            foreach (Region reg in divisions.Regions)
+            {
+                foreach (Filial fil in reg.Filials)
+                {
+                    filialNames.Add(fil.Name);
+                }
+            }
+            comboBoxChooseFilial.ItemsSource = filialNames;
+            comboBoxChooseFilial.SelectedIndex = 0;
+        }
+
     }
 }

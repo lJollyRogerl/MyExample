@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:VPNMMapplication"
         mc:Ignorable="d"
-        Title="Добро пожаловать!" Height="435" Width="310" Icon="pics/ico.png" ResizeMode="NoResize" WindowStartupLocation="CenterScreen"
+        Title="Добро пожаловать!" Height="470" Width="310" Icon="pics/ico.png" ResizeMode="NoResize" WindowStartupLocation="CenterScreen"
         MouseLeftButtonDown="Window_MouseLeftButtonDown">
     <StackPanel>
         <Label Content="Пожалуйста, выбирете способ загрузки." Margin="15" FontSize="13" FontWeight="Bold"/>
@@ -20,6 +20,10 @@
                 <StackPanel x:Name="stackPanelPassword" Orientation="Horizontal" Margin="10" IsEnabled="False">
                     <Label x:Name="lblPswd" Content="Пароль:" Width="60"/>
                     <PasswordBox x:Name="pbPassword" Width="170" Margin="5"/>
+                </StackPanel>
+                <StackPanel x:Name="stackPanelComboBox" Orientation="Horizontal" Margin="10" IsEnabled="False">
+                    <Label x:Name="lblCombo" Content="Филиал:" Width="60"/>
+                    <ComboBox x:Name="comboBoxChooseFilial" Width="170" Height="20" Margin="5"/>
                 </StackPanel>
             </StackPanel>
         </GroupBox>
