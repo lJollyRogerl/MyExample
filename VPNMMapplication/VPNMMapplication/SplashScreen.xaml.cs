@@ -116,7 +116,7 @@ namespace VPNMMapplication
         }
         private void LoadFilials()
         {
-            SerializeDivisions.AddFillial(divisions, "Нижне-Тагильский", "Урал-Западный");
+            //SerializeDivisions.AddFillial(divisions, "Нижне-Тагильский", "Урал-Западный");
             comboBoxChooseFilial.ItemsSource = SerializeDivisions.GetListOfRegions();
             comboBoxChooseFilial.SelectedIndex = 0;
         }

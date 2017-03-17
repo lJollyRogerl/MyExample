@@ -85,14 +85,14 @@ namespace VPNMMapplication
         }
     }
 
-    //class Filial
-    //{
-    //    public Filial(string name, Region parent)
-    //    {
-    //        Name = name;
-    //        Parent = parent;
-    //    }
-    //    public string Name { get; set; }
-    //    public Region Parent { get; set; }
-    //}
+    class Filial
+    {
+        public Filial(string name, Region parent)
+        {
+            Name = name;
+            Parent = parent;
+        }
+        public string Name { get; set; }
+        public Region Parent { get; set; }
+    }
 }
