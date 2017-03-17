@@ -12,7 +12,9 @@ namespace VPNMMapplication
     /// </summary>
     public partial class SplashScreen : Window
     {
-        iFilial filial;
+        //переменная для хранения данных о филлиалах и регионах. 
+        //Сериализуется/десериализуется в ListOfFillials.xml
+        private Divisions divisions = new Divisions();
         //путь к файлу для локальной загрузки
         string pathToFile;
         //Создатель коллекции название ММ - его DNS
@@ -23,6 +25,7 @@ namespace VPNMMapplication
         public SplashScreen()
         {
             InitializeComponent();
+            divisions.DivisionLoad();
             LoadFilials();
         }
 
@@ -113,8 +116,8 @@ namespace VPNMMapplication
         }
         private void LoadFilials()
         {
-            iFilial fil = new Ural_Zapad();
-            comboBoxChooseFilial.ItemsSource = (((Ural_Zapad)fil).Filial);
+            SerializeDivisions.AddFillial(divisions, "Нижне-Тагильский", "Урал-Западный");
+            comboBoxChooseFilial.ItemsSource = SerializeDivisions.GetListOfRegions();
             comboBoxChooseFilial.SelectedIndex = 0;
         }
 

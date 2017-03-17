@@ -15,6 +15,10 @@ namespace VPNMMapplication
     {
         public Divisions()
         {
+            
+        }
+        public void DivisionLoad()
+        {
             //Если в сборке присутствует список филлиалов - загрузить его. Если нет - создать новый
             List<Region> regions = SerializeDivisions.GetListOfRegions();
             if (regions != null)
@@ -48,67 +52,35 @@ namespace VPNMMapplication
         }
     }
 
+
+    //Region which contain List of Filial names
     [Serializable]
     public class Region
     {
         public Region()
         {
+            Filials = new List<string>();
         }
         public Region(string name)
         {
+            Filials = new List<string>();
             NameOfRegion = name;
         }
         public string NameOfRegion { get; set; }
-        public List<String> Filials { get; set; } = new List<String>();
-    }
+        public List<String> Filials { get; set; }
 
-    public class SerializeDivisions
-    {
-        public static List<Region> GetListOfRegions()
+
+        //Индексатор для поиска филиала
+        public string this[string name]
         {
-            try
+            get
             {
-                List<Region> regions = new List<Region>();
-                XmlSerializer serializer = new XmlSerializer(typeof(Divisions));
-                using (FileStream fs = new FileStream("ListOfFillials.xml", FileMode.Open))
+                foreach (string fil in Filials)
                 {
-                    Divisions div = (Divisions)serializer.Deserialize(fs);
-                    regions = div.Regions;
+                    if (fil == name)
+                        return fil;
                 }
-                return regions;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, "Ошибка десериализации!");
                 return null;
-            }
-            
-        }
-
-        public static void AddFillial(Divisions currentDivision, string newFilial, string region)
-        {
-            if (currentDivision[region] != null)
-            {
-                currentDivision[region].Filials.Add(newFilial);
-            }
-            else
-            {
-                currentDivision.Regions.Add(new Region(region));
-                currentDivision[region].Filials.Add(newFilial);
-            }
-
-            try
-            {
-                XmlSerializer serializer = new XmlSerializer(typeof(Divisions));
-                using (FileStream fs = new FileStream("ListOfFillials.xml", FileMode.Open))
-                {
-                    Divisions div = (Divisions)serializer.Deserialize(fs);
-                    regions = div.Regions;
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, "Ошибка серриализации!");
             }
         }
     }
