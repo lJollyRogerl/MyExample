@@ -60,6 +60,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Divisions.cs" />
     <Compile Include="Filial.cs" />
     <Compile Include="HTMLWithAutorization.cs" />
     <Compile Include="SplashScreen.xaml.cs">
@@ -121,6 +122,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="pics\screen.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ListOfFillials.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
