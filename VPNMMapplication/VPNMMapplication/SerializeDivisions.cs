@@ -14,7 +14,7 @@ namespace VPNMMapplication
             try
             {
                 List<Region> regions = new List<Region>();
-                XmlSerializer serializer = new XmlSerializer(typeof(Divisions));
+                XmlSerializer serializer = new XmlSerializer(typeof(Divisions), new Type[] { typeof(Region), typeof(Filial) });
                 using (FileStream fs = new FileStream("ListOfFillials.xml", FileMode.Open))
                 {
                     Divisions div = (Divisions)serializer.Deserialize(fs);
@@ -30,27 +30,27 @@ namespace VPNMMapplication
 
         }
 
-        public static void AddFillial(Divisions currentDivision, string newFilial, string region)
+        public static void AddFillial(Divisions currentDivision, Filial newFilial)
         {
             //Если такой регион уже существует, тогда добавляем в него филиал.
             //Если такой филиал уже есть в данном регионе - сообщаем пользователю об этом
-            if (currentDivision[region] != null)
+            if (currentDivision[newFilial.ParentRegion.NameOfRegion] != null)
             {
-                if (currentDivision[region][newFilial] == null)
-                    currentDivision[region].Filials.Add(newFilial);
+                if (currentDivision[newFilial.ParentRegion.NameOfRegion][newFilial.Name] == null)
+                    currentDivision[newFilial.ParentRegion.NameOfRegion].Filials.Add(newFilial);
                 else
                     MessageBox.Show("Филиал с таким названием уже существует!", "Ошибка!");
             }
             //Если такого региона еще не существует - создаем новый и туда добавляем филиал
             else
             {
-                currentDivision.Regions.Add(new Region(region));
-                currentDivision[region].Filials.Add(newFilial);
+                currentDivision.Regions.Add(new Region(newFilial.ParentRegion.NameOfRegion));
+                currentDivision[newFilial.ParentRegion.NameOfRegion].Filials.Add(newFilial);
             }
             //нарезаем в хмл
             try
             {
-                XmlSerializer serializer = new XmlSerializer(typeof(Divisions));
+                XmlSerializer serializer = new XmlSerializer(typeof(Divisions), new Type[] { typeof(Region), typeof(Filial) });
                 using (FileStream fs = new FileStream("ListOfFillials.xml", FileMode.OpenOrCreate))
                 {
                     serializer.Serialize(fs, currentDivision);

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Windows;
@@ -116,8 +117,18 @@ namespace VPNMMapplication
         }
         private void LoadFilials()
         {
-            //SerializeDivisions.AddFillial(divisions, "Нижне-Тагильский", "Урал-Западный");
-            comboBoxChooseFilial.ItemsSource = SerializeDivisions.GetListOfRegions();
+            //SerializeDivisions.AddFillial(divisions, new Filial("Нижне-Тагильский", new Region("Урал-Западный")));
+            //SerializeDivisions.AddFillial(divisions, new Filial("Пермский", new Region("Урал-Западный")));
+            //SerializeDivisions.AddFillial(divisions, new Filial("Серовский", new Region("Урал-Западный")));
+            List<String> filialNames = new List<string>();
+            foreach (Region reg in divisions.Regions)
+            {
+                foreach (Filial fil in reg.Filials)
+                {
+                    filialNames.Add(fil.Name);
+                }
+            }
+            comboBoxChooseFilial.ItemsSource = filialNames;
             comboBoxChooseFilial.SelectedIndex = 0;
         }
 

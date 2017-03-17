@@ -15,7 +15,6 @@ namespace VPNMMapplication
     {
         public Divisions()
         {
-            
         }
         public void DivisionLoad()
         {
@@ -27,12 +26,13 @@ namespace VPNMMapplication
                 Regions = new List<Region>();
         }
 
+
         public List<Region> Regions { get; set; }
         public Region this[string name]
         {
             get
             {
-                foreach(Region reg in Regions)
+                foreach (Region reg in Regions)
                 {
                     if (reg.NameOfRegion == name)
                         return reg;
@@ -52,47 +52,51 @@ namespace VPNMMapplication
         }
     }
 
-
-    //Region which contain List of Filial names
+    //Region which contain List of Filials
     [Serializable]
     public class Region
     {
+        public List<Filial> Filials { get; set; }
+        public string NameOfRegion { get; set; }
+
         public Region()
         {
-            Filials = new List<string>();
+            Filials = new List<Filial>();
         }
         public Region(string name)
         {
-            Filials = new List<string>();
+            Filials = new List<Filial>();
             NameOfRegion = name;
         }
 
-        public string NameOfRegion { get; set; }
-        public List<String> Filials { get; set; }
-
         //Индексатор для поиска филиала
-        public string this[string name]
+        public Filial this[string name]
         {
             get
             {
-                foreach (string fil in Filials)
+                for (int i = 0; i < Filials.Count; i++)
                 {
-                    if (fil == name)
-                        return fil;
+                    if (Filials[i].Name == name)
+                        return Filials[i];
                 }
                 return null;
             }
         }
     }
 
-    class Filial
+    [Serializable]
+    public class Filial
     {
+        private Filial()
+        {
+        }
         public Filial(string name, Region parent)
         {
             Name = name;
-            Parent = parent;
+            ParentRegion = parent;
         }
         public string Name { get; set; }
-        public Region Parent { get; set; }
+        [XmlElement(ElementName = "Parent_Region")]
+        public Region ParentRegion { get; set; }
     }
 }
