@@ -5,13 +5,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:VPNMMapplication"
         mc:Ignorable="d"
-        Title="Добро пожаловать!" Height="470" Width="310" Icon="pics/ico.png" ResizeMode="NoResize" WindowStartupLocation="CenterScreen"
-        MouseLeftButtonDown="Window_MouseLeftButtonDown">
+        Title="Добро пожаловать!" Height="497" Width="310" Icon="pics/ico.png" ResizeMode="NoResize" WindowStartupLocation="CenterScreen"
+        MouseLeftButtonDown="Window_MouseLeftButtonDown" Loaded="Window_Loaded">
     <StackPanel VerticalAlignment="Bottom">
         <Label Content="Пожалуйста, выбирете способ загрузки." Margin="15" FontSize="13" FontWeight="Bold"/>
         <GroupBox x:Name="gbLoadWithHttpRequest" Margin="5">
             <StackPanel>
-                <RadioButton x:Name="radioHttpLoad" Content="Загрузка в режиме онлайн" 
+                <RadioButton x:Name="radioHttpLoad" Content="Загрузка в режиме онлайн"  
                              Margin="10" IsEnabled="True" GroupName="groupRadio" Checked="radioHttpLoad_Checked"/>
                 <StackPanel x:Name="stackPanelLogin" Orientation="Horizontal" Margin="10" IsEnabled="False">
                     <Label x:Name="lblLogin" Content="Логин:" Width="60"/>
@@ -43,6 +43,9 @@
                 <DropShadowEffect Opacity="0.5" ShadowDepth="4"/>
             </Button.Effect>
         </Button>
-        <StatusBar x:Name="statusBar" Width="310" Height="15"  HorizontalAlignment="Center"/>
+        <Grid x:Name="statusGrid" Width="310" Height="25" 
+              Background="LightGray" Visibility="Hidden">
+            <Label x:Name="lblStatusBar" FontSize="12"/>
+        </Grid>
     </StackPanel>
 </Window>

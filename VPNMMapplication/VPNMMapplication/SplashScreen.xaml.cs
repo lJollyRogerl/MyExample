@@ -30,10 +30,11 @@ namespace VPNMMapplication
         public SplashScreen()
         {
             InitializeComponent();
-
             divisions.DivisionLoad();
             LoadFilials();
         }
+
+        
 
         private void radioHttpLoad_Checked(object sender, RoutedEventArgs e)
         {
@@ -91,8 +92,20 @@ namespace VPNMMapplication
 
         private void btnLoad_Click(object sender, RoutedEventArgs e)
         {
-            AuthorizationAsync();
+            DoBtnLoadJob();
         }
+
+        private async void DoBtnLoadJob()
+        {
+            statusGrid.Visibility = Visibility.Visible;
+            btnLoad.IsEnabled = false;
+            lblStatusBar.Content = "Пожалуйста, ожидайте.";
+            await DoAsyncAuthorization();
+            btnLoad.IsEnabled = true;
+            statusGrid.Visibility = Visibility.Hidden;
+            lblStatusBar.Content = "";
+        }
+
         private void LoadFilials()
         {
             //SerializeDivisions.AddFillial(divisions, new Filial("Нижне-Тагильский", new Region("Урал-Западный")));
@@ -119,66 +132,68 @@ namespace VPNMMapplication
             }
         }
 
-        private async void AuthorizationAsync()
+        private async Task DoAsyncAuthorization()
         {
             try
             {
-                btnLoad.IsEnabled = false;
-                await DoAuthorisationAsync();
-                btnLoad.IsEnabled = false;
+                //Если загрузка идет через HttpWebRequest
+                if (radioHttpLoad.IsChecked == true)
+                {
+                    if ((string.IsNullOrEmpty(txtLogin.Text)) || (string.IsNullOrEmpty(pbPassword.Password)))
+                    {
+                        MessageBox.Show("Заполните пожалуйста оба поля!", "Ошибка!");
+                        return;
+                    }
+                    HTMLWithAutorization htmlGetter = new HTMLWithAutorization(txtLogin.Text, pbPassword.Password,
+                        currentFilial);
+                    htmlGetter.OnAuthorizationProgress += HtmlGetter_OnAuthorizationProgress;
+
+                    string html = await Task.Run<string> (()=>
+                    {
+                        return htmlGetter.GetHTMLString();
+                    });
+
+                    if (html == null)
+                    {
+                        return;
+                    }
+                    if (html == "Неверный логин или пароль!")
+                    {
+                        MessageBox.Show("Неверный логин или пароль!", "Ошибка!");
+                        return;
+                    }
+
+                    maker = new MM_MK_DictionarryMaker(html);
+                    mainWindow = new MainWindow(maker);
+                    mainWindow.Show();
+                    this.Close();
+                }
+
+                //Если загруженна локальная страница
+                if (radioHttpPage.IsChecked == true)
+                {
+                    string htmlText = File.ReadAllText(pathToFile, Encoding.UTF8);
+                    maker = new MM_MK_DictionarryMaker(htmlText);
+                    mainWindow = new MainWindow(maker);
+                    mainWindow.Show();
+                    this.Close();
+                }
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Ошибка");
+                MessageBox.Show(ex.Message, "Ошибка!");
             }
         }
-
-        //Попытка авторизоваться и при удачной авторизации выгрузить html разметку
-        public async Task DoAuthorisationAsync()
+        private void HtmlGetter_OnAuthorizationProgress(string obj)
         {
-            await Task.Run(() =>
-            {
-                try
-                {
-
-                    //Если загрузка идет через HttpWebRequest
-                    if (radioHttpLoad.IsChecked == true)
-                    {
-                        HTMLWithAutorization htmlGetter = new HTMLWithAutorization(txtLogin.Text, pbPassword.Password,
-                            currentFilial);
-
-                        if (htmlGetter.HTML == "Неверный логин или пароль!")
-                        {
-                            this.Dispatcher.Invoke(() =>
-                            {
-                                MessageBox.Show("Неверный логин или пароль!", "Ошибка!");
-                            });
-                            return;
-                        }
-                        maker = new MM_MK_DictionarryMaker(htmlGetter.HTML);
-                        mainWindow = new MainWindow(maker);
-                        mainWindow.Show();
-                        this.Close();
-                    }
-
-                    //Если загруженна локальная страница
-                    if (radioHttpPage.IsChecked == true)
-                    {
-                        string htmlText = File.ReadAllText(pathToFile, Encoding.UTF8);
-                        maker = new MM_MK_DictionarryMaker(htmlText);
-                        mainWindow = new MainWindow(maker);
-                        mainWindow.Show();
-                        this.Close();
-                    }
-
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message, "Ошибка!");
-                }
+            this.Dispatcher.Invoke(() => {
+                lblStatusBar.Content = obj;
             });
+        }
 
-            
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            radioHttpLoad.IsChecked = true;
         }
     }
 }
