@@ -8,6 +8,7 @@ using System.Net;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace VPNMMapplication
 {
@@ -52,25 +53,15 @@ namespace VPNMMapplication
                 sr.Close();
                 ReceiveStream.Close();
                 response.Close();
-
-
+                if (answer.Contains("Неверный логин"))
+                {
+                    return "Неверный логин или пароль!";
+                }
+                //return answer;
+                OnAuthorizationProgress("Запрашиваю список регионов.");
                 GetResponseInHTML(URL + $"manage.cgi?unrollr={Filial.ParentRegion.NameOfRegion}");
+                OnAuthorizationProgress("Запрашиваю список филиалов.");
                 return GetResponseInHTML(URL + $"manage.cgi?unrollf={Filial.Name}");
-
-
-                //if (answer == "плохой ответ")
-                //{
-                //    System.Windows.MessageBox.Show("Авторизация неудалась.", "Ошибка!");
-                //    return null; 
-                //}
-                //else
-                //{
-                //    string FormParams = $"unrollr=Урал-Западный";
-                //    DoRequestWithCookie(FormParams);
-                //    FormParams = $"unrollf={Filial}";
-                //    return DoRequestWithCookie(FormParams);
-                //}
-
 
             }
             catch (Exception ex)
@@ -111,10 +102,12 @@ namespace VPNMMapplication
                 string FormParams = $"log_username={login}&log_password={password}&action=login";
                 SomeBytes = Encoding.UTF8.GetBytes(FormParams);
                 req.ContentLength = SomeBytes.Length;
+                OnAuthorizationProgress("Попытка авторизации.");
                 Stream newStream = req.GetRequestStream();
                 BugFix_CookieDomain(cookies);
                 newStream.Write(SomeBytes, 0, SomeBytes.Length);
                 newStream.Close();
+                OnAuthorizationProgress("Получаю ответ сервера.");
                 result = (HttpWebResponse)req.GetResponse();
                 BugFix_CookieDomain(cookies);
                 return result;
@@ -126,6 +119,8 @@ namespace VPNMMapplication
             }
 
         }
+
+        public event Action<string> OnAuthorizationProgress;
 
         private void BugFix_CookieDomain(CookieContainer cookies)
         {

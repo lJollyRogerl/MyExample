@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="Добро пожаловать!" Height="470" Width="310" Icon="pics/ico.png" ResizeMode="NoResize" WindowStartupLocation="CenterScreen"
         MouseLeftButtonDown="Window_MouseLeftButtonDown">
-    <StackPanel>
+    <StackPanel VerticalAlignment="Bottom">
         <Label Content="Пожалуйста, выбирете способ загрузки." Margin="15" FontSize="13" FontWeight="Bold"/>
         <GroupBox x:Name="gbLoadWithHttpRequest" Margin="5">
             <StackPanel>
@@ -38,10 +38,11 @@
                 </StackPanel>
             </StackPanel>
         </GroupBox>
-        <Button x:Name="btnLoad" Height="30" Width="70" Content="Загрузить" Margin="5" Click="btnLoad_Click">
+        <Button x:Name="btnLoad" Height="30" Width="70" Content="Загрузить" Margin="15" Click="btnLoad_Click" IsDefault="True">
             <Button.Effect>
                 <DropShadowEffect Opacity="0.5" ShadowDepth="4"/>
             </Button.Effect>
         </Button>
+        <StatusBar x:Name="statusBar" Width="310" Height="15"  HorizontalAlignment="Center"/>
     </StackPanel>
 </Window>

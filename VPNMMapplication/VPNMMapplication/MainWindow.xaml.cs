@@ -46,7 +46,6 @@ namespace VPNMMapplication
                 progressBar.Maximum = obj.TotalSteps;
                 progressBar.Value = obj.CurrentStep;
                 lblStatus.Content = "Обработка "+obj.CurrentMM_MK.ToString();
-
             });
         }
 

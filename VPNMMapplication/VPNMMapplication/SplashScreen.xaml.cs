@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 //using System.Windows.Forms;
 using System.Windows.Input;
@@ -29,11 +30,10 @@ namespace VPNMMapplication
         public SplashScreen()
         {
             InitializeComponent();
+
             divisions.DivisionLoad();
             LoadFilials();
         }
-
-        
 
         private void radioHttpLoad_Checked(object sender, RoutedEventArgs e)
         {
@@ -91,33 +91,7 @@ namespace VPNMMapplication
 
         private void btnLoad_Click(object sender, RoutedEventArgs e)
         {
-            try
-            {
-                //Если загрузка идет через HttpWebRequest
-                if (radioHttpLoad.IsChecked == true)
-                {
-                    HTMLWithAutorization htmlGetter = new HTMLWithAutorization(txtLogin.Text, pbPassword.Password, 
-                        currentFilial);
-                    maker = new MM_MK_DictionarryMaker(htmlGetter.HTML);
-                    mainWindow = new MainWindow(maker);
-                    mainWindow.Show();
-                    this.Close();
-                }
-
-                //Если загруженна локальная страница
-                if (radioHttpPage.IsChecked == true)
-                {
-                    string htmlText = File.ReadAllText(pathToFile, Encoding.UTF8);
-                    maker = new MM_MK_DictionarryMaker(htmlText);
-                    mainWindow = new MainWindow(maker);
-                    mainWindow.Show();
-                    this.Close();
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, "Ошибка!");
-            }
+            AuthorizationAsync();
         }
         private void LoadFilials()
         {
@@ -143,6 +117,68 @@ namespace VPNMMapplication
             {
                 currentFilial = divisions.FindFilialByName(comboBoxChooseFilial.SelectedItem.ToString());
             }
+        }
+
+        private async void AuthorizationAsync()
+        {
+            try
+            {
+                btnLoad.IsEnabled = false;
+                await DoAuthorisationAsync();
+                btnLoad.IsEnabled = false;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Ошибка");
+            }
+        }
+
+        //Попытка авторизоваться и при удачной авторизации выгрузить html разметку
+        public async Task DoAuthorisationAsync()
+        {
+            await Task.Run(() =>
+            {
+                try
+                {
+
+                    //Если загрузка идет через HttpWebRequest
+                    if (radioHttpLoad.IsChecked == true)
+                    {
+                        HTMLWithAutorization htmlGetter = new HTMLWithAutorization(txtLogin.Text, pbPassword.Password,
+                            currentFilial);
+
+                        if (htmlGetter.HTML == "Неверный логин или пароль!")
+                        {
+                            this.Dispatcher.Invoke(() =>
+                            {
+                                MessageBox.Show("Неверный логин или пароль!", "Ошибка!");
+                            });
+                            return;
+                        }
+                        maker = new MM_MK_DictionarryMaker(htmlGetter.HTML);
+                        mainWindow = new MainWindow(maker);
+                        mainWindow.Show();
+                        this.Close();
+                    }
+
+                    //Если загруженна локальная страница
+                    if (radioHttpPage.IsChecked == true)
+                    {
+                        string htmlText = File.ReadAllText(pathToFile, Encoding.UTF8);
+                        maker = new MM_MK_DictionarryMaker(htmlText);
+                        mainWindow = new MainWindow(maker);
+                        mainWindow.Show();
+                        this.Close();
+                    }
+
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Ошибка!");
+                }
+            });
+
+            
         }
     }
 }
