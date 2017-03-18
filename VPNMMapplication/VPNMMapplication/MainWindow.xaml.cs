@@ -7,6 +7,7 @@ namespace VPNMMapplication
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
+    /// 
     public partial class MainWindow : Window
     {
         string readyObjects = "";
@@ -46,7 +47,6 @@ namespace VPNMMapplication
                 progressBar.Maximum = obj.TotalSteps;
                 progressBar.Value = obj.CurrentStep;
                 lblStatus.Content = "Обработка "+obj.CurrentMM_MK.ToString();
-
             });
         }
 

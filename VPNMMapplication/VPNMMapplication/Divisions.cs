@@ -28,6 +28,7 @@ namespace VPNMMapplication
 
 
         public List<Region> Regions { get; set; }
+        //Возвращает регион по имени
         public Region this[string name]
         {
             get
@@ -49,7 +50,47 @@ namespace VPNMMapplication
                         reg.Filials = value.Filials;
                 }
             }
+
         }
+        public Dictionary<string, string> GetAllFilialsAsDictionary()
+        {
+            Dictionary<string, string> allOfThem = new Dictionary<string, string>();
+            foreach (Region reg in Regions)
+            {
+                foreach (Filial fil in reg.Filials)
+                {
+                    allOfThem.Add(fil.Name, reg.NameOfRegion);
+                }
+            }
+            return allOfThem;
+        }
+         
+        public List<string> GetAllFilialNamesAsList()
+        {
+            List<string> filialNames = new List<string>();
+            foreach (Region reg in this.Regions)
+            {
+                foreach (Filial fil in reg.Filials)
+                {
+                    filialNames.Add(fil.Name);
+                }
+            }
+            return filialNames;
+        }
+
+        public Filial FindFilialByName(string nameOfFil)
+        {
+            foreach (Region reg in Regions)
+            {
+                foreach (Filial fil in reg.Filials)
+                {
+                    if (fil.Name == nameOfFil)
+                        return fil;
+                }
+            }
+            return null;
+        }
+
     }
 
     //Region which contain List of Filials

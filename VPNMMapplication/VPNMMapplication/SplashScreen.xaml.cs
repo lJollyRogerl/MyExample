@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 //using System.Windows.Forms;
 using System.Windows.Input;
@@ -23,6 +24,9 @@ namespace VPNMMapplication
         //основное окно. Создается после выбора загрузки
         MainWindow mainWindow;
         //Ссылка на страницу, с которой будет производиться загрузка
+        AddingNewFilialWindow adFilWin;
+        //Текущий выбранный в комбо боксе филиал
+        Filial currentFilial;
         public SplashScreen()
         {
             InitializeComponent();
@@ -88,13 +92,78 @@ namespace VPNMMapplication
 
         private void btnLoad_Click(object sender, RoutedEventArgs e)
         {
+            DoBtnLoadJob();
+        }
+
+        private async void DoBtnLoadJob()
+        {
+            statusGrid.Visibility = Visibility.Visible;
+            btnLoad.IsEnabled = false;
+            lblStatusBar.Content = "Пожалуйста, ожидайте.";
+            await DoAsyncAuthorization();
+            btnLoad.IsEnabled = true;
+            statusGrid.Visibility = Visibility.Hidden;
+            lblStatusBar.Content = "";
+        }
+
+        private void LoadFilials()
+        {
+            //SerializeDivisions.AddFillial(divisions, new Filial("Нижне-Тагильский", new Region("Урал-Западный")));
+            //SerializeDivisions.AddFillial(divisions, new Filial("Пермский", new Region("Урал-Западный")));
+            //SerializeDivisions.AddFillial(divisions, new Filial("Серовский", new Region("Урал-Западный")));
+            List<String> filialNames = divisions.GetAllFilialNamesAsList();
+            filialNames.Add("<Добавить новый>");
+            comboBoxChooseFilial.ItemsSource = filialNames;
+            comboBoxChooseFilial.SelectedIndex = 0;
+        }
+
+        private void comboBoxChooseFilial_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            if ((string)comboBoxChooseFilial.SelectedItem == "<Добавить новый>")
+            {
+                adFilWin = new AddingNewFilialWindow(divisions);
+                adFilWin.Owner = this;
+                if (adFilWin.ShowDialog() == true)
+                    LoadFilials();
+            }
+            else
+            {
+                currentFilial = divisions.FindFilialByName(comboBoxChooseFilial.SelectedItem.ToString());
+            }
+        }
+
+        private async Task DoAsyncAuthorization()
+        {
             try
             {
                 //Если загрузка идет через HttpWebRequest
                 if (radioHttpLoad.IsChecked == true)
                 {
-                    HTMLWithAutorization htmlGetter = new HTMLWithAutorization(txtLogin.Text, pbPassword.Password, comboBoxChooseFilial.SelectedItem.ToString());
-                    maker = new MM_MK_DictionarryMaker(htmlGetter.HTML);
+                    if ((string.IsNullOrEmpty(txtLogin.Text)) || (string.IsNullOrEmpty(pbPassword.Password)))
+                    {
+                        MessageBox.Show("Заполните пожалуйста оба поля!", "Ошибка!");
+                        return;
+                    }
+                    HTMLWithAutorization htmlGetter = new HTMLWithAutorization(txtLogin.Text, pbPassword.Password,
+                        currentFilial);
+                    htmlGetter.OnAuthorizationProgress += HtmlGetter_OnAuthorizationProgress;
+
+                    string html = await Task.Run<string> (()=>
+                    {
+                        return htmlGetter.GetHTMLString();
+                    });
+
+                    if (html == null)
+                    {
+                        return;
+                    }
+                    if (html == "Неверный логин или пароль!")
+                    {
+                        MessageBox.Show("Неверный логин или пароль!", "Ошибка!");
+                        return;
+                    }
+
+                    maker = new MM_MK_DictionarryMaker(html);
                     mainWindow = new MainWindow(maker);
                     mainWindow.Show();
                     this.Close();
@@ -115,22 +184,16 @@ namespace VPNMMapplication
                 MessageBox.Show(ex.Message, "Ошибка!");
             }
         }
-        private void LoadFilials()
+        private void HtmlGetter_OnAuthorizationProgress(string obj)
         {
-            //SerializeDivisions.AddFillial(divisions, new Filial("Нижне-Тагильский", new Region("Урал-Западный")));
-            //SerializeDivisions.AddFillial(divisions, new Filial("Пермский", new Region("Урал-Западный")));
-            //SerializeDivisions.AddFillial(divisions, new Filial("Серовский", new Region("Урал-Западный")));
-            List<String> filialNames = new List<string>();
-            foreach (Region reg in divisions.Regions)
-            {
-                foreach (Filial fil in reg.Filials)
-                {
-                    filialNames.Add(fil.Name);
-                }
-            }
-            comboBoxChooseFilial.ItemsSource = filialNames;
-            comboBoxChooseFilial.SelectedIndex = 0;
+            this.Dispatcher.Invoke(() => {
+                lblStatusBar.Content = obj;
+            });
         }
 
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            radioHttpLoad.IsChecked = true;
+        }
     }
 }

@@ -8,6 +8,7 @@ using System.Net;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace VPNMMapplication
 {
@@ -15,25 +16,23 @@ namespace VPNMMapplication
     {
         public string Login { get; set; }
         public string PSWRD { get; set; }
-        public string Filial { get; set; }
+        public Filial Filial { get; set; }
         private const string URL = @"https://vpnmm.corp.tander.ru/ovpn/";
         Encoding encode = Encoding.GetEncoding("utf-8");
 
         //Очень важная часть, т.к. в этих куках будет храниться подтверждение удачно авторизации
         private CookieContainer cookies = new CookieContainer();
 
-        public HTMLWithAutorization(string login, string password, string filial)
+        public HTMLWithAutorization(string login, string password, Filial filial)
         {
             Login = login;
             PSWRD = password;
             Filial = filial;
         }
-        public string HTML
+
+        public string GetHTMLString()
         {
-            get
-            {
-                return GetHTML(Post(Login, PSWRD));
-            }
+            return GetHTML(Post(Login, PSWRD));
         }
 
         private string GetHTML(HttpWebResponse response)
@@ -45,6 +44,7 @@ namespace VPNMMapplication
                     System.Windows.MessageBox.Show("Авторизация неудалась.", "Ошибка!");
                     return null;
                 }
+                OnAuthorizationProgress("Проверяю...");
                 Stream ReceiveStream = response.GetResponseStream();
                 StreamReader sr = new StreamReader(ReceiveStream, encode);
                 //То что нам вернул сервер не попытку авторизации
@@ -52,25 +52,15 @@ namespace VPNMMapplication
                 sr.Close();
                 ReceiveStream.Close();
                 response.Close();
-
-
-                GetResponseInHTML(URL + "manage.cgi?unrollr=Урал-Западный");
-                return GetResponseInHTML(URL + "manage.cgi?unrollf=Нижне-Тагильский");
-
-
-                //if (answer == "плохой ответ")
-                //{
-                //    System.Windows.MessageBox.Show("Авторизация неудалась.", "Ошибка!");
-                //    return null; 
-                //}
-                //else
-                //{
-                //    string FormParams = $"unrollr=Урал-Западный";
-                //    DoRequestWithCookie(FormParams);
-                //    FormParams = $"unrollf={Filial}";
-                //    return DoRequestWithCookie(FormParams);
-                //}
-
+                if (answer.Contains("Неверный логин"))
+                {
+                    return "Неверный логин или пароль!";
+                }
+                //return answer;
+                OnAuthorizationProgress("Запрашиваю список регионов...");
+                GetResponseInHTML(URL + $"manage.cgi?unrollr={Filial.ParentRegion.NameOfRegion}");
+                OnAuthorizationProgress("Запрашиваю список филиалов...");
+                return GetResponseInHTML(URL + $"manage.cgi?unrollf={Filial.Name}");
 
             }
             catch (Exception ex)
@@ -111,10 +101,12 @@ namespace VPNMMapplication
                 string FormParams = $"log_username={login}&log_password={password}&action=login";
                 SomeBytes = Encoding.UTF8.GetBytes(FormParams);
                 req.ContentLength = SomeBytes.Length;
+                OnAuthorizationProgress("Попытка авторизации...");
                 Stream newStream = req.GetRequestStream();
                 BugFix_CookieDomain(cookies);
                 newStream.Write(SomeBytes, 0, SomeBytes.Length);
                 newStream.Close();
+                OnAuthorizationProgress("Получаю ответ сервера...");
                 result = (HttpWebResponse)req.GetResponse();
                 BugFix_CookieDomain(cookies);
                 return result;
@@ -126,9 +118,9 @@ namespace VPNMMapplication
             }
 
         }
-
         private void BugFix_CookieDomain(CookieContainer cookies)
         {
+            OnAuthorizationProgress("Баг фикс...");
             Type containerType = typeof(CookieContainer);
             var table = (Hashtable)containerType.InvokeMember("m_domainTable",
                                                                 BindingFlags.NonPublic |
@@ -148,5 +140,7 @@ namespace VPNMMapplication
                 }
             }
         }
+
+        public event Action<string> OnAuthorizationProgress;
     }
 }

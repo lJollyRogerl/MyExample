@@ -5,13 +5,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:VPNMMapplication"
         mc:Ignorable="d"
-        Title="Добро пожаловать!" Height="470" Width="310" Icon="pics/ico.png" ResizeMode="NoResize" WindowStartupLocation="CenterScreen"
-        MouseLeftButtonDown="Window_MouseLeftButtonDown">
-    <StackPanel>
+        Title="Добро пожаловать!" Height="497" Width="310" Icon="pics/ico.png" ResizeMode="NoResize" WindowStartupLocation="CenterScreen"
+        MouseLeftButtonDown="Window_MouseLeftButtonDown" Loaded="Window_Loaded">
+    <StackPanel VerticalAlignment="Bottom">
         <Label Content="Пожалуйста, выбирете способ загрузки." Margin="15" FontSize="13" FontWeight="Bold"/>
         <GroupBox x:Name="gbLoadWithHttpRequest" Margin="5">
             <StackPanel>
-                <RadioButton x:Name="radioHttpLoad" Content="Загрузка в режиме онлайн" 
+                <RadioButton x:Name="radioHttpLoad" Content="Загрузка в режиме онлайн"  
                              Margin="10" IsEnabled="True" GroupName="groupRadio" Checked="radioHttpLoad_Checked"/>
                 <StackPanel x:Name="stackPanelLogin" Orientation="Horizontal" Margin="10" IsEnabled="False">
                     <Label x:Name="lblLogin" Content="Логин:" Width="60"/>
@@ -23,7 +23,7 @@
                 </StackPanel>
                 <StackPanel x:Name="stackPanelComboBox" Orientation="Horizontal" Margin="10" IsEnabled="False">
                     <Label x:Name="lblCombo" Content="Филиал:" Width="60"/>
-                    <ComboBox x:Name="comboBoxChooseFilial" Width="170" Height="20" Margin="5"/>
+                    <ComboBox x:Name="comboBoxChooseFilial" Width="170" Height="20" Margin="5" SelectionChanged="comboBoxChooseFilial_SelectionChanged"/>
                 </StackPanel>
             </StackPanel>
         </GroupBox>
@@ -38,10 +38,14 @@
                 </StackPanel>
             </StackPanel>
         </GroupBox>
-        <Button x:Name="btnLoad" Height="30" Width="70" Content="Загрузить" Margin="5" Click="btnLoad_Click">
+        <Button x:Name="btnLoad" Height="30" Width="70" Content="Загрузить" Margin="15" Click="btnLoad_Click" IsDefault="True">
             <Button.Effect>
                 <DropShadowEffect Opacity="0.5" ShadowDepth="4"/>
             </Button.Effect>
         </Button>
+        <Grid x:Name="statusGrid" Width="310" Height="25" 
+              Background="LightGray" Visibility="Hidden">
+            <Label x:Name="lblStatusBar" FontSize="12"/>
+        </Grid>
     </StackPanel>
 </Window>
