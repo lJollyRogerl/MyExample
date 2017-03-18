@@ -23,7 +23,7 @@
                 </StackPanel>
                 <StackPanel x:Name="stackPanelComboBox" Orientation="Horizontal" Margin="10" IsEnabled="False">
                     <Label x:Name="lblCombo" Content="Филиал:" Width="60"/>
-                    <ComboBox x:Name="comboBoxChooseFilial" Width="170" Height="20" Margin="5"/>
+                    <ComboBox x:Name="comboBoxChooseFilial" Width="170" Height="20" Margin="5" SelectionChanged="comboBoxChooseFilial_SelectionChanged"/>
                 </StackPanel>
             </StackPanel>
         </GroupBox>

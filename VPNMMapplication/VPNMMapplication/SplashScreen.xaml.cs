@@ -23,6 +23,7 @@ namespace VPNMMapplication
         //основное окно. Создается после выбора загрузки
         MainWindow mainWindow;
         //Ссылка на страницу, с которой будет производиться загрузка
+        AddingNewFilialWindow adFilWin;
         public SplashScreen()
         {
             InitializeComponent();
@@ -128,9 +129,20 @@ namespace VPNMMapplication
                     filialNames.Add(fil.Name);
                 }
             }
+            filialNames.Add("<Добавить новый>");
             comboBoxChooseFilial.ItemsSource = filialNames;
             comboBoxChooseFilial.SelectedIndex = 0;
         }
 
+        private void comboBoxChooseFilial_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            if ((string)comboBoxChooseFilial.SelectedItem == "<Добавить новый>")
+            {
+                adFilWin = new AddingNewFilialWindow(divisions);
+                adFilWin.Owner = this;
+                if (adFilWin.ShowDialog() == true)
+                    LoadFilials();
+            }
+        }
     }
 }
