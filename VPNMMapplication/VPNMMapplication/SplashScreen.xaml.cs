@@ -24,6 +24,8 @@ namespace VPNMMapplication
         MainWindow mainWindow;
         //Ссылка на страницу, с которой будет производиться загрузка
         AddingNewFilialWindow adFilWin;
+        //Текущий выбранный в комбо боксе филиал
+        Filial currentFilial;
         public SplashScreen()
         {
             InitializeComponent();
@@ -94,7 +96,8 @@ namespace VPNMMapplication
                 //Если загрузка идет через HttpWebRequest
                 if (radioHttpLoad.IsChecked == true)
                 {
-                    HTMLWithAutorization htmlGetter = new HTMLWithAutorization(txtLogin.Text, pbPassword.Password, comboBoxChooseFilial.SelectedItem.ToString());
+                    HTMLWithAutorization htmlGetter = new HTMLWithAutorization(txtLogin.Text, pbPassword.Password, 
+                        currentFilial);
                     maker = new MM_MK_DictionarryMaker(htmlGetter.HTML);
                     mainWindow = new MainWindow(maker);
                     mainWindow.Show();
@@ -121,14 +124,7 @@ namespace VPNMMapplication
             //SerializeDivisions.AddFillial(divisions, new Filial("Нижне-Тагильский", new Region("Урал-Западный")));
             //SerializeDivisions.AddFillial(divisions, new Filial("Пермский", new Region("Урал-Западный")));
             //SerializeDivisions.AddFillial(divisions, new Filial("Серовский", new Region("Урал-Западный")));
-            List<String> filialNames = new List<string>();
-            foreach (Region reg in divisions.Regions)
-            {
-                foreach (Filial fil in reg.Filials)
-                {
-                    filialNames.Add(fil.Name);
-                }
-            }
+            List<String> filialNames = divisions.GetAllFilialNamesAsList();
             filialNames.Add("<Добавить новый>");
             comboBoxChooseFilial.ItemsSource = filialNames;
             comboBoxChooseFilial.SelectedIndex = 0;
@@ -142,6 +138,10 @@ namespace VPNMMapplication
                 adFilWin.Owner = this;
                 if (adFilWin.ShowDialog() == true)
                     LoadFilials();
+            }
+            else
+            {
+                currentFilial = divisions.FindFilialByName(comboBoxChooseFilial.SelectedItem.ToString());
             }
         }
     }

@@ -15,14 +15,14 @@ namespace VPNMMapplication
     {
         public string Login { get; set; }
         public string PSWRD { get; set; }
-        public string Filial { get; set; }
+        public Filial Filial { get; set; }
         private const string URL = @"https://vpnmm.corp.tander.ru/ovpn/";
         Encoding encode = Encoding.GetEncoding("utf-8");
 
         //Очень важная часть, т.к. в этих куках будет храниться подтверждение удачно авторизации
         private CookieContainer cookies = new CookieContainer();
 
-        public HTMLWithAutorization(string login, string password, string filial)
+        public HTMLWithAutorization(string login, string password, Filial filial)
         {
             Login = login;
             PSWRD = password;
@@ -54,8 +54,8 @@ namespace VPNMMapplication
                 response.Close();
 
 
-                GetResponseInHTML(URL + "manage.cgi?unrollr=Урал-Западный");
-                return GetResponseInHTML(URL + "manage.cgi?unrollf=Нижне-Тагильский");
+                GetResponseInHTML(URL + $"manage.cgi?unrollr={Filial.ParentRegion.NameOfRegion}");
+                return GetResponseInHTML(URL + $"manage.cgi?unrollf={Filial.Name}");
 
 
                 //if (answer == "плохой ответ")
