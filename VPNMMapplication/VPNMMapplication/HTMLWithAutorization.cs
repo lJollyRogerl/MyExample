@@ -56,7 +56,6 @@ namespace VPNMMapplication
                 {
                     return "Неверный логин или пароль!";
                 }
-                //return answer;
                 OnAuthorizationProgress("Запрашиваю список регионов...");
                 GetResponseInHTML(URL + $"manage.cgi?unrollr={Filial.ParentRegion.NameOfRegion}");
                 OnAuthorizationProgress("Запрашиваю список филиалов...");

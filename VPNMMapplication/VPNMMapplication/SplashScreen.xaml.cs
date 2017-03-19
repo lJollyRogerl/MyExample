@@ -108,9 +108,6 @@ namespace VPNMMapplication
 
         private void LoadFilials()
         {
-            //SerializeDivisions.AddFillial(divisions, new Filial("Нижне-Тагильский", new Region("Урал-Западный")));
-            //SerializeDivisions.AddFillial(divisions, new Filial("Пермский", new Region("Урал-Западный")));
-            //SerializeDivisions.AddFillial(divisions, new Filial("Серовский", new Region("Урал-Западный")));
             List<String> filialNames = divisions.GetAllFilialNamesAsList();
             filialNames.Add("<Добавить новый>");
             comboBoxChooseFilial.ItemsSource = filialNames;

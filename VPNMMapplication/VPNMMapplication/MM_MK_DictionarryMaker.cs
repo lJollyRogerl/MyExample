@@ -17,12 +17,36 @@ namespace VPNMMapplication
         public string HtmlString { get; set; }
         //Коллекция название ММ/DNS-имя
         public Dictionary<string, string> MM_MK_Dictionary { get; set; } = new Dictionary<string, string>();
+        public List<string> MM_MK_List = new List<string>();
         //Прогресс загрузки и наполнения коллекции
         public ProgressInfo ProgressOfLoading { get; set; } = new ProgressInfo();
         //Конструктор для загрузки из файла на локальной машине
         public MM_MK_DictionarryMaker(string htmlText)
         {
                 HtmlString = htmlText;
+        }
+
+        public async Task LoadListAsync()
+        {
+            await Task.Run(() =>
+            {
+                try
+                {
+                    MM_MK_List.Clear();
+                    HtmlDocument htmlDoc = new HtmlDocument();
+                    htmlDoc.LoadHtml(HtmlString);
+                    var collectionOfDNS = from c in htmlDoc.DocumentNode.SelectNodes("/html/body/table/tbody/tr/td.data2/*")
+                                          select c;
+                    foreach (var item in collectionOfDNS)
+                    {
+                        MM_MK_List.Add(item.InnerText);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "in loadListAsync");
+                }
+            });
         }
 
 

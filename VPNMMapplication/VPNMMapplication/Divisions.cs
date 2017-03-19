@@ -27,7 +27,7 @@ namespace VPNMMapplication
         }
 
 
-        public List<Region> Regions { get; set; }
+        public List<Region> Regions { get; set; } = new List<Region>();
         //Возвращает регион по имени
         public Region this[string name]
         {

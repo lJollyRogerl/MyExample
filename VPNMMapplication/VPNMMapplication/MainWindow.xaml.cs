@@ -70,15 +70,22 @@ namespace VPNMMapplication
                 //Перед нечалом загрузки - включаем видимость прогресс бара
                 VisibleProgressOn();
                 //грузим страницу
-                await maker.LoadDictionaryAsync();
+                //await maker.LoadDictionaryAsync();
+                await maker.LoadListAsync();
                 //После загрузки - выключаем видимость прогресс бара
                 VisibleProgressOff();
                 //Выводим на текстбокс всю выборку имен ММ/МК
-                foreach (var mm_mk in maker.MM_MK_Dictionary)
+                //foreach (var mm_mk in maker.MM_MK_Dictionary)
+                //{
+                //    readyObjects += mm_mk.Key + " - " + mm_mk.Value;
+                //    readyObjects += "\n";
+                //}
+                foreach (var item in maker.MM_MK_List)
                 {
-                    readyObjects += mm_mk.Key + " - " + mm_mk.Value;
+                    readyObjects += item;
                     readyObjects += "\n";
                 }
+
                 txtAllText.Text = readyObjects;
             }
 
