@@ -35,11 +35,13 @@ namespace VPNMMapplication
                     MM_MK_List.Clear();
                     HtmlDocument htmlDoc = new HtmlDocument();
                     htmlDoc.LoadHtml(HtmlString);
-                    var collectionOfDNS = from c in htmlDoc.DocumentNode.SelectNodes("/html/body/table/tbody/tr/td.data2/*")
-                                          select c;
-                    foreach (var item in collectionOfDNS)
+
+                    var collectionOfNames = from c in htmlDoc.DocumentNode.SelectNodes("/html/body/table/tbody/tr")
+                                            where c.InnerHtml.Contains("Нет подключения")
+                                            select c/*.SelectSingleNode("/b")*/;
+                    foreach (var node in collectionOfNames)
                     {
-                        MM_MK_List.Add(item.InnerText);
+                        MM_MK_List.Add(node.InnerHtml);
                     }
                 }
                 catch (Exception ex)

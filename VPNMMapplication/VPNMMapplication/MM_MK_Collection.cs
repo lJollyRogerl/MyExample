@@ -1,0 +1,48 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace VPNMMapplication
+{
+    class MM_MK_Collection
+    {
+        public List<MM_MK_Unit> TheCollection { get; set; }
+        public MM_MK_Unit this[string name]
+        {
+            get
+            {
+                foreach (MM_MK_Unit unit in TheCollection)
+                {
+                    if (unit.Title == name)
+                        return unit;
+                }
+                return null;
+            }
+
+            //Inserts a units info if name is the same 
+            private set
+            {
+                foreach (MM_MK_Unit unit in TheCollection)
+                {
+                    if (unit.Title == name)
+                    {
+                        unit.DNS_Name = value.DNS_Name;
+                        unit.IP = value.IP;
+                        unit.IsOnline = value.IsOnline;
+                    }
+                }
+            }
+
+        }
+    }
+
+    public class MM_MK_Unit
+    {
+        public string Title { get; set; }
+        public string DNS_Name { get; set; }
+        public string IP { get; set; }
+        public bool IsOnline { get; set; }
+    }
+}
