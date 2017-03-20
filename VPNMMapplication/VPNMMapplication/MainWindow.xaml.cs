@@ -70,17 +70,14 @@ namespace VPNMMapplication
                 //Перед нечалом загрузки - включаем видимость прогресс бара
                 VisibleProgressOn();
                 //грузим страницу
-                //await maker.LoadDictionaryAsync();
                 MM_MK_Collection col = await maker.LoadCollectionAsync(false);
                 //После загрузки - выключаем видимость прогресс бара
                 VisibleProgressOff();
-                
                 foreach (var item in col.TheCollection)
                 {
-                    readyObjects += item.Title;
+                    readyObjects += $"Название - {item.Title}, IP - {item.IP}, Подключен? - {item.IsOnline}, DNS - {item.DNS_Name}";
                     readyObjects += "\n";
                 }
-
                 txtAllText.Text = readyObjects;
             }
 

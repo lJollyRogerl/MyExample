@@ -38,7 +38,6 @@ namespace VPNMMapplication
             {
                 try
                 {
-                    MM_MK_List.Clear();
                     HtmlDocument htmlDoc = new HtmlDocument();
                     htmlDoc.LoadHtml(HtmlString);
                     MM_MK_Collection unitCollection = new MM_MK_Collection();
@@ -54,13 +53,20 @@ namespace VPNMMapplication
                         {
                             //Если подузел содержит МД, МК или ТЦ - добавляем в имя
                             if (child.InnerText.Contains("МД") || child.InnerText.Contains("МК") ||
-                                child.InnerText.Contains("ТЦ"))
+                                child.InnerText.Contains("ТЦ") || child.InnerText.Contains("Микроофис"))
                                 addingUnit.Title = child.InnerText.Trim();
 
                             //Если подузел содержит omd, omk или otc - добавляем в DNS имя
                             if (child.InnerText.Contains("omd") || child.InnerText.Contains("omk") || 
-                                child.InnerText.Contains("otc"))
+                                child.InnerText.Contains("otc") || child.InnerText.Contains("omf"))
                                 addingUnit.DNS_Name = child.InnerText.Trim() + ".onlinemm.corp.tander.ru";
+
+                            //Если есть строка, начинающаяся с 10 - добавляем в ip
+                            if (child.InnerText.Trim().StartsWith("10.")|| (child.InnerText.Trim().StartsWith("172.")))
+                                addingUnit.IP = child.InnerText.Trim();
+
+                            //устанавливаю статус подключения
+                            addingUnit.IsOnline = isConnected;
                         }
                         unitCollection.Add(addingUnit);
                     }
