@@ -74,12 +74,7 @@ namespace VPNMMapplication
                 MM_MK_Collection col = await maker.LoadCollectionAsync(false);
                 //После загрузки - выключаем видимость прогресс бара
                 VisibleProgressOff();
-                //Выводим на текстбокс всю выборку имен ММ/МК
-                //foreach (var mm_mk in maker.MM_MK_Dictionary)
-                //{
-                //    readyObjects += mm_mk.Key + " - " + mm_mk.Value;
-                //    readyObjects += "\n";
-                //}
+                
                 foreach (var item in col.TheCollection)
                 {
                     readyObjects += item.Title;
