@@ -6,9 +6,15 @@ using System.Threading.Tasks;
 
 namespace VPNMMapplication
 {
-    class MM_MK_Collection
+    public class MM_MK_Collection
     {
-        public List<MM_MK_Unit> TheCollection { get; set; }
+        public List<MM_MK_Unit> TheCollection { get; set; } = new List<MM_MK_Unit>();
+
+        public void Add(MM_MK_Unit unit)
+        {
+            TheCollection.Add(unit);
+        }
+
         public MM_MK_Unit this[string name]
         {
             get
