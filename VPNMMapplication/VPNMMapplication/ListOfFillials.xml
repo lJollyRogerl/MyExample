@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<Divisions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Regions>
+    <Region>
+      <Filials>
+        <Filial>
+          <Name>Нижне-Тагильский</Name>
+          <Parent_Region>
+            <Filials />
+            <NameOfRegion>Урал-Западный</NameOfRegion>
+          </Parent_Region>
+        </Filial>
+      </Filials>
+      <NameOfRegion>Урал-Западный</NameOfRegion>
+    </Region>
+  </Regions>
+</Divisions>

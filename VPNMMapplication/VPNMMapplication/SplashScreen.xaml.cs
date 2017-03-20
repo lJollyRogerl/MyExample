@@ -20,7 +20,7 @@ namespace VPNMMapplication
         //путь к файлу для локальной загрузки
         string pathToFile;
         //Создатель коллекции название ММ - его DNS
-        MM_MK_DictionarryMaker maker;
+        MM_MK_CollectionMaker maker;
         //основное окно. Создается после выбора загрузки
         MainWindow mainWindow;
         //Ссылка на страницу, с которой будет производиться загрузка
@@ -108,9 +108,6 @@ namespace VPNMMapplication
 
         private void LoadFilials()
         {
-            //SerializeDivisions.AddFillial(divisions, new Filial("Нижне-Тагильский", new Region("Урал-Западный")));
-            //SerializeDivisions.AddFillial(divisions, new Filial("Пермский", new Region("Урал-Западный")));
-            //SerializeDivisions.AddFillial(divisions, new Filial("Серовский", new Region("Урал-Западный")));
             List<String> filialNames = divisions.GetAllFilialNamesAsList();
             filialNames.Add("<Добавить новый>");
             comboBoxChooseFilial.ItemsSource = filialNames;
@@ -163,7 +160,7 @@ namespace VPNMMapplication
                         return;
                     }
 
-                    maker = new MM_MK_DictionarryMaker(html);
+                    maker = new MM_MK_CollectionMaker(html);
                     mainWindow = new MainWindow(maker);
                     mainWindow.Show();
                     this.Close();
@@ -173,7 +170,7 @@ namespace VPNMMapplication
                 if (radioHttpPage.IsChecked == true)
                 {
                     string htmlText = File.ReadAllText(pathToFile, Encoding.UTF8);
-                    maker = new MM_MK_DictionarryMaker(htmlText);
+                    maker = new MM_MK_CollectionMaker(htmlText);
                     mainWindow = new MainWindow(maker);
                     mainWindow.Show();
                     this.Close();

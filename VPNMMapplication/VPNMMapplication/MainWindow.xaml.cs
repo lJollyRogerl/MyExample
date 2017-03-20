@@ -11,12 +11,12 @@ namespace VPNMMapplication
     public partial class MainWindow : Window
     {
         string readyObjects = "";
-        MM_MK_DictionarryMaker maker;
+        MM_MK_CollectionMaker maker;
         public MainWindow()
         {
             InitializeComponent();
         }
-        public MainWindow(MM_MK_DictionarryMaker dictionaryMaker)
+        public MainWindow(MM_MK_CollectionMaker dictionaryMaker)
         {
             maker = dictionaryMaker;
             InitializeComponent();
@@ -70,15 +70,17 @@ namespace VPNMMapplication
                 //Перед нечалом загрузки - включаем видимость прогресс бара
                 VisibleProgressOn();
                 //грузим страницу
-                await maker.LoadDictionaryAsync();
+                //await maker.LoadDictionaryAsync();
+                MM_MK_Collection col = await maker.LoadCollectionAsync(false);
                 //После загрузки - выключаем видимость прогресс бара
                 VisibleProgressOff();
-                //Выводим на текстбокс всю выборку имен ММ/МК
-                foreach (var mm_mk in maker.MM_MK_Dictionary)
+                
+                foreach (var item in col.TheCollection)
                 {
-                    readyObjects += mm_mk.Key + " - " + mm_mk.Value;
+                    readyObjects += item.Title;
                     readyObjects += "\n";
                 }
+
                 txtAllText.Text = readyObjects;
             }
 

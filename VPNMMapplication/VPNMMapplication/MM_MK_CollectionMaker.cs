@@ -11,18 +11,67 @@ using System.Windows;
 
 namespace VPNMMapplication
 {
-    public class MM_MK_DictionarryMaker
+    public class MM_MK_CollectionMaker
     {
         //Строка с html содержимым
         public string HtmlString { get; set; }
         //Коллекция название ММ/DNS-имя
         public Dictionary<string, string> MM_MK_Dictionary { get; set; } = new Dictionary<string, string>();
+        public List<string> MM_MK_List = new List<string>();
         //Прогресс загрузки и наполнения коллекции
         public ProgressInfo ProgressOfLoading { get; set; } = new ProgressInfo();
         //Конструктор для загрузки из файла на локальной машине
-        public MM_MK_DictionarryMaker(string htmlText)
+        public MM_MK_CollectionMaker(string htmlText)
         {
                 HtmlString = htmlText;
+        }
+
+        //Собирает кллекцию из статуса подключения. true - есть подключение. false - нет.
+        public async Task<MM_MK_Collection> LoadCollectionAsync(bool isConnected)
+        {
+            string status;
+            if (isConnected == false)
+                status = "Нет подключения";
+            else
+                status = "Есть подключение";
+            return await Task.Run(() =>
+            {
+                try
+                {
+                    MM_MK_List.Clear();
+                    HtmlDocument htmlDoc = new HtmlDocument();
+                    htmlDoc.LoadHtml(HtmlString);
+                    MM_MK_Collection unitCollection = new MM_MK_Collection();
+
+                    var collectionOfNames = from c in htmlDoc.DocumentNode.SelectNodes("/html/body/table/tbody/tr")
+                                            where c.InnerHtml.Contains(status)
+                                            select c;
+
+                    foreach (var node in collectionOfNames)
+                    {
+                        MM_MK_Unit addingUnit = new MM_MK_Unit();
+                        foreach (var child in node.ChildNodes)
+                        {
+                            //Если подузел содержит МД, МК или ТЦ - добавляем в имя
+                            if (child.InnerText.Contains("МД") || child.InnerText.Contains("МК") ||
+                                child.InnerText.Contains("ТЦ"))
+                                addingUnit.Title = child.InnerText.Trim();
+
+                            //Если подузел содержит omd, omk или otc - добавляем в DNS имя
+                            if (child.InnerText.Contains("omd") || child.InnerText.Contains("omk") || 
+                                child.InnerText.Contains("otc"))
+                                addingUnit.DNS_Name = child.InnerText.Trim() + ".onlinemm.corp.tander.ru";
+                        }
+                        unitCollection.Add(addingUnit);
+                    }
+                    return unitCollection;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Ошибка выборки!");
+                    return null;
+                }
+            });
         }
 
 

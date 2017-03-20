@@ -65,6 +65,7 @@
     </Compile>
     <Compile Include="Divisions.cs" />
     <Compile Include="HTMLWithAutorization.cs" />
+    <Compile Include="MM_MK_Collection.cs" />
     <Compile Include="SerializeDivisions.cs" />
     <Compile Include="SplashScreen.xaml.cs">
       <DependentUpon>SplashScreen.xaml</DependentUpon>
@@ -91,7 +92,7 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MM_MK_DictionarryMaker.cs" />
+    <Compile Include="MM_MK_CollectionMaker.cs" />
     <Compile Include="ProgressInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
@@ -129,6 +130,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="pics\screen.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ListOfFillials.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

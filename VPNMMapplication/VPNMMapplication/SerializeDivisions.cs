@@ -22,10 +22,12 @@ namespace VPNMMapplication
                 }
                 return regions;
             }
-            catch (Exception ex)
+            catch (FileNotFoundException ex)
             {
-                MessageBox.Show(ex.Message, "Ошибка десериализации");
-                return null;
+                Divisions div = new Divisions();
+                AddFillial(div, new Filial("Нижне-Тагильский", new Region("Урал-Западный")));
+                //MessageBox.Show(ex.Message, "Ошибка десериализации");
+                return div.Regions;
             }
 
         }
