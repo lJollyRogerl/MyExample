@@ -10,7 +10,6 @@ namespace VPNMMapplication
     /// 
     public partial class MainWindow : Window
     {
-        string readyObjects = "";
         MM_MK_CollectionMaker maker;
         public MainWindow()
         {
@@ -36,8 +35,11 @@ namespace VPNMMapplication
         private void mainWindow_Loaded(object sender, RoutedEventArgs e)
         {
             maker.OnProgressChanged += Maker_OnProgressChanged;
-            txtAllText.Text = maker.HtmlString;
-            //LoadAsync();
+            //txtAllText.Text = maker.HtmlString;
+            LoadAsync();
+            //System.Windows.Data.CollectionViewSource mM_MK_UnitViewSource = ((System.Windows.Data.CollectionViewSource)(this.FindResource("mM_MK_UnitViewSource")));
+            // Load data by setting the CollectionViewSource.Source property:
+            // mM_MK_UnitViewSource.Source = [generic data source]
         }
 
         private void Maker_OnProgressChanged(ProgressInfo obj)
@@ -70,15 +72,11 @@ namespace VPNMMapplication
                 //Перед нечалом загрузки - включаем видимость прогресс бара
                 VisibleProgressOn();
                 //грузим страницу
-                MM_MK_Collection col = await maker.LoadCollectionAsync(false);
+                MM_MK_Collection col = await maker.LoadCollectionAsync(true);
                 //После загрузки - выключаем видимость прогресс бара
                 VisibleProgressOff();
-                foreach (var item in col.TheCollection)
-                {
-                    readyObjects += $"Название - {item.Title}, IP - {item.IP}, Подключен? - {item.IsOnline}, DNS - {item.DNS_Name}";
-                    readyObjects += "\n";
-                }
-                txtAllText.Text = readyObjects;
+                mM_MK_UnitDataGrid.ItemsSource = col.TheCollection;
+
             }
 
             catch (Exception ex)

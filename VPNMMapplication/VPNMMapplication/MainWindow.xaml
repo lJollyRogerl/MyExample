@@ -8,7 +8,10 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525" SizeChanged="mainWindow_SizeChanged"
         Loaded="mainWindow_Loaded">
-    <DockPanel LastChildFill="True">
+    <Window.Resources>
+        <CollectionViewSource x:Key="mM_MK_UnitViewSource" d:DesignSource="{d:DesignInstance {x:Type local:MM_MK_Unit}, CreateList=True}"/>
+    </Window.Resources>
+    <DockPanel LastChildFill="True" DataContext="{StaticResource mM_MK_UnitViewSource}">
         <ToolBar x:Name="toolBarMyBar" DockPanel.Dock="Top"  Height="50">
             <Button x:Name="btnLoad" Content="Load" Height="40" Width="75" Click="btnLoad_Click"/>
         </ToolBar>
@@ -16,6 +19,14 @@
             <Label x:Name="lblStatus" Foreground="Gray" FontSize="10" Height="22"/>
             <ProgressBar x:Name="progressBar" Height="13" Visibility="Hidden"/>
         </StatusBar>
-        <TextBox x:Name="txtAllText" AcceptsReturn="True" AcceptsTab="True" VerticalScrollBarVisibility="Auto"/> 
+
+        <DataGrid x:Name="mM_MK_UnitDataGrid" AutoGenerateColumns="False" EnableRowVirtualization="False" ItemsSource="{Binding}"
+                  RowDetailsVisibilityMode="VisibleWhenSelected">
+            <DataGrid.Columns>
+                <DataGridTextColumn x:Name="titleColumn" Binding="{Binding Title}" Header="Название объекта" Width="170"/>
+                <DataGridTextColumn x:Name="iPColumn" Binding="{Binding IP}" Header="Внутренний IP адрес" Width="130"/>
+                <DataGridTextColumn x:Name="dNS_NameColumn" Binding="{Binding DNS_Name}" Header="DNS имя" Width="200"/>
+            </DataGrid.Columns>
+        </DataGrid>
     </DockPanel>
 </Window>
