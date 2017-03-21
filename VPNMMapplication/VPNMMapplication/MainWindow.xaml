@@ -13,7 +13,7 @@
     </Window.Resources>
     <DockPanel LastChildFill="True" DataContext="{StaticResource mM_MK_UnitViewSource}">
         <ToolBar x:Name="toolBarMyBar" DockPanel.Dock="Top"  Height="50">
-            <Button x:Name="btnLoad" Content="Load" Height="40" Width="75" Click="btnLoad_Click"/>
+            <Button x:Name="btnLoad" Content="Обновить" Height="40" Width="75" Click="btnLoad_Click"/>
         </ToolBar>
         <StatusBar DockPanel.Dock="Bottom" Height="25">
             <Label x:Name="lblStatus" Foreground="Gray" FontSize="10" Height="22"/>
@@ -21,11 +21,13 @@
         </StatusBar>
 
         <DataGrid x:Name="mM_MK_UnitDataGrid" AutoGenerateColumns="False" EnableRowVirtualization="False" ItemsSource="{Binding}"
-                  RowDetailsVisibilityMode="VisibleWhenSelected">
+                  RowDetailsVisibilityMode="VisibleWhenSelected" FontSize="14" IsReadOnly="True" FontWeight="SemiBold">
             <DataGrid.Columns>
                 <DataGridTextColumn x:Name="titleColumn" Binding="{Binding Title}" Header="Название объекта" Width="170"/>
                 <DataGridTextColumn x:Name="iPColumn" Binding="{Binding IP}" Header="Внутренний IP адрес" Width="130"/>
                 <DataGridTextColumn x:Name="dNS_NameColumn" Binding="{Binding DNS_Name}" Header="DNS имя" Width="200"/>
+                <DataGridTextColumn x:Name="isOnline" Binding="{Binding IsOnline}" Header="Статус" Width="50"/>
+
             </DataGrid.Columns>
         </DataGrid>
     </DockPanel>

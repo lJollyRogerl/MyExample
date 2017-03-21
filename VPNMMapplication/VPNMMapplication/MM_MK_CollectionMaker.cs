@@ -42,12 +42,15 @@ namespace VPNMMapplication
                     htmlDoc.LoadHtml(HtmlString);
                     MM_MK_Collection unitCollection = new MM_MK_Collection();
 
-                    var collectionOfNames = from c in htmlDoc.DocumentNode.SelectNodes("/html/body/table/tbody/tr")
+                    var collectionOfNodes = from c in htmlDoc.DocumentNode.SelectNodes("/html/body/table/tbody/tr")
                                             where c.InnerHtml.Contains(status)
                                             select c;
 
-                    foreach (var node in collectionOfNames)
+                    ProgressOfLoading.TotalSteps = collectionOfNodes.Count();
+
+                    for (int i = 0; i < collectionOfNodes.Count(); i++)
                     {
+                        var node = collectionOfNodes.ElementAt(i);
                         MM_MK_Unit addingUnit = new MM_MK_Unit();
                         foreach (var child in node.ChildNodes)
                         {
@@ -69,6 +72,9 @@ namespace VPNMMapplication
                             addingUnit.IsOnline = isConnected;
                         }
                         unitCollection.Add(addingUnit);
+                        ProgressOfLoading.CurrentStep = i;
+                        ProgressOfLoading.CurrentMM_MK = addingUnit.Title;
+                        OnProgressChanged(ProgressOfLoading);
                     }
                     return unitCollection;
                 }

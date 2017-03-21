@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Media;
 
 namespace VPNMMapplication
 {
@@ -11,6 +13,7 @@ namespace VPNMMapplication
     public partial class MainWindow : Window
     {
         MM_MK_CollectionMaker maker;
+        Uri 
         public MainWindow()
         {
             InitializeComponent();
@@ -19,6 +22,22 @@ namespace VPNMMapplication
         {
             maker = dictionaryMaker;
             InitializeComponent();
+        }
+
+        private void MM_MK_UnitDataGrid_LoadingRow(object sender, System.Windows.Controls.DataGridRowEventArgs e)
+        {
+            if (e.Row.DataContext is MM_MK_Unit)
+            {
+                MM_MK_Unit unit = (MM_MK_Unit)e.Row.DataContext;
+                if (unit.IsOnline == false)
+                {
+                    e.Row.Background = new SolidColorBrush(Color.FromRgb(245,0,41));
+                }
+                else
+                {
+                    e.Row.Background = new SolidColorBrush(Colors.LightGreen);
+                }
+            }
         }
 
         private void btnLoad_Click(object sender, RoutedEventArgs e)
@@ -35,11 +54,8 @@ namespace VPNMMapplication
         private void mainWindow_Loaded(object sender, RoutedEventArgs e)
         {
             maker.OnProgressChanged += Maker_OnProgressChanged;
-            //txtAllText.Text = maker.HtmlString;
+            mM_MK_UnitDataGrid.LoadingRow += MM_MK_UnitDataGrid_LoadingRow;
             LoadAsync();
-            //System.Windows.Data.CollectionViewSource mM_MK_UnitViewSource = ((System.Windows.Data.CollectionViewSource)(this.FindResource("mM_MK_UnitViewSource")));
-            // Load data by setting the CollectionViewSource.Source property:
-            // mM_MK_UnitViewSource.Source = [generic data source]
         }
 
         private void Maker_OnProgressChanged(ProgressInfo obj)
@@ -48,7 +64,7 @@ namespace VPNMMapplication
             {
                 progressBar.Maximum = obj.TotalSteps;
                 progressBar.Value = obj.CurrentStep;
-                lblStatus.Content = "Обработка "+obj.CurrentMM_MK.ToString();
+                lblStatus.Content = "Обработка " + obj.CurrentMM_MK.ToString();
             });
         }
 
@@ -73,10 +89,10 @@ namespace VPNMMapplication
                 VisibleProgressOn();
                 //грузим страницу
                 MM_MK_Collection col = await maker.LoadCollectionAsync(true);
+                col.AddCollection(await maker.LoadCollectionAsync(false));
                 //После загрузки - выключаем видимость прогресс бара
                 VisibleProgressOff();
                 mM_MK_UnitDataGrid.ItemsSource = col.TheCollection;
-
             }
 
             catch (Exception ex)

@@ -35,6 +35,11 @@ namespace VPNMMapplication
             return GetHTML(Post(Login, PSWRD));
         }
 
+        //public Task<string> Refresh()
+        //{
+        //    return await GetResponseInHTML(URL + "manage.cgi");
+        //}
+
         private string GetHTML(HttpWebResponse response)
         {
             try

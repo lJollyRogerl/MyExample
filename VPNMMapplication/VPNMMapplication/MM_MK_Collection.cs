@@ -15,6 +15,11 @@ namespace VPNMMapplication
             TheCollection.Add(unit);
         }
 
+        public void AddCollection(MM_MK_Collection collectionToAdd)
+        {
+            TheCollection.AddRange(collectionToAdd.TheCollection);
+        }
+
         public MM_MK_Unit this[string name]
         {
             get
