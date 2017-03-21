@@ -13,7 +13,8 @@ namespace VPNMMapplication
     public partial class MainWindow : Window
     {
         MM_MK_CollectionMaker maker;
-        Uri 
+        private HTMLWithAutorization htmlGetter;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -24,6 +25,13 @@ namespace VPNMMapplication
             InitializeComponent();
         }
 
+        public MainWindow(MM_MK_CollectionMaker dictionaryMaker, HTMLWithAutorization getterForRefresh) : this(dictionaryMaker)
+        {
+            maker = dictionaryMaker;
+            htmlGetter = getterForRefresh;
+            InitializeComponent();
+        }
+
         private void MM_MK_UnitDataGrid_LoadingRow(object sender, System.Windows.Controls.DataGridRowEventArgs e)
         {
             if (e.Row.DataContext is MM_MK_Unit)
@@ -31,7 +39,7 @@ namespace VPNMMapplication
                 MM_MK_Unit unit = (MM_MK_Unit)e.Row.DataContext;
                 if (unit.IsOnline == false)
                 {
-                    e.Row.Background = new SolidColorBrush(Color.FromRgb(245,0,41));
+                    e.Row.Background = new SolidColorBrush(Color.FromRgb(245, 0, 41));
                 }
                 else
                 {
@@ -60,7 +68,7 @@ namespace VPNMMapplication
 
         private void Maker_OnProgressChanged(ProgressInfo obj)
         {
-            this.Dispatcher.Invoke(() => 
+            this.Dispatcher.Invoke(() =>
             {
                 progressBar.Maximum = obj.TotalSteps;
                 progressBar.Value = obj.CurrentStep;
@@ -100,6 +108,14 @@ namespace VPNMMapplication
                 MessageBox.Show(ex.Message);
             }
             btnLoad.IsEnabled = true;
+        }
+
+        private void button_Click(object sender, RoutedEventArgs e)
+        {
+            Task.Run(async () => {
+                maker.HtmlString = await htmlGetter.Refresh();
+            });
+            LoadAsync();
         }
     }
 }

@@ -14,6 +14,7 @@
     <DockPanel LastChildFill="True" DataContext="{StaticResource mM_MK_UnitViewSource}">
         <ToolBar x:Name="toolBarMyBar" DockPanel.Dock="Top"  Height="50">
             <Button x:Name="btnLoad" Content="Обновить" Height="40" Width="75" Click="btnLoad_Click"/>
+            <Button x:Name="button" Content="Button" Height="45" VerticalAlignment="Top" Width="75" Click="button_Click"/>
         </ToolBar>
         <StatusBar DockPanel.Dock="Bottom" Height="25">
             <Label x:Name="lblStatus" Foreground="Gray" FontSize="10" Height="22"/>

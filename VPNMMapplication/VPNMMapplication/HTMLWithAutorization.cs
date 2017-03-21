@@ -12,7 +12,7 @@ using System.Windows;
 
 namespace VPNMMapplication
 {
-    class HTMLWithAutorization
+    public class HTMLWithAutorization
     {
         public string Login { get; set; }
         public string PSWRD { get; set; }
@@ -30,17 +30,17 @@ namespace VPNMMapplication
             Filial = filial;
         }
 
-        public string GetHTMLString()
+        public Task<string> GetHTMLString()
         {
             return GetHTML(Post(Login, PSWRD));
         }
 
-        //public Task<string> Refresh()
-        //{
-        //    return await GetResponseInHTML(URL + "manage.cgi");
-        //}
+        public Task<string> Refresh()
+        {
+            return GetResponseInHTML(URL + "manage.cgi");
+        }
 
-        private string GetHTML(HttpWebResponse response)
+        private async Task<string> GetHTML(HttpWebResponse response)
         {
             try
             {
@@ -62,9 +62,9 @@ namespace VPNMMapplication
                     return "Неверный логин или пароль!";
                 }
                 OnAuthorizationProgress("Запрашиваю список регионов...");
-                GetResponseInHTML(URL + $"manage.cgi?unrollr={Filial.ParentRegion.NameOfRegion}");
+                await GetResponseInHTML(URL + $"manage.cgi?unrollr={Filial.ParentRegion.NameOfRegion}");
                 OnAuthorizationProgress("Запрашиваю список филиалов...");
-                return GetResponseInHTML(URL + $"manage.cgi?unrollf={Filial.Name}");
+                return await GetResponseInHTML(URL + $"manage.cgi?unrollf={Filial.Name}");
 
             }
             catch (Exception ex)
@@ -75,7 +75,7 @@ namespace VPNMMapplication
 
         }
 
-        private string GetResponseInHTML(string url)
+        private Task<string> GetResponseInHTML(string url)
         {
             HttpWebRequest req = (HttpWebRequest)HttpWebRequest.Create(url);
             req.AllowAutoRedirect = false;
@@ -87,7 +87,7 @@ namespace VPNMMapplication
             Stream ReceiveStream1 = response.GetResponseStream();
             StreamReader sr1 = new StreamReader(ReceiveStream1, encode);
             BugFix_CookieDomain(cookies);
-            return sr1.ReadToEnd();
+            return sr1.ReadToEndAsync();
         }
 
         private HttpWebResponse Post(string login, string password)

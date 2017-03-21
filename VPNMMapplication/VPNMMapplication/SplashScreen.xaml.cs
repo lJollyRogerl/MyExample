@@ -27,6 +27,8 @@ namespace VPNMMapplication
         AddingNewFilialWindow adFilWin;
         //Текущий выбранный в комбо боксе филиал
         Filial currentFilial;
+
+        HTMLWithAutorization htmlGetter;
         public SplashScreen()
         {
             InitializeComponent();
@@ -141,7 +143,7 @@ namespace VPNMMapplication
                         MessageBox.Show("Заполните пожалуйста оба поля!", "Ошибка!");
                         return;
                     }
-                    HTMLWithAutorization htmlGetter = new HTMLWithAutorization(txtLogin.Text, pbPassword.Password,
+                    htmlGetter = new HTMLWithAutorization(txtLogin.Text, pbPassword.Password,
                         currentFilial);
                     htmlGetter.OnAuthorizationProgress += HtmlGetter_OnAuthorizationProgress;
 
@@ -161,7 +163,7 @@ namespace VPNMMapplication
                     }
 
                     maker = new MM_MK_CollectionMaker(html);
-                    mainWindow = new MainWindow(maker);
+                    mainWindow = new MainWindow(maker, htmlGetter);
                     mainWindow.Show();
                     this.Close();
                 }
