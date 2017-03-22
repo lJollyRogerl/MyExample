@@ -40,6 +40,7 @@ namespace VPNMMapplication
             return GetResponseInHTML(URL + "manage.cgi");
         }
 
+
         private async Task<string> GetHTML(HttpWebResponse response)
         {
             try

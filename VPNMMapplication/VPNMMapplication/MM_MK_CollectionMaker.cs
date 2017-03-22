@@ -68,6 +68,14 @@ namespace VPNMMapplication
                             if (child.InnerText.Trim().StartsWith("10.")|| (child.InnerText.Trim().StartsWith("172.")))
                                 addingUnit.IP = child.InnerText.Trim();
 
+                            //Если днс имя присвоено - проверяем
+                            if (addingUnit.DNS_Name != null)
+                            {
+                                if (addingUnit.DNS_Name.Contains("_1"))
+                                    addingUnit.MainOrReserve = "Резервный";
+                                else
+                                    addingUnit.MainOrReserve = "Основной";
+                            }
                             //устанавливаю статус подключения
                             addingUnit.IsOnline = isConnected;
                         }

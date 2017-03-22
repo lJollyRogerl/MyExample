@@ -4,6 +4,7 @@
              xmlns:local="clr-namespace:VPNMMapplication"
              StartupUri="SplashScreen.xaml">
     <Application.Resources>
+        <!--Folder template-->
         <ControlTemplate x:Key="FolderButton" TargetType="Button">
             <Grid x:Name="templateBtn" Width="25">
                 <Grid.Background>
@@ -22,6 +23,90 @@
                 <Trigger Property="IsPressed" Value="True">
                     <Setter TargetName="templateBtn" Property="RenderTransformOrigin" Value="0.5,0.5"/>
                     <Setter TargetName="templateBtn" Property="RenderTransform">
+                        <Setter.Value>
+                            <ScaleTransform ScaleX="0.9" ScaleY="0.9"/>
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+        <!-- Plugged Radio template -->
+        <ControlTemplate x:Key="RadioBtnPlugged" TargetType="RadioButton">
+            <Rectangle x:Name="templateRadio" Width="35" Height="35">
+                <Rectangle.Fill>
+                    <ImageBrush ImageSource="pics/plugged.png"/>
+                </Rectangle.Fill>
+            </Rectangle>
+            <ControlTemplate.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter TargetName="templateRadio" Property="RenderTransformOrigin" Value="0.5,0.5"/>
+                    <Setter TargetName="templateRadio" Property="RenderTransform">
+                        <Setter.Value>
+                            <ScaleTransform ScaleX="1.1" ScaleY="1.1"/>
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+                <Trigger Property="IsChecked" Value="True">
+                    <Setter TargetName="templateRadio" Property="RenderTransformOrigin" Value="0.5,0.5"/>
+                    <Setter TargetName="templateRadio" Property="StrokeThickness" Value="1"/>
+                    <Setter TargetName="templateRadio" Property="Stroke" Value="Black"/>
+                    <Setter TargetName="templateRadio" Property="RenderTransform">
+                        <Setter.Value>
+                            <ScaleTransform ScaleX="0.9" ScaleY="0.9"/>
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+        <!-- Unplugged Radio template -->
+        <ControlTemplate x:Key="RadioBtnUnPlugged" TargetType="RadioButton">
+            <Rectangle x:Name="templateRadio" Width="35" Height="35">
+                <Rectangle.Fill>
+                    <ImageBrush ImageSource="pics/unplugged.png"/>
+                </Rectangle.Fill>
+            </Rectangle>
+            <ControlTemplate.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter TargetName="templateRadio" Property="RenderTransformOrigin" Value="0.5,0.5"/>
+                    <Setter TargetName="templateRadio" Property="RenderTransform">
+                        <Setter.Value>
+                            <ScaleTransform ScaleX="1.1" ScaleY="1.1"/>
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+                <Trigger Property="IsChecked" Value="True">
+                    <Setter TargetName="templateRadio" Property="RenderTransformOrigin" Value="0.5,0.5"/>
+                    <Setter TargetName="templateRadio" Property="StrokeThickness" Value="1"/>
+                    <Setter TargetName="templateRadio" Property="Stroke" Value="Black"/>
+                    <Setter TargetName="templateRadio" Property="RenderTransform">
+                        <Setter.Value>
+                            <ScaleTransform ScaleX="0.9" ScaleY="0.9"/>
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+        <!-- Both statuses Radio template -->
+        <ControlTemplate x:Key="RadioBtnBothStatuses" TargetType="RadioButton">
+            <Rectangle x:Name="templateRadio" Width="35" Height="35">
+                <Rectangle.Fill>
+                    <ImageBrush ImageSource="pics/BothStatuses.png"/>
+                </Rectangle.Fill>
+            </Rectangle>
+            <ControlTemplate.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter TargetName="templateRadio" Property="RenderTransformOrigin" Value="0.5,0.5"/>
+                    <Setter TargetName="templateRadio" Property="RenderTransform">
+                        <Setter.Value>
+                            <ScaleTransform ScaleX="1.1" ScaleY="1.1"/>
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+                <Trigger Property="IsChecked" Value="True">
+                    <Setter TargetName="templateRadio" Property="RenderTransformOrigin" Value="0.5,0.5"/>
+                    <Setter TargetName="templateRadio" Property="StrokeThickness" Value="1"/>
+                    <Setter TargetName="templateRadio" Property="Stroke" Value="Black"/>
+                    <Setter TargetName="templateRadio" Property="RenderTransform">
                         <Setter.Value>
                             <ScaleTransform ScaleX="0.9" ScaleY="0.9"/>
                         </Setter.Value>

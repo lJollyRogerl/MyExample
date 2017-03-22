@@ -55,5 +55,7 @@ namespace VPNMMapplication
         public string DNS_Name { get; set; }
         public string IP { get; set; }
         public bool IsOnline { get; set; }
+        public string MainOrReserve { get; set; }
+        public string LastDateOnline { get; set; }
     }
 }

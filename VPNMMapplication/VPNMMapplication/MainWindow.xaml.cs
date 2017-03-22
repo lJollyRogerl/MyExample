@@ -108,7 +108,7 @@ namespace VPNMMapplication
 
         private async void LoadAsync()
         {
-            btnLoad.IsEnabled = false;
+            btnRefresh.IsEnabled = false;
             try
             {
                 //Перед нечалом загрузки - включаем видимость прогресс бара
@@ -129,21 +129,24 @@ namespace VPNMMapplication
             {
                 MessageBox.Show(ex.Message);
             }
-            btnLoad.IsEnabled = true;
+            btnRefresh.IsEnabled = true;
         }
 
         //Прогружает новый список онлайн
-        private void Refresh()
+        private async void Refresh()
         {
-            Task.Run(async () => {
-                maker.HtmlString = await htmlGetter.Refresh();
-            });
+            maker.HtmlString = await htmlGetter.Refresh();
             LoadAsync();
         }
 
         private void btnRefresh_Click(object sender, RoutedEventArgs e)
         {
             Refresh();
+        }
+
+        private void mM_MK_UnitDataGrid_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+
         }
     }
 }

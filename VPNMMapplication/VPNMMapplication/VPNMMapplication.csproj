@@ -124,13 +124,23 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="pics\ico.png" />
+    <Content Include="pics\BothStatuses.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="pics\ico.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="pics\Plugged.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="pics\Unplugged.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="pics\folder.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="pics\screen.gif" />
+    <Content Include="pics\folder.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="ListOfFillials.xml" />
