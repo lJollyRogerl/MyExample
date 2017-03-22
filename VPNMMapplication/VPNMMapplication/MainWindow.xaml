@@ -26,7 +26,7 @@
         </StatusBar>
 
         <DataGrid x:Name="mM_MK_UnitDataGrid" AutoGenerateColumns="False" EnableRowVirtualization="False" ItemsSource="{Binding}"
-                  RowDetailsVisibilityMode="VisibleWhenSelected" FontSize="14" IsReadOnly="True" FontWeight="SemiBold" SelectionChanged="mM_MK_UnitDataGrid_SelectionChanged">
+                  RowDetailsVisibilityMode="VisibleWhenSelected" FontSize="14" IsReadOnly="True" FontWeight="SemiBold">
             <DataGrid.Columns>
                 <DataGridTextColumn x:Name="titleColumn" Binding="{Binding Title}" Header="Название объекта" Width="170"/>
                 <DataGridTextColumn x:Name="iPColumn" Binding="{Binding IP}" Header="Внутренний IP адрес" Width="130"/>

@@ -143,10 +143,5 @@ namespace VPNMMapplication
         {
             Refresh();
         }
-
-        private void mM_MK_UnitDataGrid_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
-        {
-
-        }
     }
 }
