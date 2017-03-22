@@ -163,7 +163,7 @@ namespace VPNMMapplication
                     }
 
                     maker = new MM_MK_CollectionMaker(html);
-                    mainWindow = new MainWindow(maker, htmlGetter);
+                    mainWindow = new MainWindow(maker, htmlGetter, radioHttpLoad.IsChecked);
                     mainWindow.Show();
                     this.Close();
                 }

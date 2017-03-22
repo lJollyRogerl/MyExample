@@ -3,6 +3,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
+using System.Windows.Threading;
 
 namespace VPNMMapplication
 {
@@ -12,8 +13,11 @@ namespace VPNMMapplication
     /// 
     public partial class MainWindow : Window
     {
-        MM_MK_CollectionMaker maker;
+        private MM_MK_CollectionMaker maker;
         private HTMLWithAutorization htmlGetter;
+        private MM_MK_Collection col;
+        private bool? isOnlineMode = false;
+        DispatcherTimer dispatcherTimer;
 
         public MainWindow()
         {
@@ -25,8 +29,9 @@ namespace VPNMMapplication
             InitializeComponent();
         }
 
-        public MainWindow(MM_MK_CollectionMaker dictionaryMaker, HTMLWithAutorization getterForRefresh) : this(dictionaryMaker)
+        public MainWindow(MM_MK_CollectionMaker dictionaryMaker, HTMLWithAutorization getterForRefresh, bool? isChecked)
         {
+            isOnlineMode = isChecked;
             maker = dictionaryMaker;
             htmlGetter = getterForRefresh;
             InitializeComponent();
@@ -64,6 +69,19 @@ namespace VPNMMapplication
             maker.OnProgressChanged += Maker_OnProgressChanged;
             mM_MK_UnitDataGrid.LoadingRow += MM_MK_UnitDataGrid_LoadingRow;
             LoadAsync();
+            //Если запущено в онлайн режиме - обновляет статус ММ каждые 5 минут
+            if (isOnlineMode == true)
+            {
+                dispatcherTimer = new System.Windows.Threading.DispatcherTimer();
+                dispatcherTimer.Tick += delegate (object s, EventArgs eArgs) { Refresh(); };
+                dispatcherTimer.Interval = new TimeSpan(0, 5, 0);
+                dispatcherTimer.Start();
+            }
+        }
+
+        private void DispatcherTimer_Tick(object sender, EventArgs e)
+        {
+            throw new NotImplementedException();
         }
 
         private void Maker_OnProgressChanged(ProgressInfo obj)
@@ -95,12 +113,16 @@ namespace VPNMMapplication
             {
                 //Перед нечалом загрузки - включаем видимость прогресс бара
                 VisibleProgressOn();
+                MM_MK_Collection newCollection = new MM_MK_Collection();
                 //грузим страницу
-                MM_MK_Collection col = await maker.LoadCollectionAsync(true);
-                col.AddCollection(await maker.LoadCollectionAsync(false));
+                newCollection = await maker.LoadCollectionAsync(true);
+                newCollection.AddCollection(await maker.LoadCollectionAsync(false));
+                this.Dispatcher.Invoke(() => {
+                    col = newCollection;
+                    mM_MK_UnitDataGrid.ItemsSource = col.TheCollection;
+                });
                 //После загрузки - выключаем видимость прогресс бара
                 VisibleProgressOff();
-                mM_MK_UnitDataGrid.ItemsSource = col.TheCollection;
             }
 
             catch (Exception ex)
@@ -110,12 +132,18 @@ namespace VPNMMapplication
             btnLoad.IsEnabled = true;
         }
 
-        private void button_Click(object sender, RoutedEventArgs e)
+        //Прогружает новый список онлайн
+        private void Refresh()
         {
             Task.Run(async () => {
                 maker.HtmlString = await htmlGetter.Refresh();
             });
             LoadAsync();
+        }
+
+        private void btnRefresh_Click(object sender, RoutedEventArgs e)
+        {
+            Refresh();
         }
     }
 }

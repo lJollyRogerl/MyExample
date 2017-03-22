@@ -13,8 +13,8 @@
     </Window.Resources>
     <DockPanel LastChildFill="True" DataContext="{StaticResource mM_MK_UnitViewSource}">
         <ToolBar x:Name="toolBarMyBar" DockPanel.Dock="Top"  Height="50">
-            <Button x:Name="btnLoad" Content="Обновить" Height="40" Width="75" Click="btnLoad_Click"/>
-            <Button x:Name="button" Content="Button" Height="45" VerticalAlignment="Top" Width="75" Click="button_Click"/>
+            <Button x:Name="btnRefresh" Content="Обновить" Height="45" VerticalAlignment="Top" Width="75" Click="btnRefresh_Click"/>
+            <Button x:Name="btnLoad" Content="Обновить" Height="40" Width="75" Click="btnLoad_Click" Visibility="Hidden"/>
         </ToolBar>
         <StatusBar DockPanel.Dock="Bottom" Height="25">
             <Label x:Name="lblStatus" Foreground="Gray" FontSize="10" Height="22"/>
@@ -27,7 +27,6 @@
                 <DataGridTextColumn x:Name="titleColumn" Binding="{Binding Title}" Header="Название объекта" Width="170"/>
                 <DataGridTextColumn x:Name="iPColumn" Binding="{Binding IP}" Header="Внутренний IP адрес" Width="130"/>
                 <DataGridTextColumn x:Name="dNS_NameColumn" Binding="{Binding DNS_Name}" Header="DNS имя" Width="200"/>
-                <DataGridTextColumn x:Name="isOnline" Binding="{Binding IsOnline}" Header="Статус" Width="50"/>
 
             </DataGrid.Columns>
         </DataGrid>
