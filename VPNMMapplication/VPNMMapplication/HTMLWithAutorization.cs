@@ -40,6 +40,12 @@ namespace VPNMMapplication
             return GetResponseInHTML(URL + "manage.cgi");
         }
 
+        //public string> GetSessionsLog(string username)
+        //{
+        //    string url = URL + $"history2.cgi? username = {username}";
+        //    return GetResponseInHTML(url);
+        //}
+
 
         private async Task<string> GetHTML(HttpWebResponse response)
         {

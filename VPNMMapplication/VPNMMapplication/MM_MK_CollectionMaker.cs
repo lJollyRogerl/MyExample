@@ -17,13 +17,17 @@ namespace VPNMMapplication
         public string HtmlString { get; set; }
         //Коллекция название ММ/DNS-имя
         public Dictionary<string, string> MM_MK_Dictionary { get; set; } = new Dictionary<string, string>();
+
         public List<string> MM_MK_List = new List<string>();
         //Прогресс загрузки и наполнения коллекции
         public ProgressInfo ProgressOfLoading { get; set; } = new ProgressInfo();
+
+        public HTMLWithAutorization htmlMaker { get; set; }
         //Конструктор для загрузки из файла на локальной машине
-        public MM_MK_CollectionMaker(string htmlText)
+        public MM_MK_CollectionMaker(string htmlText, HTMLWithAutorization htmMaker)
         {
-                HtmlString = htmlText;
+            HtmlString = htmlText;
+            htmlMaker = htmMaker;
         }
 
         //Собирает кллекцию из статуса подключения. true - есть подключение. false - нет.
@@ -60,9 +64,14 @@ namespace VPNMMapplication
                                 addingUnit.Title = child.InnerText.Trim();
 
                             //Если подузел содержит omd, omk или otc - добавляем в DNS имя
-                            if (child.InnerText.Contains("omd") || child.InnerText.Contains("omk") || 
+                            if (child.InnerText.Contains("omd") || child.InnerText.Contains("omk") ||
                                 child.InnerText.Contains("otc") || child.InnerText.Contains("omf"))
-                                addingUnit.DNS_Name = child.InnerText.Trim() + ".onlinemm.corp.tander.ru";
+                            {
+                                string objName = child.InnerText.Trim();
+                                addingUnit.LastDateOnline = GetLastSessionDate(objName);
+                                addingUnit.DNS_Name = objName + ".onlinemm.corp.tander.ru";
+                            }
+
 
                             //Если есть строка, начинающаяся с 10 - добавляем в ip
                             if (child.InnerText.Trim().StartsWith("10.")|| (child.InnerText.Trim().StartsWith("172.")))
@@ -78,6 +87,7 @@ namespace VPNMMapplication
                             }
                             //устанавливаю статус подключения
                             addingUnit.IsOnline = isConnected;
+
                         }
                         unitCollection.Add(addingUnit);
                         ProgressOfLoading.CurrentStep = i;
@@ -94,7 +104,16 @@ namespace VPNMMapplication
             });
         }
 
+        public async void GetLastSessionDate(string objectName)
+        {
+            HtmlDocument htmlDoc = new HtmlDocument();
+            string html = await Task.Run<string>(() =>
+            {
+                return htmlMaker.GetSessionsLog(objectName);
+            });
+            htmlDoc.LoadHtml(html);
 
+        }
 
         //Загружаем небходимые имена и DNS из HTML, а так же создаем словарь.
         public async Task LoadDictionaryAsync()

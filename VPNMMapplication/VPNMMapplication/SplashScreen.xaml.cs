@@ -162,7 +162,7 @@ namespace VPNMMapplication
                         return;
                     }
 
-                    maker = new MM_MK_CollectionMaker(html);
+                    maker = new MM_MK_CollectionMaker(html, htmlGetter);
                     mainWindow = new MainWindow(maker, htmlGetter, radioHttpLoad.IsChecked);
                     mainWindow.Show();
                     this.Close();
@@ -172,7 +172,7 @@ namespace VPNMMapplication
                 if (radioHttpPage.IsChecked == true)
                 {
                     string htmlText = File.ReadAllText(pathToFile, Encoding.UTF8);
-                    maker = new MM_MK_CollectionMaker(htmlText);
+                    maker = new MM_MK_CollectionMaker(htmlText, htmlGetter);
                     mainWindow = new MainWindow(maker);
                     mainWindow.Show();
                     this.Close();
