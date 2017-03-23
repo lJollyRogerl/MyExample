@@ -30,24 +30,25 @@ namespace VPNMMapplication
             Filial = filial;
         }
 
-        public Task<string> GetHTMLString()
+        public string GetHTMLString()
         {
             return GetHTML(Post(Login, PSWRD));
         }
 
-        public Task<string> Refresh()
+        public string Refresh()
         {
             return GetResponseInHTML(URL + "manage.cgi");
         }
 
-        //public string> GetSessionsLog(string username)
-        //{
-        //    string url = URL + $"history2.cgi? username = {username}";
-        //    return GetResponseInHTML(url);
-        //}
+        public string GetSessionsLog(string username)
+        {
+            //данная ссылка не работает. Необходимо добавлять beginDate.
+            string url = URL + $"history2.cgi?username={username}";
+            return GetResponseInHTML(url);
+        }
 
 
-        private async Task<string> GetHTML(HttpWebResponse response)
+        private string GetHTML(HttpWebResponse response)
         {
             try
             {
@@ -69,9 +70,9 @@ namespace VPNMMapplication
                     return "Неверный логин или пароль!";
                 }
                 OnAuthorizationProgress("Запрашиваю список регионов...");
-                await GetResponseInHTML(URL + $"manage.cgi?unrollr={Filial.ParentRegion.NameOfRegion}");
+                GetResponseInHTML(URL + $"manage.cgi?unrollr={Filial.ParentRegion.NameOfRegion}");
                 OnAuthorizationProgress("Запрашиваю список филиалов...");
-                return await GetResponseInHTML(URL + $"manage.cgi?unrollf={Filial.Name}");
+                return GetResponseInHTML(URL + $"manage.cgi?unrollf={Filial.Name}");
 
             }
             catch (Exception ex)
@@ -82,7 +83,7 @@ namespace VPNMMapplication
 
         }
 
-        private Task<string> GetResponseInHTML(string url)
+        private string GetResponseInHTML(string url)
         {
             HttpWebRequest req = (HttpWebRequest)HttpWebRequest.Create(url);
             req.AllowAutoRedirect = false;
@@ -94,7 +95,7 @@ namespace VPNMMapplication
             Stream ReceiveStream1 = response.GetResponseStream();
             StreamReader sr1 = new StreamReader(ReceiveStream1, encode);
             BugFix_CookieDomain(cookies);
-            return sr1.ReadToEndAsync();
+            return sr1.ReadToEnd();
         }
 
         private HttpWebResponse Post(string login, string password)

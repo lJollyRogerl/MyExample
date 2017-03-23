@@ -20,6 +20,11 @@ namespace VPNMMapplication
             TheCollection.AddRange(collectionToAdd.TheCollection);
         }
 
+        public void Clear()
+        {
+            TheCollection.Clear();
+        }
+
         public MM_MK_Unit this[string name]
         {
             get
@@ -51,11 +56,11 @@ namespace VPNMMapplication
 
     public class MM_MK_Unit
     {
-        public string Title { get; set; }
-        public string DNS_Name { get; set; }
-        public string IP { get; set; }
-        public bool IsOnline { get; set; }
-        public string MainOrReserve { get; set; }
-        public string LastDateOnline { get; set; }
+        public string Title { get; set; } = "";
+        public string DNS_Name { get; set; } = "";
+        public string IP { get; set; } = "";
+        public bool IsOnline { get; set; } = true;
+        public string MainOrReserve { get; set; } = "";
+        public string LastDateOnline { get; set; } = "";
     }
 }

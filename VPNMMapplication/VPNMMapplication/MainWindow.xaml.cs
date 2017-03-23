@@ -18,6 +18,9 @@ namespace VPNMMapplication
         private MM_MK_Collection col;
         private bool? isOnlineMode = false;
         DispatcherTimer dispatcherTimer;
+        MM_MK_Collection onlineCollection = new MM_MK_Collection();
+        MM_MK_Collection oflineCollection = new MM_MK_Collection();
+        MM_MK_Collection fullCollection = new MM_MK_Collection();
 
         public MainWindow()
         {
@@ -74,14 +77,9 @@ namespace VPNMMapplication
             {
                 dispatcherTimer = new System.Windows.Threading.DispatcherTimer();
                 dispatcherTimer.Tick += delegate (object s, EventArgs eArgs) { Refresh(); };
-                dispatcherTimer.Interval = new TimeSpan(0, 5, 0);
+                dispatcherTimer.Interval = new TimeSpan(0, 7, 0);
                 dispatcherTimer.Start();
             }
-        }
-
-        private void DispatcherTimer_Tick(object sender, EventArgs e)
-        {
-            throw new NotImplementedException();
         }
 
         private void Maker_OnProgressChanged(ProgressInfo obj)
@@ -113,14 +111,40 @@ namespace VPNMMapplication
             {
                 //Перед нечалом загрузки - включаем видимость прогресс бара
                 VisibleProgressOn();
-                MM_MK_Collection newCollection = new MM_MK_Collection();
                 //грузим страницу
-                newCollection = await maker.LoadCollectionAsync(true);
-                newCollection.AddCollection(await maker.LoadCollectionAsync(false));
-                this.Dispatcher.Invoke(() => {
-                    col = newCollection;
+                onlineCollection = await maker.LoadCollectionAsync(true);
+                oflineCollection = await maker.LoadCollectionAsync(false);
+                fullCollection.Clear();
+                fullCollection.AddCollection(onlineCollection);
+                fullCollection.AddCollection(oflineCollection);
+
+                if (radioBtnOnline.IsChecked == true)
+                {
+                    this.Dispatcher.Invoke(() => {
+                        col = onlineCollection;
+                        mM_MK_UnitDataGrid.ItemsSource = col.TheCollection;
+                    });
+                }
+                if (radioBtnOffline.IsChecked == true)
+                {
+                    this.Dispatcher.Invoke(() => {
+                        col = oflineCollection;
+                        mM_MK_UnitDataGrid.ItemsSource = col.TheCollection;
+                    });
+                }
+                if (radioBtnBothStats.IsChecked == true)
+                {
+                    this.Dispatcher.Invoke(() =>
+                    {
+                        col = fullCollection;
+                        mM_MK_UnitDataGrid.ItemsSource = col.TheCollection;
+                    });
+                }
+                else
+                {
                     mM_MK_UnitDataGrid.ItemsSource = col.TheCollection;
-                });
+                }
+                
                 //После загрузки - выключаем видимость прогресс бара
                 VisibleProgressOff();
             }
@@ -133,15 +157,21 @@ namespace VPNMMapplication
         }
 
         //Прогружает новый список онлайн
-        private async void Refresh()
+        private void Refresh()
         {
-            maker.HtmlString = await htmlGetter.Refresh();
+            maker.HtmlString = htmlGetter.Refresh();
             LoadAsync();
         }
 
         private void btnRefresh_Click(object sender, RoutedEventArgs e)
         {
             Refresh();
+        }
+
+        private void radioBtnOnline_Checked(object sender, RoutedEventArgs e)
+        {
+            col = fullCollection;
+            mM_MK_UnitDataGrid.ItemsSource = col.TheCollection;
         }
     }
 }

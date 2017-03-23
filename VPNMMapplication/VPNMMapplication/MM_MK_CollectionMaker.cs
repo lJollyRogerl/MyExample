@@ -68,7 +68,8 @@ namespace VPNMMapplication
                                 child.InnerText.Contains("otc") || child.InnerText.Contains("omf"))
                             {
                                 string objName = child.InnerText.Trim();
-                                addingUnit.LastDateOnline = GetLastSessionDate(objName);
+                                if(isConnected == false)
+                                    addingUnit.LastDateOnline = GetLastSessionDate(objName);
                                 addingUnit.DNS_Name = objName + ".onlinemm.corp.tander.ru";
                             }
 
@@ -104,15 +105,38 @@ namespace VPNMMapplication
             });
         }
 
-        public async void GetLastSessionDate(string objectName)
+        //Выбирает дату последнего подключения
+        public string GetLastSessionDate(string objectName)
         {
-            HtmlDocument htmlDoc = new HtmlDocument();
-            string html = await Task.Run<string>(() =>
+            try
             {
-                return htmlMaker.GetSessionsLog(objectName);
-            });
-            htmlDoc.LoadHtml(html);
+                string result = "";
+                HtmlDocument htmlDoc = new HtmlDocument();
+                string html = htmlMaker.GetSessionsLog(objectName);
+                htmlDoc.LoadHtml(html);
+                var collectionOfNodes = from c in htmlDoc.DocumentNode.SelectNodes("/html/body/table/tbody/tr/*")
+                                        select c;
+                foreach (var row in collectionOfNodes)
+                {
+                    //тут линк сделать и отобрать даты только
+                    var dates = from column in row.ChildNodes
+                                where column.InnerText.Trim().StartsWith("201")
+                                select column.InnerText.Trim();
 
+                    foreach (var date in dates)
+                        result = date;
+
+                    if (string.IsNullOrWhiteSpace(result))
+                        result = "Нет данных";
+                }
+                return result;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Ошибка");
+                return null;
+            }
+            
         }
 
         //Загружаем небходимые имена и DNS из HTML, а так же создаем словарь.
