@@ -63,4 +63,13 @@ namespace VPNMMapplication
         public string MainOrReserve { get; set; } = "";
         public string LastDateOnline { get; set; } = "";
     }
+
+    public class MMCollectionComparer : IComparer<MM_MK_Unit>
+    {
+        public int Compare(MM_MK_Unit x, MM_MK_Unit y)
+        {
+            return x.Title.CompareTo(y.Title);
+        }
+    }
+
 }

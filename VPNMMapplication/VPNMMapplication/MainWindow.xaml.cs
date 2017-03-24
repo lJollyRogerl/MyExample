@@ -56,11 +56,6 @@ namespace VPNMMapplication
             }
         }
 
-        private void btnLoad_Click(object sender, RoutedEventArgs e)
-        {
-            LoadAsync();
-        }
-
         private void mainWindow_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             lblStatus.Width = mainWindow.Width / 3 * 1;
@@ -114,11 +109,13 @@ namespace VPNMMapplication
                 VisibleProgressOn();
                 //грузим страницу
                 onlineCollection = await maker.LoadCollectionAsync(true, checkBoxShowDate.IsChecked);
+                onlineCollection.TheCollection.Sort(new MMCollectionComparer());
                 offlineCollection = await maker.LoadCollectionAsync(false, checkBoxShowDate.IsChecked);
+                offlineCollection.TheCollection.Sort(new MMCollectionComparer());
                 fullCollection.Clear();
                 fullCollection.AddCollection(onlineCollection);
                 fullCollection.AddCollection(offlineCollection);
-                fullCollection.TheCollection.Sort();
+                fullCollection.TheCollection.Sort(new MMCollectionComparer());
                 if (radioBtnOnline.IsChecked == true)
                 {
                     this.Dispatcher.Invoke(() => {
