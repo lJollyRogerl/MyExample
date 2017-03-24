@@ -114,5 +114,34 @@
                 </Trigger>
             </ControlTemplate.Triggers>
         </ControlTemplate>
+        <ControlTemplate x:Key="checkBox" TargetType="CheckBox">
+            <StackPanel x:Name="checkBoxStackPanel" Orientation="Horizontal">
+                <Rectangle x:Name="checkBoxRectangle" Width="35" Height="35">
+                    <Rectangle.Fill>
+                        <ImageBrush ImageSource="pics/unchecked.png" Stretch="Uniform"/>
+                    </Rectangle.Fill>
+                </Rectangle>
+                <StackPanel Orientation="Vertical">
+                    <Label x:Name="checkBoxLabel" Content="Загружать даты" FontSize="15"/>
+                </StackPanel>
+            </StackPanel>
+            <ControlTemplate.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter TargetName="checkBoxStackPanel" Property="RenderTransformOrigin" Value="0.5,0.5"/>
+                    <Setter TargetName="checkBoxStackPanel" Property="RenderTransform">
+                        <Setter.Value>
+                            <ScaleTransform ScaleX="1.1" ScaleY="1.1"/>
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+                <Trigger Property="IsChecked" Value="true">
+                    <Setter TargetName="checkBoxRectangle" Property="Fill">
+                        <Setter.Value>
+                            <ImageBrush ImageSource="pics/checked.png" Stretch="Uniform"/>
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
     </Application.Resources>
 </Application>

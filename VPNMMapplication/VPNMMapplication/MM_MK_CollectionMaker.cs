@@ -31,7 +31,7 @@ namespace VPNMMapplication
         }
 
         //Собирает кллекцию из статуса подключения. true - есть подключение. false - нет.
-        public async Task<MM_MK_Collection> LoadCollectionAsync(bool isConnected)
+        public async Task<MM_MK_Collection> LoadCollectionAsync(bool isConnected, bool? doDateLogLoad)
         {
             string status;
             if (isConnected == false)
@@ -68,7 +68,7 @@ namespace VPNMMapplication
                                 child.InnerText.Contains("otc") || child.InnerText.Contains("omf"))
                             {
                                 string objName = child.InnerText.Trim();
-                                if(isConnected == false)
+                                if(isConnected == false && doDateLogLoad == true)
                                     addingUnit.LastDateOnline = GetLastSessionDate(objName);
                                 addingUnit.DNS_Name = objName + ".onlinemm.corp.tander.ru";
                             }

@@ -43,7 +43,7 @@ namespace VPNMMapplication
         public string GetSessionsLog(string username)
         {
             //данная ссылка не работает. Необходимо добавлять beginDate.
-            string url = URL + $"history2.cgi?username={username}";
+            string url = URL + $"history2.cgi?begin=2017-03-16;username={username}";
             return GetResponseInHTML(url);
         }
 

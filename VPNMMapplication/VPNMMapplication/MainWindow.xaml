@@ -6,8 +6,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:VPNMMapplication"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525" SizeChanged="mainWindow_SizeChanged"
-        Loaded="mainWindow_Loaded">
+        Title="Мониторинг Объектов Обслуживания" Height="350" Width="525" SizeChanged="mainWindow_SizeChanged"
+        Loaded="mainWindow_Loaded" Icon="pics/ico.png">
     <Window.Resources>
         <CollectionViewSource x:Key="mM_MK_UnitViewSource" d:DesignSource="{d:DesignInstance {x:Type local:MM_MK_Unit}, CreateList=True}"/>
     </Window.Resources>
@@ -20,9 +20,8 @@
             <RadioButton x:Name="radioBtnOffline" Template="{DynamicResource RadioBtnUnPlugged}" Margin="5" Checked="radioBtnOnline_Checked"/>
             <RadioButton x:Name="radioBtnBothStats" Template="{DynamicResource RadioBtnBothStatuses}" Margin="5" Checked="radioBtnOnline_Checked"/>
             <Separator/>
-            <CheckBox x:Name="checkBoxShowDate" Content="Показывать дату"/>
+            <CheckBox x:Name="checkBoxShowDate" Template="{DynamicResource checkBox}"/>
         </ToolBar>
-
         <StatusBar DockPanel.Dock="Bottom" Height="25">
             <Label x:Name="lblStatus" Foreground="Gray" FontSize="10" Height="22"/>
             <ProgressBar x:Name="progressBar" Height="13" Visibility="Hidden"/>
