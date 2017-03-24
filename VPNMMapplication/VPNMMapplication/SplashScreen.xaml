@@ -10,7 +10,7 @@
     <StackPanel VerticalAlignment="Bottom">
         <Label Content="Пожалуйста, выбирете способ загрузки." Margin="15" FontSize="13" FontWeight="Bold"/>
         <GroupBox x:Name="gbLoadWithHttpRequest" Margin="5">
-            <StackPanel>
+            <StackPanel x:Name="authorisStackPnl">
                 <RadioButton x:Name="radioHttpLoad" Content="Загрузка в режиме онлайн"  
                              Margin="10" IsEnabled="True" GroupName="groupRadio" Checked="radioHttpLoad_Checked"/>
                 <StackPanel x:Name="stackPanelLogin" Orientation="Horizontal" Margin="10" IsEnabled="False">

@@ -70,7 +70,7 @@ namespace VPNMMapplication
             //Если запущено в онлайн режиме - обновляет статус ММ каждые 5 минут
             if (isOnlineMode == true)
             {
-                dispatcherTimer = new System.Windows.Threading.DispatcherTimer();
+                dispatcherTimer = new DispatcherTimer();
                 dispatcherTimer.Tick += delegate (object s, EventArgs eArgs) { Refresh(); };
                 dispatcherTimer.Interval = new TimeSpan(0, 7, 0);
                 dispatcherTimer.Start();
@@ -107,43 +107,20 @@ namespace VPNMMapplication
             {
                 //Перед нечалом загрузки - включаем видимость прогресс бара
                 VisibleProgressOn();
-                //грузим страницу
+
+                //Коллекция онлайн объектов
                 onlineCollection = await maker.LoadCollectionAsync(true, checkBoxShowDate.IsChecked);
                 onlineCollection.TheCollection.Sort(new MMCollectionComparer());
+                //Коллекция оффлайн объектов
                 offlineCollection = await maker.LoadCollectionAsync(false, checkBoxShowDate.IsChecked);
                 offlineCollection.TheCollection.Sort(new MMCollectionComparer());
+                //Коллекция онлайн+оффлайн объектов
                 fullCollection.Clear();
                 fullCollection.AddCollection(onlineCollection);
                 fullCollection.AddCollection(offlineCollection);
                 fullCollection.TheCollection.Sort(new MMCollectionComparer());
-                if (radioBtnOnline.IsChecked == true)
-                {
-                    this.Dispatcher.Invoke(() => {
-                        col = onlineCollection;
-                        mM_MK_UnitDataGrid.ItemsSource = col.TheCollection;
-                    });
-                }
-                if (radioBtnOffline.IsChecked == true)
-                {
-                    this.Dispatcher.Invoke(() => {
-                        col = offlineCollection;
-                        mM_MK_UnitDataGrid.ItemsSource = col.TheCollection;
-                    });
-                }
-                if (radioBtnBothStats.IsChecked == true)
-                {
-                    this.Dispatcher.Invoke(() =>
-                    {
-                        col = fullCollection;
-                        mM_MK_UnitDataGrid.ItemsSource = col.TheCollection;
-                    });
-                }
-                else
-                {
-                    col = fullCollection;
-                    mM_MK_UnitDataGrid.ItemsSource = col.TheCollection;
-                }
-                
+                //Выбор текущей колекции
+                SwitchView();
                 //После загрузки - выключаем видимость прогресс бара
                 VisibleProgressOff();
             }
@@ -173,6 +150,11 @@ namespace VPNMMapplication
         private void radioBtnOnline_Checked(object sender, RoutedEventArgs e)
         {
             //Если выбран чек бокс - показывать только онлайн - показываем только онлайн и т.д.
+            SwitchView();
+        }
+
+        private void SwitchView()
+        {
             if (radioBtnBothStats.IsChecked == true)
                 col = fullCollection;
             if (radioBtnOnline.IsChecked == true)

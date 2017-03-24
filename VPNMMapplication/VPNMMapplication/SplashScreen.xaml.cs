@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows;
 //using System.Windows.Forms;
 using System.Windows.Input;
+using System.Windows.Threading;
 
 namespace VPNMMapplication
 {
@@ -95,15 +96,18 @@ namespace VPNMMapplication
         private void btnLoad_Click(object sender, RoutedEventArgs e)
         {
             DoBtnLoadJob();
+
         }
 
         private async void DoBtnLoadJob()
         {
             statusGrid.Visibility = Visibility.Visible;
             btnLoad.IsEnabled = false;
+            authorisStackPnl.IsEnabled = false;
             lblStatusBar.Content = "Пожалуйста, ожидайте.";
             await DoAsyncAuthorization();
             btnLoad.IsEnabled = true;
+            authorisStackPnl.IsEnabled = true;
             statusGrid.Visibility = Visibility.Hidden;
             lblStatusBar.Content = "";
         }
@@ -185,9 +189,21 @@ namespace VPNMMapplication
         }
         private void HtmlGetter_OnAuthorizationProgress(string obj)
         {
+            //{
+            //    DispatcherTimer dispatcherTimer = new DispatcherTimer();
+            //    dispatcherTimer.Tick += delegate (object s, EventArgs eArgs) 
+            //                                        { obj = LoadingProcess(obj); };
+            //    dispatcherTimer.Interval = new TimeSpan(0, 0, 2);
+            //    dispatcherTimer.Start();
+            //}
             this.Dispatcher.Invoke(() => {
                 lblStatusBar.Content = obj;
             });
+        }
+
+        private string LoadingProcess(string obj)
+        {
+            return obj + ".";
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)

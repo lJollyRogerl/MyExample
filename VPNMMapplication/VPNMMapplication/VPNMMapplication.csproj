@@ -136,6 +136,9 @@
     <Content Include="pics\Plugged.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="pics\refresh.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="pics\unchecked.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

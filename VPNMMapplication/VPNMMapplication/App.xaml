@@ -30,6 +30,32 @@
                 </Trigger>
             </ControlTemplate.Triggers>
         </ControlTemplate>
+        <!--Refresh template-->
+        <ControlTemplate x:Key="RefreshButton" TargetType="Button">
+            <Grid x:Name="templateRefreshBtn" Width="30" Height="30">
+                <Grid.Background>
+                    <ImageBrush ImageSource="pics/refresh.png" Stretch="Uniform"/>
+                </Grid.Background>
+            </Grid>
+            <ControlTemplate.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter TargetName="templateRefreshBtn" Property="RenderTransformOrigin" Value="0.5,0.5"/>
+                    <Setter TargetName="templateRefreshBtn" Property="RenderTransform">
+                        <Setter.Value>
+                            <ScaleTransform ScaleX="1.1" ScaleY="1.1"/>
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter TargetName="templateRefreshBtn" Property="RenderTransformOrigin" Value="0.5,0.5"/>
+                    <Setter TargetName="templateRefreshBtn" Property="RenderTransform">
+                        <Setter.Value>
+                            <ScaleTransform ScaleX="0.9" ScaleY="0.9"/>
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
         <!-- Plugged Radio template -->
         <ControlTemplate x:Key="RadioBtnPlugged" TargetType="RadioButton">
             <Rectangle x:Name="templateRadio" Width="35" Height="35">
@@ -122,7 +148,7 @@
                     </Rectangle.Fill>
                 </Rectangle>
                 <StackPanel Orientation="Vertical">
-                    <Label x:Name="checkBoxLabel" Content="Загружать даты" FontSize="15"/>
+                    <Label x:Name="checkBoxLabel" Content="Загружать даты" FontSize="15" VerticalAlignment="Center"/>
                 </StackPanel>
             </StackPanel>
             <ControlTemplate.Triggers>
