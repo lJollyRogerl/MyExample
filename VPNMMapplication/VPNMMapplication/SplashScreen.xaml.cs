@@ -108,7 +108,7 @@ namespace VPNMMapplication
             authorisStackPnl.IsEnabled = false;
             lblStatusBar.Content = "Пожалуйста, ожидайте.";
             dispatcherTimer.Tick += DispatcherTimer_Tick;
-            dispatcherTimer.Interval = TimeSpan.FromMilliseconds(160);
+            dispatcherTimer.Interval = TimeSpan.FromSeconds(1);
             dispatcherTimer.Start();
             await DoAsyncAuthorization();
             btnLoad.IsEnabled = true;
