@@ -46,49 +46,49 @@ namespace VPNMMapplication
             //Если выбрана загрузка по http - включаем поля авторизации.
             //Если выбрана локальная загрузка - включаем поля для загрузки из файла .http
             //Остальне поля - отключаем
-            if (radioHttpLoad.IsChecked == true)
-            {
+            //if (radioHttpLoad.IsChecked == true)
+            //{
                 stackPanelLogin.IsEnabled = true;
                 stackPanelPassword.IsEnabled = true;
                 stackPanelComboBox.IsEnabled = true;
-                stackPanelOfflineLoad.IsEnabled = false;
+                //stackPanelOfflineLoad.IsEnabled = false;
                 gbLoadWithHttpRequest.Header = "Необходимо пройти доменную авторизацию";
-                gbLoadWithLocalHtmlPage.Header = "";
-            }
+                //gbLoadWithLocalHtmlPage.Header = "";
+            //}
 
-            if (radioHttpPage.IsChecked == true)
-            {
-                stackPanelLogin.IsEnabled = false;
-                stackPanelPassword.IsEnabled = false;
-                stackPanelComboBox.IsEnabled = false;
-                stackPanelOfflineLoad.IsEnabled = true;
-                gbLoadWithHttpRequest.Header = "";
-                gbLoadWithLocalHtmlPage.Header = "Необходимо загрузить сохраненный *.html";
-            }
+            //if (radioHttpPage.IsChecked == true)
+            //{
+            //    stackPanelLogin.IsEnabled = false;
+            //    stackPanelPassword.IsEnabled = false;
+            //    stackPanelComboBox.IsEnabled = false;
+            //    stackPanelOfflineLoad.IsEnabled = true;
+            //    gbLoadWithHttpRequest.Header = "";
+            //    gbLoadWithLocalHtmlPage.Header = "Необходимо загрузить сохраненный *.html";
+            //}
         }
 
-        private void btnPickFile_Click(object sender, RoutedEventArgs e)
-        {
-            RunFileDialog();
-        }
+        //private void btnPickFile_Click(object sender, RoutedEventArgs e)
+        //{
+        //    RunFileDialog();
+        //}
 
-        private void RunFileDialog()
-        {
-            try
-            {
-                System.Windows.Forms.OpenFileDialog openFile = new System.Windows.Forms.OpenFileDialog();
-                openFile.Filter = "html страница (*.html, *.htm) | *.html; *.htm";
-                if (openFile.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-                {
-                    pathToFile = openFile.FileName;
-                    txtPathToHtmlFile.Text = openFile.SafeFileName;
-                }
-            }
-            catch (System.Exception ex)
-            {
-                System.Windows.MessageBox.Show(ex.Message);
-            }
-        }
+        //private void RunFileDialog()
+        //{
+        //    try
+        //    {
+        //        System.Windows.Forms.OpenFileDialog openFile = new System.Windows.Forms.OpenFileDialog();
+        //        openFile.Filter = "html страница (*.html, *.htm) | *.html; *.htm";
+        //        if (openFile.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+        //        {
+        //            pathToFile = openFile.FileName;
+        //            txtPathToHtmlFile.Text = openFile.SafeFileName;
+        //        }
+        //    }
+        //    catch (System.Exception ex)
+        //    {
+        //        System.Windows.MessageBox.Show(ex.Message);
+        //    }
+        //}
 
         private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
@@ -146,8 +146,8 @@ namespace VPNMMapplication
             try
             {
                 //Если загрузка идет через HttpWebRequest
-                if (radioHttpLoad.IsChecked == true)
-                {
+                //if (radioHttpLoad.IsChecked == true)
+                //{
                     if ((string.IsNullOrEmpty(txtLogin.Text)) || (string.IsNullOrEmpty(pbPassword.Password)))
                     {
                         MessageBox.Show("Заполните пожалуйста оба поля!", "Ошибка!");
@@ -173,20 +173,20 @@ namespace VPNMMapplication
                     }
 
                     maker = new MM_MK_CollectionMaker(html, htmlGetter);
-                    mainWindow = new MainWindow(maker, htmlGetter, radioHttpLoad.IsChecked);
+                    mainWindow = new MainWindow(maker, htmlGetter, true/*radioHttpLoad.IsChecked*/);
                     mainWindow.Show();
                     this.Close();
-                }
+                //}
 
-                //Если загруженна локальная страница
-                if (radioHttpPage.IsChecked == true)
-                {
-                    string htmlText = File.ReadAllText(pathToFile, Encoding.UTF8);
-                    maker = new MM_MK_CollectionMaker(htmlText, htmlGetter);
-                    mainWindow = new MainWindow(maker);
-                    mainWindow.Show();
-                    this.Close();
-                }
+                ////Если загруженна локальная страница
+                //if (radioHttpPage.IsChecked == true)
+                //{
+                //    string htmlText = File.ReadAllText(pathToFile, Encoding.UTF8);
+                //    maker = new MM_MK_CollectionMaker(htmlText, htmlGetter);
+                //    mainWindow = new MainWindow(maker);
+                //    mainWindow.Show();
+                //    this.Close();
+                //}
             }
             catch (Exception ex)
             {
@@ -207,7 +207,7 @@ namespace VPNMMapplication
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            radioHttpLoad.IsChecked = true;
+            //radioHttpLoad.IsChecked = true;
         }
     }
 }

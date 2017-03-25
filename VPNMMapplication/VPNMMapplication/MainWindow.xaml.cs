@@ -65,6 +65,9 @@ namespace VPNMMapplication
         {
             maker.OnProgressChanged += Maker_OnProgressChanged;
             mM_MK_UnitDataGrid.LoadingRow += MM_MK_UnitDataGrid_LoadingRow;
+            checkBoxShowDate.ToolTip = "При выборе данной опции загрузка будет проходить намного дольше.\n" +
+                "Это происходит из за того, что программа переходит по ссылке в историю подклюений и выбирает\n"+
+                "последнюю сессию из списка для каждого магазина.";
             LoadAsync();
             //Если запущено в онлайн режиме - обновляет статус ММ каждые 5 минут
             if (isOnlineMode == true)
@@ -167,6 +170,7 @@ namespace VPNMMapplication
                 currentDisplayedCol = fullCollection;
 
             mM_MK_UnitDataGrid.ItemsSource = currentDisplayedCol.TheCollection;
+            lblCurrentCount.Content = currentDisplayedCol.TheCollection.Count;
         }
     }
 }

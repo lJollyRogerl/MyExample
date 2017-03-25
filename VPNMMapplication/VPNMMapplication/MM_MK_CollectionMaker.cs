@@ -115,20 +115,25 @@ namespace VPNMMapplication
                 string html = htmlMaker.GetSessionsLog(objectName);
                 htmlDoc.LoadHtml(html);
                 var collectionOfNodes = from c in htmlDoc.DocumentNode.SelectNodes("/html/body/table/tbody/tr/*")
-                                        select c;
-                foreach (var row in collectionOfNodes)
-                {
-                    //тут линк сделать и отобрать даты только
-                    var dates = from column in row.ChildNodes
-                                where column.InnerText.Trim().StartsWith("201")
-                                select column.InnerText.Trim();
+                                        where c.ChildNodes.Count > 9
+                                        select c.ChildNodes.ElementAt(9).InnerText.Trim();
 
-                    foreach (var date in dates)
-                        result = date;
+                result = collectionOfNodes.Last();
+                //var collectionOfNodes = from c in htmlDoc.DocumentNode.SelectNodes("/html/body/table/tbody/tr/*")
+                //                        select c;
+                //foreach (var row in collectionOfNodes)
+                //{
+                //    //тут линк сделать и отобрать даты только
+                //    var dates = from column in row.ChildNodes
+                //                where column.InnerText.Trim().StartsWith("201")
+                //                select column.InnerText.Trim();
 
-                    if (string.IsNullOrWhiteSpace(result))
-                        result = "Нет данных";
-                }
+                //    foreach (var date in dates)
+                //        result = date;
+
+                //    if (string.IsNullOrWhiteSpace(result))
+                //        result = "Нет данных";
+            //}
                 return result;
             }
             catch (Exception ex)

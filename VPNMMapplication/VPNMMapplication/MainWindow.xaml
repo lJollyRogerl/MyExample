@@ -19,15 +19,18 @@
             <RadioButton x:Name="radioBtnOffline" Template="{DynamicResource RadioBtnUnPlugged}" Margin="5" Checked="radioBtnOnline_Checked"/>
             <RadioButton x:Name="radioBtnBothStats" Template="{DynamicResource RadioBtnBothStatuses}" Margin="5" Checked="radioBtnOnline_Checked"/>
             <Separator/>
-            <CheckBox x:Name="checkBoxShowDate" Template="{DynamicResource checkBox}"/>
+            <CheckBox x:Name="checkBoxShowDate" Template="{DynamicResource checkBox}" FontFamily="Sitka Text"/>
+            <Separator/>
+            <Label x:Name="lblCurrentCount" HorizontalAlignment="Center" 
+                   VerticalAlignment="Center" FontSize="30" FontFamily="Sitka Text"/>
         </ToolBar>
         <StatusBar DockPanel.Dock="Bottom" Height="25">
             <Label x:Name="lblStatus" Foreground="Gray" FontSize="10" Height="22"/>
             <ProgressBar x:Name="progressBar" Height="13" Visibility="Hidden"/>
         </StatusBar>
 
-        <DataGrid x:Name="mM_MK_UnitDataGrid" AutoGenerateColumns="False" EnableRowVirtualization="False" ItemsSource="{Binding}"
-                  RowDetailsVisibilityMode="VisibleWhenSelected" FontSize="14" IsReadOnly="True" FontWeight="SemiBold">
+        <DataGrid x:Name="mM_MK_UnitDataGrid" AutoGenerateColumns="False" ItemsSource="{Binding}"
+                  RowDetailsVisibilityMode="VisibleWhenSelected" FontSize="14" FontWeight="SemiBold" EnableRowVirtualization="False" FontFamily="Sitka Display">
             <DataGrid.Columns>
                 <DataGridTextColumn x:Name="titleColumn" Binding="{Binding Title}" Header="Название объекта" Width="170"/>
                 <DataGridTextColumn x:Name="iPColumn" Binding="{Binding IP}" Header="Внутренний IP" Width="130"/>
