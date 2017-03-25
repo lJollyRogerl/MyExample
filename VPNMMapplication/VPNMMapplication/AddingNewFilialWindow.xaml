@@ -5,16 +5,31 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:VPNMMapplication"
         mc:Ignorable="d"
-        Title="Добавление филлиала" Height="176.924" Width="280.147" WindowStartupLocation="CenterOwner" ResizeMode="NoResize" Icon="pics/ico.png">
+        Title="Добавление филлиала" Height="268.667" Width="400" WindowStartupLocation="CenterOwner" 
+        ResizeMode="NoResize" Icon="pics/ico.png" MouseDown="Window_MouseDown">
     <StackPanel>
-        <Label x:Name="lblExplain" Margin="5" HorizontalAlignment="Center" Visibility="Hidden"/>
-        <StackPanel x:Name="filialName" Orientation="Horizontal">
-            <Label x:Name="lblFilialName" Content="Название филиала:" Margin="5" Width="120"/>
-            <TextBox x:Name="txtFilialName" Width="120" Margin="10"/>
+        <StackPanel x:Name="stackPnlHelp">
+            <Label Content="Внимание" HorizontalAlignment="Center" Foreground="Red" FontSize="16" FontWeight="Bold" />
+            <Label Content="Названия должны быть прилагательными. Примеры ниже:" Height="25" FontSize="13" HorizontalAlignment="Center"/>
+            <Rectangle Height="23">
+                <Rectangle.Fill>
+                    <ImageBrush ImageSource="pics/N-Tagil.jpg" Stretch="Uniform"/>
+                </Rectangle.Fill>
+            </Rectangle>
+            <Rectangle Height="23">
+                <Rectangle.Fill>
+                    <ImageBrush ImageSource="pics/Ural-Zapad.jpg" Stretch="Uniform"/>
+                </Rectangle.Fill>
+            </Rectangle>
         </StackPanel>
-        <StackPanel x:Name="ownerRegion" Orientation="Horizontal">
-            <Label x:Name="lblOwnerRegion" Content="Регион филиала:" Margin="5" Width="120"/>
-            <TextBox x:Name="txtOwnerRegion" Width="120" Margin="10"/>
+        <Separator/>
+        <StackPanel x:Name="filialName" Orientation="Horizontal" HorizontalAlignment="Center">
+            <Label x:Name="lblFilialName" Content="Название филиала:" Margin="5" Width="140" FontSize="13"/>
+            <TextBox x:Name="txtFilialName" Width="160" Margin="5" FontSize="13" VerticalAlignment="Center"/>
+        </StackPanel>
+        <StackPanel x:Name="ownerRegion" Orientation="Horizontal" HorizontalAlignment="Center">
+            <Label x:Name="lblOwnerRegion" Content="Регион филиала:" Margin="5" Width="140" FontSize="13"/>
+            <TextBox x:Name="txtOwnerRegion" Width="160" Margin="5" FontSize="13" VerticalAlignment="Center"/>
         </StackPanel>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
             <Button x:Name="btnCommit" Width="60" Height="30" Content="Ok" Margin="10" Click="btnCommit_Click" IsDefault="True"/>

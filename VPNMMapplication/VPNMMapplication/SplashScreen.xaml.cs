@@ -28,6 +28,8 @@ namespace VPNMMapplication
         AddingNewFilialWindow adFilWin;
         //Текущий выбранный в комбо боксе филиал
         Filial currentFilial;
+        //Таймер ля оформления загрузки
+        DispatcherTimer dispatcherTimer = new DispatcherTimer();
 
         HTMLWithAutorization htmlGetter;
         public SplashScreen()
@@ -105,10 +107,14 @@ namespace VPNMMapplication
             btnLoad.IsEnabled = false;
             authorisStackPnl.IsEnabled = false;
             lblStatusBar.Content = "Пожалуйста, ожидайте.";
+            dispatcherTimer.Tick += DispatcherTimer_Tick;
+            dispatcherTimer.Interval = TimeSpan.FromMilliseconds(160);
+            dispatcherTimer.Start();
             await DoAsyncAuthorization();
             btnLoad.IsEnabled = true;
             authorisStackPnl.IsEnabled = true;
             statusGrid.Visibility = Visibility.Hidden;
+            dispatcherTimer.Stop();
             lblStatusBar.Content = "";
         }
 
@@ -189,21 +195,14 @@ namespace VPNMMapplication
         }
         private void HtmlGetter_OnAuthorizationProgress(string obj)
         {
-            //{
-            //    DispatcherTimer dispatcherTimer = new DispatcherTimer();
-            //    dispatcherTimer.Tick += delegate (object s, EventArgs eArgs) 
-            //                                        { obj = LoadingProcess(obj); };
-            //    dispatcherTimer.Interval = new TimeSpan(0, 0, 2);
-            //    dispatcherTimer.Start();
-            //}
             this.Dispatcher.Invoke(() => {
                 lblStatusBar.Content = obj;
             });
         }
 
-        private string LoadingProcess(string obj)
+        private void DispatcherTimer_Tick(object sender, EventArgs e)
         {
-            return obj + ".";
+            lblStatusBar.Content += ".";
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)

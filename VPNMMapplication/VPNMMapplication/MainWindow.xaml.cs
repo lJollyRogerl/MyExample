@@ -15,9 +15,8 @@ namespace VPNMMapplication
     {
         private MM_MK_CollectionMaker maker;
         private HTMLWithAutorization htmlGetter;
-        private MM_MK_Collection col;
+        private MM_MK_Collection currentDisplayedCol = new MM_MK_Collection();
         private bool? isOnlineMode = false;
-        DispatcherTimer dispatcherTimer;
         MM_MK_Collection onlineCollection = new MM_MK_Collection();
         MM_MK_Collection offlineCollection = new MM_MK_Collection();
         MM_MK_Collection fullCollection = new MM_MK_Collection();
@@ -70,6 +69,7 @@ namespace VPNMMapplication
             //Если запущено в онлайн режиме - обновляет статус ММ каждые 5 минут
             if (isOnlineMode == true)
             {
+                DispatcherTimer dispatcherTimer;
                 dispatcherTimer = new DispatcherTimer();
                 dispatcherTimer.Tick += delegate (object s, EventArgs eArgs) { Refresh(); };
                 dispatcherTimer.Interval = new TimeSpan(0, 7, 0);
@@ -155,14 +155,18 @@ namespace VPNMMapplication
 
         private void SwitchView()
         {
-            if (radioBtnBothStats.IsChecked == true)
-                col = fullCollection;
+            //Если выбранно показывать онлайн коллекцию - показываем ее, оффлайн - показываем её, 
+            //в остальных случаях показываем полную коллекцию
             if (radioBtnOnline.IsChecked == true)
-                col = onlineCollection;
-            if (radioBtnOffline.IsChecked == true)
-                col = offlineCollection;
+                currentDisplayedCol = onlineCollection;
 
-            mM_MK_UnitDataGrid.ItemsSource = col.TheCollection;
+            else if (radioBtnOffline.IsChecked == true)
+                currentDisplayedCol = offlineCollection;
+
+            else
+                currentDisplayedCol = fullCollection;
+
+            mM_MK_UnitDataGrid.ItemsSource = currentDisplayedCol.TheCollection;
         }
     }
 }

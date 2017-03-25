@@ -40,5 +40,10 @@ namespace VPNMMapplication
         private void btnCancel_Click(object sender, RoutedEventArgs e)
         {
         }
+
+        private void Window_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            DragMove();
+        }
     }
 }
