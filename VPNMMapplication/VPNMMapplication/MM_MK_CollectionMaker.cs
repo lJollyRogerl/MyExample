@@ -73,7 +73,6 @@ namespace VPNMMapplication
                                 addingUnit.DNS_Name = objName + ".onlinemm.corp.tander.ru";
                             }
 
-
                             //Если есть строка, начинающаяся с 10 - добавляем в ip
                             if (child.InnerText.Trim().StartsWith("10.")|| (child.InnerText.Trim().StartsWith("172.")))
                                 addingUnit.IP = child.InnerText.Trim();
@@ -115,25 +114,12 @@ namespace VPNMMapplication
                 string html = htmlMaker.GetSessionsLog(objectName);
                 htmlDoc.LoadHtml(html);
                 var collectionOfNodes = from c in htmlDoc.DocumentNode.SelectNodes("/html/body/table/tbody/tr/*")
-                                        where c.ChildNodes.Count > 9
-                                        select c.ChildNodes.ElementAt(9).InnerText.Trim();
+                                        where c.ChildNodes.Count < 2
+                                        select c;
 
-                result = collectionOfNodes.Last();
-                //var collectionOfNodes = from c in htmlDoc.DocumentNode.SelectNodes("/html/body/table/tbody/tr/*")
-                //                        select c;
-                //foreach (var row in collectionOfNodes)
-                //{
-                //    //тут линк сделать и отобрать даты только
-                //    var dates = from column in row.ChildNodes
-                //                where column.InnerText.Trim().StartsWith("201")
-                //                select column.InnerText.Trim();
-
-                //    foreach (var date in dates)
-                //        result = date;
-
-                //    if (string.IsNullOrWhiteSpace(result))
-                //        result = "Нет данных";
-            //}
+                result = collectionOfNodes.ElementAt(collectionOfNodes.Count() - 7).InnerText.Trim();
+                if (string.IsNullOrWhiteSpace(result))
+                    result = "Нет данных";                
                 return result;
             }
             catch (Exception ex)

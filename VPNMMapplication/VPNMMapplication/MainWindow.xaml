@@ -6,23 +6,31 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:VPNMMapplication"
         mc:Ignorable="d"
-        Title="Мониторинг Объектов Обслуживания" Height="350" Width="525" SizeChanged="mainWindow_SizeChanged"
+        Title="Мониторинг Объектов Обслуживания" Height="350" Width="800" SizeChanged="mainWindow_SizeChanged"
         Loaded="mainWindow_Loaded" Icon="pics/ico.png">
     <Window.Resources>
         <CollectionViewSource x:Key="mM_MK_UnitViewSource" d:DesignSource="{d:DesignInstance {x:Type local:MM_MK_Unit}, CreateList=True}"/>
     </Window.Resources>
     <DockPanel LastChildFill="True" DataContext="{StaticResource mM_MK_UnitViewSource}">
         <ToolBar x:Name="toolBarMyBar" DockPanel.Dock="Top"  Height="50">
-            <Button x:Name="btnRefresh" Template="{DynamicResource RefreshButton}" Click="btnRefresh_Click"/>
+            <Button x:Name="btnRefresh" Template="{DynamicResource RefreshButton}" Click="btnRefresh_Click" ToolTip="Обновить"/>
             <Separator/>
-            <RadioButton x:Name="radioBtnOnline" Template="{DynamicResource RadioBtnPlugged}" Margin="5" Checked="radioBtnOnline_Checked"/>
-            <RadioButton x:Name="radioBtnOffline" Template="{DynamicResource RadioBtnUnPlugged}" Margin="5" Checked="radioBtnOnline_Checked"/>
-            <RadioButton x:Name="radioBtnBothStats" Template="{DynamicResource RadioBtnBothStatuses}" Margin="5" Checked="radioBtnOnline_Checked"/>
+            <RadioButton x:Name="radioBtnOnline" Template="{DynamicResource RadioBtnPlugged}" Margin="5" ToolTip="Online"/>
+            <RadioButton x:Name="radioBtnOffline" Template="{DynamicResource RadioBtnUnPlugged}" Margin="5" ToolTip="Offline"/>
+            <RadioButton x:Name="radioBtnBothStats" Template="{DynamicResource RadioBtnBothStatuses}" Margin="5" ToolTip="Online/Offline"/>
             <Separator/>
             <CheckBox x:Name="checkBoxShowDate" Template="{DynamicResource checkBox}" FontFamily="Sitka Text"/>
             <Separator/>
             <Label x:Name="lblCurrentCount" HorizontalAlignment="Center" 
-                   VerticalAlignment="Center" FontSize="30" FontFamily="Sitka Text"/>
+                   VerticalAlignment="Center" FontSize="30" FontFamily="Sitka Text" Width="65" Height="45" 
+                   ToolTip="Колличество объектов в таблице ниже."/>
+            <StackPanel x:Name="stackSlider" Orientation="Vertical" Margin="4" ToolTip="Частота загрузки данных с сервера">
+                <TextBlock x:Name="txtFrequency" Text="Частота обновления 7 минут" FontFamily="Sitka Text"
+                           FontSize="14"/>
+                <Slider x:Name="sliderFrequency" VerticalAlignment="Center" Width="160" Value="7" 
+                    Maximum="30" ValueChanged="sliderFrequency_ValueChanged" SmallChange="1" Minimum="5"/>
+            </StackPanel>
+            
         </ToolBar>
         <StatusBar DockPanel.Dock="Bottom" Height="25">
             <Label x:Name="lblStatus" Foreground="Gray" FontSize="10" Height="22"/>
@@ -33,10 +41,10 @@
                   RowDetailsVisibilityMode="VisibleWhenSelected" FontSize="14" FontWeight="SemiBold" EnableRowVirtualization="False" FontFamily="Sitka Display">
             <DataGrid.Columns>
                 <DataGridTextColumn x:Name="titleColumn" Binding="{Binding Title}" Header="Название объекта" Width="170"/>
-                <DataGridTextColumn x:Name="iPColumn" Binding="{Binding IP}" Header="Внутренний IP" Width="130"/>
-                <DataGridTextColumn x:Name="mainOrReserve" Binding="{Binding MainOrReserve}" Header="Основной/резерв" Width="130"/>
-                <DataGridTextColumn x:Name="lastOnlineDate" Binding="{Binding LastDateOnline}" Header="Последний сеанс" Width="180"/>
-                <DataGridTextColumn x:Name="dNS_NameColumn" Binding="{Binding DNS_Name}" Header="DNS имя" Width="200"/>
+                <DataGridTextColumn x:Name="iPColumn" Binding="{Binding IP}" Header="Внутренний IP" Width="105"/>
+                <DataGridTextColumn x:Name="mainOrReserve" Binding="{Binding MainOrReserve}" Header="Основной/резерв" Width="120"/>
+                <DataGridTextColumn x:Name="lastOnlineDate" Binding="{Binding LastDateOnline}" Header="Последний сеанс" Width="160"/>
+                <DataGridTextColumn x:Name="dNS_NameColumn" Binding="{Binding DNS_Name}" Header="DNS имя" Width="240"/>
             </DataGrid.Columns>
         </DataGrid>
     </DockPanel>

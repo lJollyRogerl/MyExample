@@ -20,6 +20,7 @@ namespace VPNMMapplication
         MM_MK_Collection onlineCollection = new MM_MK_Collection();
         MM_MK_Collection offlineCollection = new MM_MK_Collection();
         MM_MK_Collection fullCollection = new MM_MK_Collection();
+        DispatcherTimer dispatcherTimer = new DispatcherTimer();
 
         public MainWindow()
         {
@@ -63,22 +64,25 @@ namespace VPNMMapplication
 
         private void mainWindow_Loaded(object sender, RoutedEventArgs e)
         {
+            radioBtnBothStats.IsChecked = true;
+            radioBtnOnline.Checked += radioBtnOnline_Checked;
+            radioBtnOffline.Checked += radioBtnOnline_Checked;
+            radioBtnBothStats.Checked += radioBtnOnline_Checked;
             maker.OnProgressChanged += Maker_OnProgressChanged;
             mM_MK_UnitDataGrid.LoadingRow += MM_MK_UnitDataGrid_LoadingRow;
             checkBoxShowDate.ToolTip = "При выборе данной опции загрузка будет проходить намного дольше.\n" +
                 "Это происходит из за того, что программа переходит по ссылке в историю подклюений и выбирает\n"+
                 "последнюю сессию из списка для каждого магазина.";
+
             LoadAsync();
             //Если запущено в онлайн режиме - обновляет статус ММ каждые 5 минут
             if (isOnlineMode == true)
             {
-                DispatcherTimer dispatcherTimer;
                 dispatcherTimer = new DispatcherTimer();
                 dispatcherTimer.Tick += delegate (object s, EventArgs eArgs) { Refresh(); };
                 dispatcherTimer.Interval = new TimeSpan(0, 7, 0);
                 dispatcherTimer.Start();
             }
-
         }
 
         private void Maker_OnProgressChanged(ProgressInfo obj)
@@ -106,6 +110,8 @@ namespace VPNMMapplication
         private async void LoadAsync()
         {
             btnRefresh.IsEnabled = false;
+            dispatcherTimer.Stop();
+            dispatcherTimer.Start();
             try
             {
                 //Перед нечалом загрузки - включаем видимость прогресс бара
@@ -171,6 +177,12 @@ namespace VPNMMapplication
 
             mM_MK_UnitDataGrid.ItemsSource = currentDisplayedCol.TheCollection;
             lblCurrentCount.Content = currentDisplayedCol.TheCollection.Count;
+        }
+
+        private void sliderFrequency_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            txtFrequency.Text = $"Частота обновления {(int)e.NewValue} минут";
+            dispatcherTimer.Interval = TimeSpan.FromMinutes((int)e.NewValue);
         }
     }
 }
