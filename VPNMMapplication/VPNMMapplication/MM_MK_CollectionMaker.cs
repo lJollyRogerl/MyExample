@@ -56,39 +56,55 @@ namespace VPNMMapplication
                     {
                         var node = collectionOfNodes.ElementAt(i);
                         MM_MK_Unit addingUnit = new MM_MK_Unit();
-                        foreach (var child in node.ChildNodes)
+                        //foreach (var child in node.ChildNodes)
+                        //{
+                        //    //Если подузел содержит МД, МК или ТЦ - добавляем в имя
+                        //    if (child.InnerText.Contains("МД") || child.InnerText.Contains("МК") ||
+                        //        child.InnerText.Contains("ТЦ") || child.InnerText.Contains("Микроофис"))
+                        //        addingUnit.Title = child.InnerText.Trim();
+
+                        //    //Если подузел содержит omd, omk или otc - добавляем в DNS имя
+                        //    if (child.InnerText.Contains("omd") || child.InnerText.Contains("omk") ||
+                        //        child.InnerText.Contains("otc") || child.InnerText.Contains("omf"))
+                        //    {
+                        //        string objName = child.InnerText.Trim();
+                        //        if(isConnected == false && doDateLogLoad == true)
+                        //            addingUnit.LastDateOnline = GetLastSessionDate(objName);
+                        //        addingUnit.DNS_Name = objName + ".onlinemm.corp.tander.ru";
+                        //    }
+
+                        //    //Если есть строка, начинающаяся с 10 - добавляем в ip
+                        //    if (child.InnerText.Trim().StartsWith("10.") || (child.InnerText.Trim().StartsWith("172.")))
+                        //        addingUnit.IP = child.InnerText.Trim();
+
+                        //    //Если днс имя присвоено - проверяем
+                        //    if (addingUnit.DNS_Name != null)
+                        //    {
+                        //        if (addingUnit.DNS_Name.Contains("_1"))
+                        //            addingUnit.MainOrReserve = "Резервный";
+                        //        else
+                        //            addingUnit.MainOrReserve = "Основной";
+                        //    }
+                        //    //устанавливаю статус подключения
+                        //    addingUnit.IsOnline = isConnected;
+
+                        //}
+
+                        addingUnit.Title = node.ChildNodes.ElementAt(4).InnerText.Trim();
+                        string objName = node.ChildNodes.ElementAt(8).InnerText.Trim();
+                        if (isConnected == false && doDateLogLoad == true)
+                            addingUnit.LastDateOnline = GetLastSessionDate(objName);
+                        addingUnit.DNS_Name = objName + ".onlinemm.corp.tander.ru";
+                        addingUnit.IP = node.ChildNodes.ElementAt(12).InnerText.Trim();
+                        if (addingUnit.DNS_Name != null)
                         {
-                            //Если подузел содержит МД, МК или ТЦ - добавляем в имя
-                            if (child.InnerText.Contains("МД") || child.InnerText.Contains("МК") ||
-                                child.InnerText.Contains("ТЦ") || child.InnerText.Contains("Микроофис"))
-                                addingUnit.Title = child.InnerText.Trim();
-
-                            //Если подузел содержит omd, omk или otc - добавляем в DNS имя
-                            if (child.InnerText.Contains("omd") || child.InnerText.Contains("omk") ||
-                                child.InnerText.Contains("otc") || child.InnerText.Contains("omf"))
-                            {
-                                string objName = child.InnerText.Trim();
-                                if(isConnected == false && doDateLogLoad == true)
-                                    addingUnit.LastDateOnline = GetLastSessionDate(objName);
-                                addingUnit.DNS_Name = objName + ".onlinemm.corp.tander.ru";
-                            }
-
-                            //Если есть строка, начинающаяся с 10 - добавляем в ip
-                            if (child.InnerText.Trim().StartsWith("10.")|| (child.InnerText.Trim().StartsWith("172.")))
-                                addingUnit.IP = child.InnerText.Trim();
-
-                            //Если днс имя присвоено - проверяем
-                            if (addingUnit.DNS_Name != null)
-                            {
-                                if (addingUnit.DNS_Name.Contains("_1"))
-                                    addingUnit.MainOrReserve = "Резервный";
-                                else
-                                    addingUnit.MainOrReserve = "Основной";
-                            }
-                            //устанавливаю статус подключения
-                            addingUnit.IsOnline = isConnected;
-
+                            if (addingUnit.DNS_Name.Contains("_1"))
+                                addingUnit.MainOrReserve = "Резервный";
+                            else
+                                addingUnit.MainOrReserve = "Основной";
                         }
+                        //устанавливаю статус подключения
+                        addingUnit.IsOnline = isConnected;
                         unitCollection.Add(addingUnit);
                         ProgressOfLoading.CurrentStep = i;
                         ProgressOfLoading.CurrentMM_MK = addingUnit.Title;
