@@ -116,7 +116,6 @@ namespace VPNMMapplication
             {
                 //Перед нечалом загрузки - включаем видимость прогресс бара
                 VisibleProgressOn();
-
                 //Коллекция онлайн объектов
                 onlineCollection = await maker.LoadCollectionAsync(true, checkBoxShowDate.IsChecked);
                 onlineCollection.TheCollection.Sort(new MMCollectionComparer());
@@ -124,14 +123,14 @@ namespace VPNMMapplication
                 offlineCollection = await maker.LoadCollectionAsync(false, checkBoxShowDate.IsChecked);
                 offlineCollection.TheCollection.Sort(new MMCollectionComparer());
                 //Коллекция онлайн+оффлайн объектов
-                fullCollection.Clear();
+                fullCollection = new MM_MK_Collection();
                 fullCollection.AddCollection(onlineCollection);
                 fullCollection.AddCollection(offlineCollection);
                 fullCollection.TheCollection.Sort(new MMCollectionComparer());
-                //Выбор текущей колекции
-                SwitchView();
                 //После загрузки - выключаем видимость прогресс бара
                 VisibleProgressOff();
+                //Выбор текущей колекции
+                SwitchView();
             }
 
             catch (Exception ex)
@@ -149,6 +148,7 @@ namespace VPNMMapplication
                 maker.HtmlString = htmlGetter.Refresh();
             });
             LoadAsync();
+            
         }
 
         private void btnRefresh_Click(object sender, RoutedEventArgs e)
