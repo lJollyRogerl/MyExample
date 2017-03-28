@@ -24,7 +24,7 @@ namespace VPNMMapplication
 
         private void menuToXmlForRMS_Click(object sender, RoutedEventArgs e)
         {
-
+            SaveToXML.BuildXmlDoc(fullCollection, "file");
         }
 
         private void menuClose_Click(object sender, RoutedEventArgs e)
