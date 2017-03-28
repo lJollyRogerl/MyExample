@@ -18,8 +18,6 @@ namespace VPNMMapplication
         //переменная для хранения данных о филлиалах и регионах. 
         //Сериализуется/десериализуется в ListOfFillials.xml
         private Divisions divisions = new Divisions();
-        //путь к файлу для локальной загрузки
-        string pathToFile;
         //Создатель коллекции название ММ - его DNS
         MM_MK_CollectionMaker maker;
         //основное окно. Создается после выбора загрузки
@@ -173,7 +171,7 @@ namespace VPNMMapplication
                     }
 
                     maker = new MM_MK_CollectionMaker(html, htmlGetter);
-                    mainWindow = new MainWindow(maker, htmlGetter, true/*radioHttpLoad.IsChecked*/);
+                    mainWindow = new MainWindow(maker, htmlGetter/*radioHttpLoad.IsChecked*/);
                     mainWindow.Show();
                     this.Close();
                 //}

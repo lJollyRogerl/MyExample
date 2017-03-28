@@ -12,6 +12,17 @@
         <CollectionViewSource x:Key="mM_MK_UnitViewSource" d:DesignSource="{d:DesignInstance {x:Type local:MM_MK_Unit}, CreateList=True}"/>
     </Window.Resources>
     <DockPanel LastChildFill="True" DataContext="{StaticResource mM_MK_UnitViewSource}">
+        <Menu DockPanel.Dock="Top">
+            <MenuItem x:Name="menuFile" Header="_Файл">
+                <MenuItem x:Name="menuNewSession" Header="_Новая сессия" Click="menuNewSession_Click"/>
+                <Separator/>
+                <MenuItem x:Name="menuToExel" Header="_Выгрузить в Excel" Click="menuToExel_Click"/>
+                <MenuItem x:Name="menuToXmlForRMS" Header="Выгрузить в _файл импорта для RMS" Click="menuToXmlForRMS_Click"/>
+                <Separator/>
+                <MenuItem x:Name="menuClose" Header="_Закрыть" Click="menuClose_Click"/>
+            </MenuItem>
+
+        </Menu>
         <ToolBar x:Name="toolBarMyBar" DockPanel.Dock="Top"  Height="50">
             <Button x:Name="btnRefresh" Template="{DynamicResource RefreshButton}" Click="btnRefresh_Click" ToolTip="Обновить"/>
             <Separator/>
@@ -32,7 +43,7 @@
             </StackPanel>
             
         </ToolBar>
-        <StatusBar DockPanel.Dock="Bottom" Height="25">
+        <StatusBar x:Name="statusBar" DockPanel.Dock="Bottom" Height="25" >
             <Label x:Name="lblStatus" Foreground="Gray" FontSize="10" Height="22"/>
             <ProgressBar x:Name="progressBar" Height="13" Visibility="Hidden"/>
         </StatusBar>

@@ -7,10 +7,10 @@ using System.Windows;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("VPNMMapplication")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("Монторинг ОО")]
+[assembly: AssemblyDescription("Let users to do monitoring their objects of maintenance")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Gleb Obodovsky co.")]
 [assembly: AssemblyProduct("VPNMMapplication")]
 [assembly: AssemblyCopyright("Copyright ©  2017")]
 [assembly: AssemblyTrademark("")]

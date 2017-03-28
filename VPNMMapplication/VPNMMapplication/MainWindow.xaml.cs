@@ -32,9 +32,8 @@ namespace VPNMMapplication
             InitializeComponent();
         }
 
-        public MainWindow(MM_MK_CollectionMaker dictionaryMaker, HTMLWithAutorization getterForRefresh, bool? isChecked)
+        public MainWindow(MM_MK_CollectionMaker dictionaryMaker, HTMLWithAutorization getterForRefresh)
         {
-            isOnlineMode = isChecked;
             maker = dictionaryMaker;
             htmlGetter = getterForRefresh;
             InitializeComponent();
@@ -97,14 +96,12 @@ namespace VPNMMapplication
 
         public void VisibleProgressOn()
         {
-            progressBar.Visibility = Visibility.Visible;
-            lblStatus.Visibility = Visibility.Visible;
+            statusBar.Visibility = Visibility.Visible;
         }
 
         public void VisibleProgressOff()
         {
-            progressBar.Visibility = Visibility.Hidden;
-            lblStatus.Visibility = Visibility.Hidden;
+            statusBar.Visibility = Visibility.Hidden;
         }
 
         private async void LoadAsync()
@@ -184,5 +181,6 @@ namespace VPNMMapplication
             txtFrequency.Text = $"Частота обновления {(int)e.NewValue} минут";
             dispatcherTimer.Interval = TimeSpan.FromMinutes((int)e.NewValue);
         }
+
     }
 }
