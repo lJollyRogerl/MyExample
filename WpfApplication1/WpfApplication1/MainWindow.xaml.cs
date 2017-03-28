@@ -26,27 +26,22 @@ namespace WpfApplication1
             InitializeComponent();
         }
 
-        private void textBox_GotMouseCapture(object sender, System.Windows.Forms.MouseEventArgs e)
+        private void button_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                System.Windows.Forms.OpenFileDialog openFile = new System.Windows.Forms.OpenFileDialog();
-                openFile.Filter = "html страница (*.html) | *.html";
-                if (openFile.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                SaveFileDialog saveFile = new SaveFileDialog();
+                saveFile.Filter = "Файл импорта (*.xml) | *.xml";
+                if (saveFile.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 {
-                    string pathToFile = openFile.FileName;
-                    
+                    string pathToFile = saveFile.FileName;
+                    System.Windows.MessageBox.Show(pathToFile);
                 }
             }
             catch (System.Exception ex)
             {
                 System.Windows.MessageBox.Show(ex.Message);
             }
-        }
-
-        private void button_Click(object sender, RoutedEventArgs e)
-        {
-
         }
     }
 }

@@ -44,7 +44,7 @@
         </ToolBar>
         <StatusBar x:Name="statusBar" DockPanel.Dock="Bottom" Height="25" Visibility="Collapsed">
             <Label x:Name="lblStatus" Foreground="Gray" FontSize="10" Height="22"/>
-            <ProgressBar x:Name="progressBar" Height="13" Visibility="Hidden"/>
+            <ProgressBar x:Name="progressBar" Height="13"/>
         </StatusBar>
         <DataGrid x:Name="mM_MK_UnitDataGrid" AutoGenerateColumns="False" ItemsSource="{Binding}"
                   RowDetailsVisibilityMode="VisibleWhenSelected" FontSize="14" FontWeight="SemiBold" EnableRowVirtualization="False" FontFamily="Sitka Display">

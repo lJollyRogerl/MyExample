@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
+
 namespace VPNMMapplication
 {
     public partial class MainWindow : Window
@@ -24,7 +25,20 @@ namespace VPNMMapplication
 
         private void menuToXmlForRMS_Click(object sender, RoutedEventArgs e)
         {
-            SaveToXML.BuildXmlDoc(fullCollection, "file");
+            try
+            {
+                string pathToFile = "ImportToRMS.xml";
+                System.Windows.Forms.SaveFileDialog saveFile = new System.Windows.Forms.SaveFileDialog();
+                saveFile.Filter = "Файл импорта (*.xml) | *.xml";
+                if (saveFile.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                    pathToFile = saveFile.FileName;
+                SaveToXML.BuildXmlDoc(fullCollection, pathToFile);
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
 
         private void menuClose_Click(object sender, RoutedEventArgs e)
