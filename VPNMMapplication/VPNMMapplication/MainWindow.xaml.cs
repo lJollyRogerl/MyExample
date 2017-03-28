@@ -101,7 +101,7 @@ namespace VPNMMapplication
 
         public void VisibleProgressOff()
         {
-            statusBar.Visibility = Visibility.Hidden;
+            statusBar.Visibility = Visibility.Collapsed;
         }
 
         private async void LoadAsync()

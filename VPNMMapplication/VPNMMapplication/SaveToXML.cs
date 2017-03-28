@@ -16,9 +16,9 @@ namespace VPNMMapplication
                 new XElement("address_book", new XAttribute("version", "63006"),
                     new XElement("groups"),
                     new XElement("connections", collection.TheCollection.Select(unit =>
-                        new XElement("connection", new XAttribute("parent_group_id", "\"\""),
+                        new XElement("connection", new XAttribute("parent_group_id", ""),
                             new XElement("InternalID"),
-                            new XElement("Caption", unit.Title),
+                            new XElement("Caption", unit.Title+" "+unit.MainOrReserve),
                             new XElement("PeerIP"),
                             new XElement("PeerHost", unit.DNS_Name),
                             new XElement("Port", "5650"),
