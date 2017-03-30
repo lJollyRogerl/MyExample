@@ -17,6 +17,7 @@ namespace VPNMMapplication
         private HTMLWithAutorization htmlGetter;
         private MM_MK_Collection currentDisplayedCol = new MM_MK_Collection();
         private bool? isOnlineMode = false;
+        private bool firstLoad = true;
         MM_MK_Collection onlineCollection = new MM_MK_Collection();
         MM_MK_Collection offlineCollection = new MM_MK_Collection();
         MM_MK_Collection fullCollection = new MM_MK_Collection();
@@ -68,26 +69,38 @@ namespace VPNMMapplication
             radioBtnOffline.Checked += radioBtnOnline_Checked;
             radioBtnBothStats.Checked += radioBtnOnline_Checked;
             maker.OnProgressChanged += Maker_OnProgressChanged;
+            htmlGetter.OnAuthorizationProgress += HtmlGetter_OnAuthorizationProgress;
             mM_MK_UnitDataGrid.LoadingRow += MM_MK_UnitDataGrid_LoadingRow;
             checkBoxShowDate.ToolTip = "При выборе данной опции загрузка будет проходить намного дольше.\n" +
                 "Это происходит из за того, что программа переходит по ссылке в историю подклюений и выбирает\n"+
                 "последнюю сессию из списка для каждого магазина.";
 
             LoadAsync();
+            firstLoad = false;
             //Если запущено в онлайн режиме - обновляет статус ММ каждые 5 минут
             if (isOnlineMode == true)
             {
                 dispatcherTimer = new DispatcherTimer();
-                dispatcherTimer.Tick += delegate (object s, EventArgs eArgs) { Refresh(); };
+                dispatcherTimer.Tick += delegate (object s, EventArgs eArgs) { LoadAsync(); };
                 dispatcherTimer.Interval = new TimeSpan(0, 7, 0);
                 dispatcherTimer.Start();
             }
+        }
+
+        private void HtmlGetter_OnAuthorizationProgress(string obj)
+        {
+            this.Dispatcher.Invoke(() =>
+            {
+                progressBar.Visibility = Visibility.Hidden;
+                lblStatus.Content = obj;
+            });
         }
 
         private void Maker_OnProgressChanged(ProgressInfo obj)
         {
             this.Dispatcher.Invoke(() =>
             {
+                progressBar.Visibility = Visibility.Visible;
                 progressBar.Maximum = obj.TotalSteps;
                 progressBar.Value = obj.CurrentStep;
                 lblStatus.Content = "Обработка " + obj.CurrentMM_MK.ToString();
@@ -106,13 +119,20 @@ namespace VPNMMapplication
 
         private async void LoadAsync()
         {
-            btnRefresh.IsEnabled = false;
-            dispatcherTimer.Stop();
-            dispatcherTimer.Start();
             try
             {
                 //Перед нечалом загрузки - включаем видимость прогресс бара
+                //И отключаем кнопку "обновить"
                 VisibleProgressOn();
+                btnRefresh.IsEnabled = false;
+                //Если загрузка производится не в первый раз - обновить html строку
+                if (firstLoad == false)
+                {
+                    maker.HtmlString = "";
+                    maker.HtmlString = await htmlGetter.Refresh();
+                }
+                dispatcherTimer.Stop();
+                dispatcherTimer.Start();
                 //Коллекция онлайн объектов
                 onlineCollection = await maker.LoadCollectionAsync(true, checkBoxShowDate.IsChecked);
                 onlineCollection.TheCollection.Sort(new MMCollectionComparer());
@@ -128,29 +148,20 @@ namespace VPNMMapplication
                 VisibleProgressOff();
                 //Выбор текущей колекции
                 SwitchView();
+                btnRefresh.IsEnabled = true;
             }
 
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
+                InvokeNewSession();
             }
-            btnRefresh.IsEnabled = true;
         }
 
-        //Прогружает новый список онлайн
-        private void Refresh()
-        {
-            Task.Run(() =>
-            {
-                maker.HtmlString = htmlGetter.Refresh();
-            });
-            LoadAsync();
-            
-        }
 
         private void btnRefresh_Click(object sender, RoutedEventArgs e)
         {
-            Refresh();
+             LoadAsync();
         }
 
         private void radioBtnOnline_Checked(object sender, RoutedEventArgs e)

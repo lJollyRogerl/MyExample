@@ -35,9 +35,12 @@ namespace VPNMMapplication
             return GetHTML(Post(Login, PSWRD));
         }
 
-        public string Refresh()
+        public async Task<string> Refresh()
         {
-            return GetResponseInHTML(URL + "manage.cgi");
+            OnAuthorizationProgress("Обновляю данные по объектам");
+            return await Task<string>.Run(() => {
+                 return GetResponseInHTML(URL + "manage.cgi");
+            });
         }
 
         public string GetSessionsLog(string username)
@@ -57,7 +60,7 @@ namespace VPNMMapplication
                     System.Windows.MessageBox.Show("Авторизация неудалась.", "Ошибка!");
                     return null;
                 }
-                OnAuthorizationProgress("Проверяю...");
+                OnAuthorizationProgress("Проверяю");
                 Stream ReceiveStream = response.GetResponseStream();
                 StreamReader sr = new StreamReader(ReceiveStream, encode);
                 //То что нам вернул сервер не попытку авторизации
@@ -69,9 +72,9 @@ namespace VPNMMapplication
                 {
                     return "Неверный логин или пароль!";
                 }
-                OnAuthorizationProgress("Запрашиваю список регионов...");
+                OnAuthorizationProgress("Запрашиваю список филиалов региона");
                 GetResponseInHTML(URL + $"manage.cgi?unrollr={Filial.ParentRegion.NameOfRegion}");
-                OnAuthorizationProgress("Запрашиваю список филиалов...");
+                OnAuthorizationProgress("Запрашиваю список магазинов");
                 return GetResponseInHTML(URL + $"manage.cgi?unrollf={Filial.Name}");
 
             }
@@ -113,12 +116,12 @@ namespace VPNMMapplication
                 string FormParams = $"log_username={login}&log_password={password}&action=login";
                 SomeBytes = Encoding.UTF8.GetBytes(FormParams);
                 req.ContentLength = SomeBytes.Length;
-                OnAuthorizationProgress("Попытка авторизации...");
+                OnAuthorizationProgress("Попытка авторизации");
                 Stream newStream = req.GetRequestStream();
                 BugFix_CookieDomain(cookies);
                 newStream.Write(SomeBytes, 0, SomeBytes.Length);
                 newStream.Close();
-                OnAuthorizationProgress("Получаю ответ сервера...");
+                OnAuthorizationProgress("Получаю ответ сервера");
                 result = (HttpWebResponse)req.GetResponse();
                 BugFix_CookieDomain(cookies);
                 return result;
@@ -132,7 +135,6 @@ namespace VPNMMapplication
         }
         private void BugFix_CookieDomain(CookieContainer cookies)
         {
-            OnAuthorizationProgress("Баг фикс...");
             Type containerType = typeof(CookieContainer);
             var table = (Hashtable)containerType.InvokeMember("m_domainTable",
                                                                 BindingFlags.NonPublic |
