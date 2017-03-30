@@ -32,9 +32,9 @@
         </ControlTemplate>
         <!--Refresh template-->
         <ControlTemplate x:Key="RefreshButton" TargetType="Button">
-            <Grid x:Name="templateRefreshBtn" Width="30" Height="30">
+            <Grid x:Name="templateRefreshBtn" Width="35" Height="35">
                 <Grid.Background>
-                    <ImageBrush ImageSource="pics/refresh.png" Stretch="Uniform"/>
+                    <ImageBrush ImageSource="pics/_refresh.png" Stretch="Uniform"/>
                 </Grid.Background>
             </Grid>
             <ControlTemplate.Triggers>
