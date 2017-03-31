@@ -30,7 +30,7 @@ namespace VPNMMapplication
             {
                 string pathToFile = "exportToExcel.сsv";
                 System.Windows.Forms.SaveFileDialog saveFile = new System.Windows.Forms.SaveFileDialog();
-                saveFile.Filter = "(*.csv) | *.csv";
+                saveFile.Filter = "Таблица (*.csv) | *.csv";
                 if (saveFile.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 {
                     pathToFile = saveFile.FileName;
