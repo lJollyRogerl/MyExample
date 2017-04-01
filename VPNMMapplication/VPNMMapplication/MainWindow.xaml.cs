@@ -93,13 +93,13 @@ namespace VPNMMapplication
                 for (int i = 0; i < statuses.StatusesList.Count; i++)
                 {
                     DataGridTextColumn column = new DataGridTextColumn();
-                    column.Header = statuses.StatusesList[i].Statuses[1].TheDate.ToLocalTime();
+                    column.Header = statuses.StatusesList[i].TheDate.ToLocalTime();
                     MessageBox.Show("сейчас вылетит птичка");
                     column.Binding = new Binding("TitleAndState"); 
                     statusesDataGrid.Columns.Add(column);
                 }
-                statusGridColumnLastState.Header = statuses.StatusesList[0].Statuses[0].TheDate.ToLocalTime();
-                statusesDataGrid.ItemsSource = statuses.StatusesList[0].Statuses;
+                //statusGridColumnLastState.Header = statuses.StatusesList[0].Statuses[0].TheDate.ToLocalTime();
+                //statusesDataGrid.ItemsSource = statuses.StatusesList[0].Statuses;
             }
             catch (Exception ex)
             {

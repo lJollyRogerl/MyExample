@@ -49,8 +49,11 @@ namespace VPNMMapplication
     public class SessionStatuses
     {
         public List<PreviousSessionState> Statuses { get; set; } = new List<PreviousSessionState>();
+        public DateTime TheDate { get; set; } = new DateTime();
+
         public SessionStatuses()
         {
+            TheDate = DateTime.Now;
             //try
             //{
             //    Statuses = StateSerialiser.DeSerialize().Statuses;
@@ -74,7 +77,6 @@ namespace VPNMMapplication
                 foreach (var unit in currentCollection.TheCollection)
                 {
                     PreviousSessionState state = new PreviousSessionState();
-                    state.TheDate = DateTime.Now;
                     string status = "";
                     if (unit.IsOnline)
                         status = "Был в сети.";
@@ -99,7 +101,6 @@ namespace VPNMMapplication
     [Serializable]
     public class PreviousSessionState
     {
-        public DateTime TheDate { get; set; } = new DateTime();
         public string TitleAndState { get; set; } = "";
     }
 
