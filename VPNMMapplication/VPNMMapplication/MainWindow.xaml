@@ -71,9 +71,9 @@
                 <DataGridTextColumn x:Name="dNS_NameColumn" Binding="{Binding DNS_Name}" Header="DNS имя" Width="240"/>
             </DataGrid.Columns>
         </DataGrid>
-        <DataGrid x:Name="statusesDataGrid" AutoGenerateColumns="False" LoadingRow="statusesDataGrid_LoadingRow">
+        <DataGrid x:Name="statusesDataGrid" AutoGenerateColumns="False" ItemsSource="{Binding}">
             <DataGrid.Columns>
-                <DataGridTextColumn x:Name="statusGridColumnLastState" Binding="{Binding TitleAndState}" Width="240"/>
+                
             </DataGrid.Columns>
         </DataGrid>
     </DockPanel>
