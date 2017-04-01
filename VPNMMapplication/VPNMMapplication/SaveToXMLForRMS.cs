@@ -8,7 +8,7 @@ using System.Xml.Linq;
 
 namespace VPNMMapplication
 {
-    public class SaveToXML
+    public class SaveToXMLForRMS
     {
         public static void BuildXmlDoc(MM_MK_Collection collection, string pathToSave)
         {

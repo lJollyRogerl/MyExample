@@ -22,7 +22,7 @@ namespace VPNMMapplication
         MM_MK_Collection offlineCollection = new MM_MK_Collection();
         MM_MK_Collection fullCollection = new MM_MK_Collection();
         DispatcherTimer dispatcherTimer = new DispatcherTimer();
-
+        SessionStatuses statuses = new SessionStatuses();
         public MainWindow()
         {
             InitializeComponent();

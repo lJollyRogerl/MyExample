@@ -66,10 +66,14 @@
                 <DataGridTextColumn x:Name="titleColumn" Binding="{Binding Title}" Header="Название объекта" Width="170"/>
                 <DataGridTextColumn x:Name="iPColumn" Binding="{Binding IP}" Header="Внутренний IP" Width="105"/>
                 <DataGridTextColumn x:Name="mainOrReserve" Binding="{Binding MainOrReserve}" Header="Основной/резерв" Width="120"/>
-                <DataGridTextColumn x:Name="historysession" Width="150" Visibility="Collapsed"/>
                 <DataGridTextColumn x:Name="lastOnlineDate" Binding="{Binding LastDateOnline}" Header="Последний сеанс" Width="160"/>
                 <DataGridTextColumn x:Name="dNS_NameColumn" Binding="{Binding DNS_Name}" Header="DNS имя" Width="240"/>
             </DataGrid.Columns>
         </DataGrid>
+        <DataGrid x:Name="statusesGrid" AutoGenerateColumns="False"
+                  RowDetailsVisibilityMode="VisibleWhenSelected" FontSize="14" FontWeight="SemiBold" EnableRowVirtualization="False" FontFamily="Sitka Display">
+            
+        </DataGrid>
+        
     </DockPanel>
 </Window>

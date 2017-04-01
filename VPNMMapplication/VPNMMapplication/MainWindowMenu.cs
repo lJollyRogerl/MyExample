@@ -63,7 +63,7 @@ namespace VPNMMapplication
                 if (saveFile.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 {
                     pathToFile = saveFile.FileName;
-                    SaveToXML.BuildXmlDoc(fullCollection, pathToFile);
+                    SaveToXMLForRMS.BuildXmlDoc(fullCollection, pathToFile);
                 }
             }
             catch (Exception ex)

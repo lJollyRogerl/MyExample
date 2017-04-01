@@ -95,7 +95,7 @@
     <Compile Include="MainWindowMenu.cs" />
     <Compile Include="MM_MK_Collection.cs" />
     <Compile Include="PreviousSessionState.cs" />
-    <Compile Include="SaveToXML.cs" />
+    <Compile Include="SaveToXMLForRMS.cs" />
     <Compile Include="SerializeDivisions.cs" />
     <Compile Include="SplashScreen.xaml.cs">
       <DependentUpon>SplashScreen.xaml</DependentUpon>
