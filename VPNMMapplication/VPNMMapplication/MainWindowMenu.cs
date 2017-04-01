@@ -77,14 +77,27 @@ namespace VPNMMapplication
             this.Close();
         }
 
-        private void helpDesription_Click(object sender, RoutedEventArgs e)
+        private void helpDesсription_Click(object sender, RoutedEventArgs e)
         {
-
+            //Написать код, который будет выводить окно с подсказками
         }
 
         private void helpWriteToDeveloper_Click(object sender, RoutedEventArgs e)
         {
+            string subject = "Предложения и пожелания VPNMMapplication";
+            Process.Start("mailto:dmitriev_gv@ntagil.magnit.ru" + "?subject=" + subject/* + "&body="+ body*/);
+        }
 
+        private void comboWhatToShow_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            if (comboWhatToShow.SelectedValue.ToString() == "Мониторинг")
+            {
+                //Написать код, который будет показывать только мониторинг и соответсвующие контролы
+            }
+            else
+            {
+                //Написать код, который будет показывать только логи и соответсвующие контролы
+            }
         }
     }
 }

@@ -193,6 +193,5 @@ namespace VPNMMapplication
             dispatcherTimer.Interval = TimeSpan.FromMinutes((int)e.NewValue);
         }
 
-
     }
 }

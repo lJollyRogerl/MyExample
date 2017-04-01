@@ -1,10 +1,11 @@
-﻿<Window x:Name="mainWindow"
-        x:Class="VPNMMapplication.MainWindow"
+﻿<Window
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:VPNMMapplication"
+        xmlns:System="clr-namespace:System;assembly=mscorlib" x:Name="mainWindow"
+        x:Class="VPNMMapplication.MainWindow"
         mc:Ignorable="d"
         Title="Мониторинг Объектов Обслуживания" Height="350" Width="800" SizeChanged="mainWindow_SizeChanged"
         Loaded="mainWindow_Loaded" Icon="pics/ico.png">
@@ -21,8 +22,17 @@
                 <Separator/>
                 <MenuItem x:Name="menuClose" Header="_Закрыть" Click="menuClose_Click"/>
             </MenuItem>
+            <MenuItem x:Name="menuView" Header="_Вид">
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="Промотр"/>
+                    <ComboBox x:Name="comboWhatToShow" Width="110" SelectedIndex="0" VerticalAlignment="Center" SelectionChanged="comboWhatToShow_SelectionChanged">
+                        <System:String>Мониторинг</System:String>
+                        <System:String>Просмотр лога</System:String>
+                    </ComboBox>
+                </StackPanel>
+            </MenuItem>
             <MenuItem x:Name="menuHelp" Header="_Помощь">
-                <MenuItem x:Name="helpDesription" Header="_О программе" Click="helpDesription_Click"/>
+                <MenuItem x:Name="helpDesription" Header="_О программе" Click="helpDesсription_Click"/>
                 <MenuItem x:Name="helpWriteToDeveloper" Header="_Написать отзыв" Click="helpWriteToDeveloper_Click"/>
             </MenuItem>
         </Menu>
@@ -44,7 +54,7 @@
                 <Slider x:Name="sliderFrequency" VerticalAlignment="Center" Width="160" Value="7" 
                     Maximum="30" ValueChanged="sliderFrequency_ValueChanged" SmallChange="1" Minimum="5"/>
             </StackPanel>
-            
+
         </ToolBar>
         <StatusBar x:Name="statusBar" DockPanel.Dock="Bottom" Height="25" Visibility="Collapsed">
             <Label x:Name="lblStatus" Foreground="Gray" FontSize="10" Height="22"/>
