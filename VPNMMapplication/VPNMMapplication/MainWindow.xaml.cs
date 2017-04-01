@@ -26,6 +26,7 @@ namespace VPNMMapplication
         MM_MK_Collection fullCollection = new MM_MK_Collection();
         DispatcherTimer dispatcherTimer = new DispatcherTimer();
         SessionStatusesArray statuses;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -89,17 +90,22 @@ namespace VPNMMapplication
             //Загружаем логи. Если их нет - создаем первую запись лога
             try
             {
-                statuses = new SessionStatusesArray(currentDisplayedCol);
+                statuses = new SessionStatusesArray(fullCollection);
                 for (int i = 0; i < statuses.StatusesList.Count; i++)
                 {
-                    DataGridTextColumn column = new DataGridTextColumn();
-                    column.Header = statuses.StatusesList[i].TheDate;
-                    column.Binding = new Binding("TitleAndState");
-                    statusesDataGrid.Columns.Add(column);
-                    statusesDataGrid.ItemsSource = statuses.StatusesList[i].Statuses;
-
+                    //    DataGridTextColumn column = new DataGridTextColumn();
+                    //    column.Header = statuses.StatusesList.Count/*statuses.StatusesList[i].Statuses[0].TheDate.ToString("MM/dd/yyyy HH:mm")*/;
+                    //    column.Binding = new Binding("TitleAndState");
+                    //    statusesDataGrid.Columns.Add(column);
+                    //    statusesDataGrid.ItemsSource = statuses.StatusesList[i].Statuses;
+                    string s = "";
+                foreach (var item in statuses.StatusesList[i].Statuses)
+                {
+                    s += item.TheDate + item.TitleAndState+"\n";
                 }
-                //statusGridColumnLastState.Header = statuses.StatusesList[0].Statuses[0].TheDate.ToLocalTime();
+                MessageBox.Show(s);
+                }
+                //statusGridColumnLastState.Header = statuses.StatusesList[0].Statuses[0].TheDate.ToString("MM/dd/yyyy HH:mm");
                 //statusesDataGrid.ItemsSource = statuses.StatusesList[0].Statuses;
             }
             catch (Exception ex)

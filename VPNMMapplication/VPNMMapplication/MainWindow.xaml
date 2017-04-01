@@ -26,7 +26,7 @@
             <MenuItem x:Name="menuView" Header="_Вид">
                 <StackPanel Orientation="Horizontal">
                     <Label Content="Промотр"/>
-                    <ComboBox x:Name="comboWhatToShow" Width="110" SelectedIndex="0" VerticalAlignment="Center" SelectionChanged="comboWhatToShow_SelectionChanged">
+                    <ComboBox x:Name="comboWhatToShow" Width="110" VerticalAlignment="Center" SelectionChanged="comboWhatToShow_SelectionChanged">
                         <System:String>Мониторинг</System:String>
                         <System:String>Просмотр лога</System:String>
                     </ComboBox>
@@ -71,10 +71,10 @@
                 <DataGridTextColumn x:Name="dNS_NameColumn" Binding="{Binding DNS_Name}" Header="DNS имя" Width="240"/>
             </DataGrid.Columns>
         </DataGrid>
-        <DataGrid x:Name="statusesDataGrid" AutoGenerateColumns="False" ItemsSource="{Binding}">
-            <DataGrid.Columns>
-                
-            </DataGrid.Columns>
+        <DataGrid x:Name="statusesDataGrid" AutoGenerateColumns="False"
+                  RowDetailsVisibilityMode="VisibleWhenSelected" FontSize="14" FontWeight="SemiBold" 
+                  EnableRowVirtualization="False" FontFamily="Sitka Display">
+            <DataGridTextColumn x:Name="statusGridColumnLastState" Header="header" Binding="{Binding TitleAndState}" Width="210"/>
         </DataGrid>
     </DockPanel>
 </Window>

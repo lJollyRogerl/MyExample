@@ -90,16 +90,14 @@ namespace VPNMMapplication
 
         private void comboWhatToShow_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
-            if (comboWhatToShow.SelectedIndex == 0)
+            if ((string)comboWhatToShow.SelectedValue == "Мониторинг")
             {
-                MessageBox.Show("comboWhatToShow.SelectedIndex == 0");
                 ////Написать код, который будет показывать только мониторинг и соответсвующие контролы
                 //statusesDataGrid.Visibility = Visibility.Visible;
                 //mM_MK_UnitDataGrid.Visibility = Visibility.Collapsed;
             }
             else
             {
-                MessageBox.Show("comboWhatToShow.SelectedIndex == 1");
                 ////Написать код, который будет показывать только логи и соответсвующие контролы
                 //statusesDataGrid.Visibility = Visibility.Collapsed;
                 //mM_MK_UnitDataGrid.Visibility = Visibility.Visible;

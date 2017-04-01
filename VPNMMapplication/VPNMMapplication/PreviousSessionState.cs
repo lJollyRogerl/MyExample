@@ -13,7 +13,7 @@ namespace VPNMMapplication
     [Serializable]
     public class SessionStatusesArray
     {
-        public List<SessionStatuses> StatusesList { get; set; } = new List<SessionStatuses>();
+        public List<SessionStatuses> StatusesList { get; set; }
         public SessionStatusesArray()
         {
         }
@@ -30,7 +30,6 @@ namespace VPNMMapplication
                     status.MakeStates(currentDisplayedCol);
                     StatusesList.Add(status);
                     StateSerialiser.Serialize(this);
-                    MessageBox.Show("Данных нет!", "Загрузка лога");
                 }
                 else
                 {
@@ -49,24 +48,8 @@ namespace VPNMMapplication
     public class SessionStatuses
     {
         public List<PreviousSessionState> Statuses { get; set; } = new List<PreviousSessionState>();
-        public DateTime TheDate { get; set; } = new DateTime();
-
         public SessionStatuses()
         {
-            TheDate = DateTime.Now;
-            //try
-            //{
-            //    Statuses = StateSerialiser.DeSerialize().Statuses;
-            //    if (Statuses == null)
-            //    {
-            //        Statuses = new List<PreviousSessionState>();
-            //        MessageBox.Show("Данных нет!", "Загрузка лога");
-            //    }
-            //}
-            //catch (Exception ex)
-            //{
-            //    MessageBox.Show(ex.Message, "В конструкторе");
-            //}
         }
 
         public void MakeStates(MM_MK_Collection currentCollection)
@@ -77,6 +60,7 @@ namespace VPNMMapplication
                 foreach (var unit in currentCollection.TheCollection)
                 {
                     PreviousSessionState state = new PreviousSessionState();
+                    state.TheDate = DateTime.Now;
                     string status = "";
                     if (unit.IsOnline)
                         status = "Был в сети.";
@@ -93,14 +77,15 @@ namespace VPNMMapplication
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "Создание коллекции статусов");
-            }   
+            }
         }
-        
+
     }
 
     [Serializable]
     public class PreviousSessionState
     {
+        public DateTime TheDate { get; set; } = new DateTime();
         public string TitleAndState { get; set; } = "";
     }
 
@@ -112,7 +97,7 @@ namespace VPNMMapplication
             try
             {
                 BinaryFormatter binary = new BinaryFormatter();
-                using (Stream stream = new FileStream("LastStatuses.bin", FileMode.Append,
+                using (Stream stream = new FileStream("LastStatuses.bin", FileMode.OpenOrCreate,
                     FileAccess.Write, FileShare.None))
                 {
                     binary.Serialize(stream, statusesList);
