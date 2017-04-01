@@ -11,6 +11,7 @@
         Loaded="mainWindow_Loaded" Icon="pics/ico.png">
     <Window.Resources>
         <CollectionViewSource x:Key="mM_MK_UnitViewSource" d:DesignSource="{d:DesignInstance {x:Type local:MM_MK_Unit}, CreateList=True}"/>
+        <CollectionViewSource x:Key="lastStatusesVievSource" d:DesignSource="{d:DesignInstance {x:Type local:PreviousSessionState}, CreateList=True}"/>
     </Window.Resources>
     <DockPanel LastChildFill="True" DataContext="{StaticResource mM_MK_UnitViewSource}">
         <Menu DockPanel.Dock="Top">
@@ -60,7 +61,7 @@
             <Label x:Name="lblStatus" Foreground="Gray" FontSize="10" Height="22"/>
             <ProgressBar x:Name="progressBar" Height="13"/>
         </StatusBar>
-        <DataGrid x:Name="mM_MK_UnitDataGrid" AutoGenerateColumns="False" ItemsSource="{Binding}"
+        <DataGrid x:Name="mM_MK_UnitDataGrid" AutoGenerateColumns="False" ItemsSource="{Binding}" Visibility="Collapsed"
                   RowDetailsVisibilityMode="VisibleWhenSelected" FontSize="14" FontWeight="SemiBold" EnableRowVirtualization="False" FontFamily="Sitka Display">
             <DataGrid.Columns>
                 <DataGridTextColumn x:Name="titleColumn" Binding="{Binding Title}" Header="Название объекта" Width="170"/>
@@ -70,10 +71,10 @@
                 <DataGridTextColumn x:Name="dNS_NameColumn" Binding="{Binding DNS_Name}" Header="DNS имя" Width="240"/>
             </DataGrid.Columns>
         </DataGrid>
-        <DataGrid x:Name="statusesGrid" AutoGenerateColumns="False"
-                  RowDetailsVisibilityMode="VisibleWhenSelected" FontSize="14" FontWeight="SemiBold" EnableRowVirtualization="False" FontFamily="Sitka Display">
-            
+        <DataGrid x:Name="statusesDataGrid" AutoGenerateColumns="False" LoadingRow="statusesDataGrid_LoadingRow">
+            <DataGrid.Columns>
+                <DataGridTextColumn x:Name="statusGridColumnLastState" Binding="{Binding TitleAndState}" Width="240"/>
+            </DataGrid.Columns>
         </DataGrid>
-        
     </DockPanel>
 </Window>

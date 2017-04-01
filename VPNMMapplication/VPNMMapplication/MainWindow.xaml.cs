@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Media;
 using System.Windows.Threading;
 
@@ -22,7 +25,7 @@ namespace VPNMMapplication
         MM_MK_Collection offlineCollection = new MM_MK_Collection();
         MM_MK_Collection fullCollection = new MM_MK_Collection();
         DispatcherTimer dispatcherTimer = new DispatcherTimer();
-        SessionStatuses statuses = new SessionStatuses();
+        SessionStatusesArray statuses;
         public MainWindow()
         {
             InitializeComponent();
@@ -72,19 +75,37 @@ namespace VPNMMapplication
             htmlGetter.OnAuthorizationProgress += HtmlGetter_OnAuthorizationProgress;
             mM_MK_UnitDataGrid.LoadingRow += MM_MK_UnitDataGrid_LoadingRow;
             checkBoxShowDate.ToolTip = "При выборе данной опции загрузка будет проходить намного дольше.\n" +
-                "Это происходит из за того, что программа переходит по ссылке в историю подклюений и выбирает\n"+
+                "Это происходит из за того, что программа переходит по ссылке в историю подклюений и выбирает\n" +
                 "последнюю сессию из списка для каждого магазина.";
 
             LoadAsync();
             firstLoad = false;
-            //Если запущено в онлайн режиме - обновляет статус ММ каждые 5 минут
-            if (isOnlineMode == true)
+            //обновляет статус ММ каждые 7 минут
+            dispatcherTimer = new DispatcherTimer();
+            dispatcherTimer.Tick += delegate (object s, EventArgs eArgs) { LoadAsync(); };
+            dispatcherTimer.Interval = new TimeSpan(0, 7, 0);
+            dispatcherTimer.Start();
+
+            //Загружаем логи. Если их нет - создаем первую запись лога
+            try
             {
-                dispatcherTimer = new DispatcherTimer();
-                dispatcherTimer.Tick += delegate (object s, EventArgs eArgs) { LoadAsync(); };
-                dispatcherTimer.Interval = new TimeSpan(0, 7, 0);
-                dispatcherTimer.Start();
+                statuses = new SessionStatusesArray(currentDisplayedCol);
+                for (int i = 0; i < statuses.StatusesList.Count; i++)
+                {
+                    DataGridTextColumn column = new DataGridTextColumn();
+                    column.Header = statuses.StatusesList[i].Statuses[1].TheDate.ToLocalTime();
+                    MessageBox.Show("сейчас вылетит птичка");
+                    column.Binding = new Binding("TitleAndState"); 
+                    statusesDataGrid.Columns.Add(column);
+                }
+                statusGridColumnLastState.Header = statuses.StatusesList[0].Statuses[0].TheDate.ToLocalTime();
+                statusesDataGrid.ItemsSource = statuses.StatusesList[0].Statuses;
             }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Ошибка загрузки лога");
+            }
+
         }
 
         private void HtmlGetter_OnAuthorizationProgress(string obj)
@@ -193,5 +214,21 @@ namespace VPNMMapplication
             dispatcherTimer.Interval = TimeSpan.FromMinutes((int)e.NewValue);
         }
 
+        private void statusesDataGrid_LoadingRow(object sender, System.Windows.Controls.DataGridRowEventArgs e)
+        {
+            //Ели в предыдущей сесси данный объект не был в сети, то окрашиваем в красный
+            if (e.Row.DataContext is PreviousSessionState)
+            {
+                PreviousSessionState state = (PreviousSessionState)e.Row.DataContext;
+                if (state.TitleAndState.Contains("Не"))
+                {
+                    e.Row.Background = new SolidColorBrush(Color.FromRgb(245, 0, 41));
+                }
+                else
+                {
+                    e.Row.Background = new SolidColorBrush(Colors.LightGreen);
+                }
+            }
+        }
     }
 }

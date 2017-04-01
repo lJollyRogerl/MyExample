@@ -10,73 +10,103 @@ using System.Xml.Serialization;
 
 namespace VPNMMapplication
 {
-    public class SessionStatuses
+    [Serializable]
+    public class SessionStatusesArray
     {
-        public SessionStatuses()
+        public List<SessionStatuses> StatusesList { get; set; } = new List<SessionStatuses>();
+        public SessionStatusesArray()
         {
-            Statuses = StateSerialiser.DeSerialize();
-            if (Statuses == null)
+        }
+
+        public SessionStatusesArray(MM_MK_Collection currentDisplayedCol)
+        {
+            try
             {
-                Statuses = new List<PreviousSessionState>();
-                MessageBox.Show("Данных нет!", "Загрузка лога");
+                SessionStatusesArray array = StateSerialiser.DeSerializeList();
+                if (array == null)
+                {
+                    StatusesList = new List<SessionStatuses>();
+                    SessionStatuses status = new SessionStatuses();
+                    status.MakeStates(currentDisplayedCol);
+                    StatusesList.Add(status);
+                    StateSerialiser.Serialize(this);
+                    MessageBox.Show("Данных нет!", "Загрузка лога");
+                }
+                else
+                {
+                    StatusesList = array.StatusesList;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "В конструкторе");
             }
         }
+    }
 
-        public void AddToLog(PreviousSessionState state)
+
+    [Serializable]
+    public class SessionStatuses
+    {
+        public List<PreviousSessionState> Statuses { get; set; } = new List<PreviousSessionState>();
+        public SessionStatuses()
         {
-            StateSerialiser.AddStatus(state);
+            //try
+            //{
+            //    Statuses = StateSerialiser.DeSerialize().Statuses;
+            //    if (Statuses == null)
+            //    {
+            //        Statuses = new List<PreviousSessionState>();
+            //        MessageBox.Show("Данных нет!", "Загрузка лога");
+            //    }
+            //}
+            //catch (Exception ex)
+            //{
+            //    MessageBox.Show(ex.Message, "В конструкторе");
+            //}
         }
 
+        public void MakeStates(MM_MK_Collection currentCollection)
+        {
+            try
+            {
+                Statuses.Clear();
+                foreach (var unit in currentCollection.TheCollection)
+                {
+                    PreviousSessionState state = new PreviousSessionState();
+                    state.TheDate = DateTime.Now;
+                    string status = "";
+                    if (unit.IsOnline)
+                        status = "Был в сети.";
+                    else
+                    {
+                        status = "Не в сети.";
+                        if (!string.IsNullOrWhiteSpace(unit.LastDateOnline))
+                            status += $" Последняя сессия {unit.LastDateOnline}";
+                    }
+                    state.TitleAndState = unit.Title + " " + status;
+                    Statuses.Add(state);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Создание коллекции статусов");
+            }   
+        }
         
-        public List<PreviousSessionState> Statuses { get; set; }
     }
 
     [Serializable]
     public class PreviousSessionState
     {
-        public PreviousSessionState(MM_MK_Collection currentCollection)
-        {
-            TheDate = DateTime.Now;
-            foreach (var unit in currentCollection.TheCollection)
-            {
-                string state = "";
-                if (unit.IsOnline)
-                    state = "Был в сети.";
-                else
-                {
-                    state = "Не в сети.";
-                    if (unit.LastDateOnline != null)
-                        state += $" Последняя сессия {unit.LastDateOnline}";
-                }
-                TitleAndState.Add(unit.Title, state);
-            }
-        }
-        public DateTime TheDate { get; set; }
-        public Dictionary<string, string> TitleAndState { get; set; }
+        public DateTime TheDate { get; set; } = new DateTime();
+        public string TitleAndState { get; set; } = "";
     }
 
     public static class StateSerialiser
     {
-        //Добавляет данные по поледней дате в бин файл
-        public static void AddStatus(PreviousSessionState state)
-        {
-            try
-            {
-                BinaryFormatter binary = new BinaryFormatter();
-                using (Stream stream = new FileStream("LastStatuses.bin", FileMode.Append,
-                    FileAccess.Write, FileShare.None))
-                {
-                    binary.Serialize(stream, state);
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, "Ошибка сериализации лога");
-            }
-            
-        }
         //Сериализует данные по поледним статусам в бин файл
-        public static void Serialize(List<PreviousSessionState> statuses)
+        public static void Serialize(SessionStatusesArray statusesList)
         {
             try
             {
@@ -84,7 +114,7 @@ namespace VPNMMapplication
                 using (Stream stream = new FileStream("LastStatuses.bin", FileMode.Append,
                     FileAccess.Write, FileShare.None))
                 {
-                    binary.Serialize(stream, statuses);
+                    binary.Serialize(stream, statusesList);
                 }
             }
             catch (Exception ex)
@@ -93,18 +123,18 @@ namespace VPNMMapplication
             }
 
         }
-        //Десериализует данные по поледним статусам из бин файла
-        public static List<PreviousSessionState> DeSerialize()
+
+        public static SessionStatusesArray DeSerializeList()
         {
             try
             {
                 BinaryFormatter binary = new BinaryFormatter();
-                List<PreviousSessionState> statuses;
+                SessionStatusesArray statuses;
                 using (Stream stream = new FileStream("LastStatuses.bin", FileMode.Open,
                     FileAccess.Read, FileShare.None))
                 {
 
-                    statuses = (List<PreviousSessionState>)binary.Deserialize(stream);
+                    statuses = (SessionStatusesArray)binary.Deserialize(stream);
                     return statuses;
                 }
             }
@@ -113,7 +143,7 @@ namespace VPNMMapplication
                 MessageBox.Show(ex.Message, "Ошибка десериализации лога");
                 return null;
             }
-            
+
         }
     }
 }
