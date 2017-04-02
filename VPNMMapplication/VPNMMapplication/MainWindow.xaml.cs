@@ -208,22 +208,7 @@ namespace VPNMMapplication
             dispatcherTimer.Interval = TimeSpan.FromMinutes((int)e.NewValue);
         }
 
-        private void statusesDataGrid_LoadingRow(object sender, System.Windows.Controls.DataGridRowEventArgs e)
-        {
-            //Ели в предыдущей сесси данный объект не был в сети, то окрашиваем в красный
-            if (e.Row.DataContext is PreviousSessionState)
-            {
-                PreviousSessionState state = (PreviousSessionState)e.Row.DataContext;
-                if (state.TitleAndState.Contains("Не"))
-                {
-                    e.Row.Background = new SolidColorBrush(Color.FromRgb(245, 0, 41));
-                }
-                else
-                {
-                    e.Row.Background = new SolidColorBrush(Colors.LightGreen);
-                }
-            }
-        }
+        
 
     }
 }

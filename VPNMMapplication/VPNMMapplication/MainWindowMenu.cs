@@ -6,13 +6,13 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
+using System.Windows.Media;
 using Excel = Microsoft.Office.Interop.Excel;
 
 namespace VPNMMapplication
 {
     public partial class MainWindow : Window
     {
-
         private void menuNewSession_Click(object sender, RoutedEventArgs e)
         {
             InvokeNewSession();
@@ -103,16 +103,17 @@ namespace VPNMMapplication
                 else
                 {
                     SessionsLog = new SessionsArray(fullCollection);
+                    statusesDataGrid.Columns.Clear();
                     for (int i = 0; i < SessionsLog.SessionsLog.Count; i++)
                     {
                         DataGridTextColumn column = new DataGridTextColumn();
-                        column.Header = SessionsLog.SessionsLog[i].Statuses[0].TheDate.ToString("MM/dd/yyyy HH:mm");
+                        column.Header = SessionsLog.SessionsLog[i].Statuses[0].TheDate.ToString("dd/MM/yyyy HH:mm");
                         column.Binding = new Binding("TitleAndState");
                         statusesDataGrid.Columns.Add(column);
                         statusesDataGrid.ItemsSource = SessionsLog.SessionsLog[i].Statuses;
                         statusesDataGrid.Visibility = Visibility.Visible;
                         mM_MK_UnitDataGrid.Visibility = Visibility.Collapsed;
-
+                        statusesDataGrid.LoadingRow += StatusesDataGrid_LoadingRow;
                     }
                 }
             }
@@ -122,11 +123,27 @@ namespace VPNMMapplication
             }
             
         }
-
-
+        private void StatusesDataGrid_LoadingRow(object sender, System.Windows.Controls.DataGridRowEventArgs e)
+        {
+            //Ели в предыдущей сесси данный объект не был в сети, то окрашиваем в красный
+            if (e.Row.DataContext is PreviousSessionState)
+            {
+                PreviousSessionState state = (PreviousSessionState)e.Row.DataContext;
+                if (state.TitleAndState.Contains("Не"))
+                {
+                    e.Row.Background = new SolidColorBrush(Color.FromRgb(245, 0, 41));
+                }
+                else
+                {
+                    e.Row.Background = new SolidColorBrush(Colors.LightGreen);
+                }
+            }
+        }
+            
         private void menuSettings_Click(object sender, RoutedEventArgs e)
         {
             settingsWindow = new SettingsWindow(settings);
+            settingsWindow.Owner = this;
             if (settingsWindow.ShowDialog() == true)
             {
                 logSerializationTimer.Interval = new TimeSpan(settings.TimePerLogging, 0, 0);

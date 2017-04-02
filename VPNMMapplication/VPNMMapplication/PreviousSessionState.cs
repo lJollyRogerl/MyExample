@@ -13,6 +13,7 @@ namespace VPNMMapplication
     [Serializable]
     public class SessionsArray
     {
+        private static bool isLoaded = false;
         public List<PreviousSessionStatuses> SessionsLog { get; set; }
         public SessionsArray()
         {
@@ -35,6 +36,12 @@ namespace VPNMMapplication
                 else
                 {
                     SessionsLog = array.SessionsLog;
+                    //Если лог уже есть, но в данной сессии загрузка происходит первый раз - добавить текущие значения в лог
+                    if (isLoaded == false)
+                    {
+                        Add(currentDisplayedCol);
+                        isLoaded = true;
+                    }
                 }
             }
             catch (Exception ex)

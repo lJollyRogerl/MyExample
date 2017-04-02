@@ -19,8 +19,7 @@ namespace VPNMMapplication
     /// </summary>
     public partial class SettingsWindow : Window
     {
-        int timePerLoggingSet = 4;
-        private Settings settings;
+        private Settings settings = new Settings() { TimePerLogging = 4 };
 
         public SettingsWindow()
         {
@@ -29,13 +28,18 @@ namespace VPNMMapplication
 
         public SettingsWindow(Settings settings)
         {
+            InitializeComponent();
             this.settings = settings;
         }
 
         private void sliderTimePerLoggingSet_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            lblTimePerLogging.Content = $"Логирование происходит каждые {(int)e.NewValue} часа";
-            timePerLoggingSet = ((int)e.NewValue);
+            if((int)e.NewValue==1)
+                lblTimePerLogging.Content = $"Логирование происходит каждый час";
+            else
+                lblTimePerLogging.Content = $"Логирование происходит каждые {(int)e.NewValue} часа";
+
+            settings.TimePerLogging = ((int)e.NewValue);
         }
 
         private void btnOk_Click(object sender, RoutedEventArgs e)

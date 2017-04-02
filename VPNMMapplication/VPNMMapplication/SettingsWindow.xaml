@@ -5,13 +5,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:VPNMMapplication"
         mc:Ignorable="d"
-        Title="SettingsWindow" Height="300" Width="300" MouseDown="Window_MouseDown">
+        Title="Окно настроек" Height="150" Width="300" MouseDown="Window_MouseDown" WindowStartupLocation="CenterOwner" Icon="Tander.ico">
     <StackPanel>
         <GroupBox>
             <StackPanel>
                 <Label x:Name="lblTimePerLogging" Content="Логирование происходит каждые 4 часа"/>
                 <Slider x:Name="sliderTimePerLoggingSet" SmallChange="1" Minimum="1" Maximum="24" 
-                        ValueChanged="sliderTimePerLoggingSet_ValueChanged"/>
+                        ValueChanged="sliderTimePerLoggingSet_ValueChanged" Value="4"/>
             </StackPanel>
         </GroupBox>
         <Button x:Name="btnOk" Content="Применить" Width="80" IsDefault="True" Click="btnOk_Click"/>
