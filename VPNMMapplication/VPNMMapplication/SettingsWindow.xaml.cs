@@ -42,5 +42,10 @@ namespace VPNMMapplication
         {
             this.DialogResult = true;
         }
+
+        private void Window_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            DragMove();
+        }
     }
 }
