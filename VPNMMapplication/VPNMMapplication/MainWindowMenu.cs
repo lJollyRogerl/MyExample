@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
 using Excel = Microsoft.Office.Interop.Excel;
 
@@ -80,6 +81,31 @@ namespace VPNMMapplication
         private void helpDesсription_Click(object sender, RoutedEventArgs e)
         {
             //Написать код, который будет выводить окно с подсказками
+            //Загружаем логи. Если их нет - создаем первую запись лога
+            try
+            {
+                SessionsLog = new SessionsArray(fullCollection);
+                for (int i = 0; i < SessionsLog.SessionsLog.Count; i++)
+                {
+                    DataGridTextColumn column = new DataGridTextColumn();
+                    column.Header = SessionsLog.SessionsLog[i].Statuses[0].TheDate.ToString("MM/dd/yyyy HH:mm");
+                    column.Binding = new Binding("TitleAndState");
+                    statusesDataGrid.Columns.Add(column);
+                    statusesDataGrid.ItemsSource = SessionsLog.SessionsLog[i].Statuses;
+                    //string s = "";
+                    //foreach (var item in SessionsLog.SessionsLog[i].Statuses)
+                    //{
+                    //    s += item.TheDate + item.TitleAndState + "\n";
+                    //}
+                    //MessageBox.Show(s);
+                }
+                //statusGridColumnLastState.Header = statuses.StatusesList[0].Statuses[0].TheDate.ToString("MM/dd/yyyy HH:mm");
+                //statusesDataGrid.ItemsSource = statuses.StatusesList[0].Statuses;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Ошибка загрузки лога");
+            }
         }
 
         private void helpWriteToDeveloper_Click(object sender, RoutedEventArgs e)

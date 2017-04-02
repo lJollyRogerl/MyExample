@@ -74,7 +74,6 @@
         <DataGrid x:Name="statusesDataGrid" AutoGenerateColumns="False"
                   RowDetailsVisibilityMode="VisibleWhenSelected" FontSize="14" FontWeight="SemiBold" 
                   EnableRowVirtualization="False" FontFamily="Sitka Display">
-            <DataGridTextColumn x:Name="statusGridColumnLastState" Header="header" Binding="{Binding TitleAndState}" Width="210"/>
         </DataGrid>
     </DockPanel>
 </Window>

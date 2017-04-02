@@ -11,29 +11,29 @@ using System.Xml.Serialization;
 namespace VPNMMapplication
 {
     [Serializable]
-    public class SessionStatusesArray
+    public class SessionsArray
     {
-        public List<SessionStatuses> StatusesList { get; set; }
-        public SessionStatusesArray()
+        public List<PreviousSessionStatuses> SessionsLog { get; set; }
+        public SessionsArray()
         {
         }
 
-        public SessionStatusesArray(MM_MK_Collection currentDisplayedCol)
+        public SessionsArray(MM_MK_Collection currentDisplayedCol)
         {
             try
             {
-                SessionStatusesArray array = StateSerialiser.DeSerializeList();
+                SessionsArray array = StateSerialiser.DeSerializeList();
                 if (array == null)
                 {
-                    StatusesList = new List<SessionStatuses>();
-                    SessionStatuses status = new SessionStatuses();
+                    SessionsLog = new List<PreviousSessionStatuses>();
+                    PreviousSessionStatuses status = new PreviousSessionStatuses();
                     status.MakeStates(currentDisplayedCol);
-                    StatusesList.Add(status);
+                    SessionsLog.Add(status);
                     StateSerialiser.Serialize(this);
                 }
                 else
                 {
-                    StatusesList = array.StatusesList;
+                    SessionsLog = array.SessionsLog;
                 }
             }
             catch (Exception ex)
@@ -45,10 +45,10 @@ namespace VPNMMapplication
 
 
     [Serializable]
-    public class SessionStatuses
+    public class PreviousSessionStatuses
     {
         public List<PreviousSessionState> Statuses { get; set; } = new List<PreviousSessionState>();
-        public SessionStatuses()
+        public PreviousSessionStatuses()
         {
         }
 
@@ -92,7 +92,7 @@ namespace VPNMMapplication
     public static class StateSerialiser
     {
         //Сериализует данные по поледним статусам в бин файл
-        public static void Serialize(SessionStatusesArray statusesList)
+        public static void Serialize(SessionsArray statusesList)
         {
             try
             {
@@ -110,17 +110,17 @@ namespace VPNMMapplication
 
         }
 
-        public static SessionStatusesArray DeSerializeList()
+        public static SessionsArray DeSerializeList()
         {
             try
             {
                 BinaryFormatter binary = new BinaryFormatter();
-                SessionStatusesArray statuses;
+                SessionsArray statuses;
                 using (Stream stream = new FileStream("LastStatuses.bin", FileMode.Open,
                     FileAccess.Read, FileShare.None))
                 {
 
-                    statuses = (SessionStatusesArray)binary.Deserialize(stream);
+                    statuses = (SessionsArray)binary.Deserialize(stream);
                     return statuses;
                 }
             }
