@@ -126,7 +126,11 @@ namespace VPNMMapplication
 
         private void menuSettings_Click(object sender, RoutedEventArgs e)
         {
-
+            settingsWindow = new SettingsWindow(settings);
+            if (settingsWindow.ShowDialog() == true)
+            {
+                logSerializationTimer.Interval = new TimeSpan(settings.TimePerLogging, 0, 0);
+            }
         }
     }
 }

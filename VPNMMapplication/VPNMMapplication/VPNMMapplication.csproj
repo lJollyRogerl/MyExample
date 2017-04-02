@@ -97,6 +97,7 @@
     <Compile Include="PreviousSessionState.cs" />
     <Compile Include="SaveToXMLForRMS.cs" />
     <Compile Include="SerializeDivisions.cs" />
+    <Compile Include="Settings.cs" />
     <Compile Include="SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>

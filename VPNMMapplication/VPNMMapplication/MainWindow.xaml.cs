@@ -27,6 +27,8 @@ namespace VPNMMapplication
         DispatcherTimer dispatcherTimer = new DispatcherTimer();
         DispatcherTimer logSerializationTimer = new DispatcherTimer();
         SessionsArray SessionsLog;
+        Settings settings = new Settings();
+        SettingsWindow settingsWindow;
 
         public MainWindow()
         {

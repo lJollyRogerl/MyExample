@@ -8,7 +8,12 @@
         Title="SettingsWindow" Height="300" Width="300">
     <StackPanel>
         <GroupBox>
-            <Label x:Name="lblTimePerLogging"/>
+            <StackPanel>
+                <Label x:Name="lblTimePerLogging" Content="Логирование происходит каждые 4 часа"/>
+                <Slider x:Name="sliderTimePerLoggingSet" SmallChange="1" Minimum="1" Maximum="24" 
+                        ValueChanged="sliderTimePerLoggingSet_ValueChanged"/>
+            </StackPanel>
         </GroupBox>
+        <Button x:Name="btnOk" Content="Применить" Width="80" IsDefault="True" Click="btnOk_Click"/>
     </StackPanel>
 </Window>
