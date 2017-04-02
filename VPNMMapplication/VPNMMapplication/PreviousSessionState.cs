@@ -17,7 +17,8 @@ namespace VPNMMapplication
         public SessionsArray()
         {
         }
-
+        //Если нет сериализованного лога, создаем лог и записываем текущие значения.
+        //Если есть - достаем лог оттуда
         public SessionsArray(MM_MK_Collection currentDisplayedCol)
         {
             try
@@ -29,7 +30,7 @@ namespace VPNMMapplication
                     PreviousSessionStatuses status = new PreviousSessionStatuses();
                     status.MakeStates(currentDisplayedCol);
                     SessionsLog.Add(status);
-                    StateSerialiser.Serialize(this);
+                    DoSerialization();
                 }
                 else
                 {
@@ -38,7 +39,28 @@ namespace VPNMMapplication
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "В конструкторе");
+                MessageBox.Show(ex.Message, "Ошибка создания лога");
+            }
+        }
+
+        public void DoSerialization()
+        {
+            StateSerialiser.Serialize(this);
+        }
+
+        //Добавляет к логу текущую сессию а затем серриализует
+        public void Add(MM_MK_Collection currentDisplayedCol)
+        {
+            try
+            {
+                PreviousSessionStatuses status = new PreviousSessionStatuses();
+                status.MakeStates(currentDisplayedCol);
+                SessionsLog.Add(status);
+                DoSerialization();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Ошибка добавления лога");
             }
         }
     }
@@ -56,7 +78,6 @@ namespace VPNMMapplication
         {
             try
             {
-                Statuses.Clear();
                 foreach (var unit in currentCollection.TheCollection)
                 {
                     PreviousSessionState state = new PreviousSessionState();
@@ -66,7 +87,7 @@ namespace VPNMMapplication
                         status = "Был в сети.";
                     else
                     {
-                        status = "Не в сети.";
+                        status = "Не был в сети.";
                         if (!string.IsNullOrWhiteSpace(unit.LastDateOnline))
                             status += $" Последняя сессия {unit.LastDateOnline}";
                     }

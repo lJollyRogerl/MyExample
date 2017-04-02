@@ -25,6 +25,7 @@ namespace VPNMMapplication
         MM_MK_Collection offlineCollection = new MM_MK_Collection();
         MM_MK_Collection fullCollection = new MM_MK_Collection();
         DispatcherTimer dispatcherTimer = new DispatcherTimer();
+        DispatcherTimer logSerializationTimer = new DispatcherTimer();
         SessionsArray SessionsLog;
 
         public MainWindow()
@@ -87,8 +88,16 @@ namespace VPNMMapplication
             dispatcherTimer.Interval = new TimeSpan(0, 7, 0);
             dispatcherTimer.Start();
 
-            
-
+            //записывает лог каджые 4 часа
+            logSerializationTimer = new DispatcherTimer();
+            logSerializationTimer.Tick += delegate (object s, EventArgs eArgs) 
+            {
+                if (SessionsLog == null)
+                    SessionsLog = new SessionsArray(fullCollection);
+                SessionsLog.Add(fullCollection);
+            };
+            logSerializationTimer.Interval = new TimeSpan(4, 0, 0);
+            logSerializationTimer.Start();
         }
 
         private void HtmlGetter_OnAuthorizationProgress(string obj)
@@ -213,5 +222,6 @@ namespace VPNMMapplication
                 }
             }
         }
+
     }
 }

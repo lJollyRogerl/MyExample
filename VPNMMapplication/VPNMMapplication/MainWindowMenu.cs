@@ -82,52 +82,51 @@ namespace VPNMMapplication
         {
             //Написать код, который будет выводить окно с подсказками
             //Загружаем логи. Если их нет - создаем первую запись лога
-            try
-            {
-                SessionsLog = new SessionsArray(fullCollection);
-                for (int i = 0; i < SessionsLog.SessionsLog.Count; i++)
-                {
-                    DataGridTextColumn column = new DataGridTextColumn();
-                    column.Header = SessionsLog.SessionsLog[i].Statuses[0].TheDate.ToString("MM/dd/yyyy HH:mm");
-                    column.Binding = new Binding("TitleAndState");
-                    statusesDataGrid.Columns.Add(column);
-                    statusesDataGrid.ItemsSource = SessionsLog.SessionsLog[i].Statuses;
-                    //string s = "";
-                    //foreach (var item in SessionsLog.SessionsLog[i].Statuses)
-                    //{
-                    //    s += item.TheDate + item.TitleAndState + "\n";
-                    //}
-                    //MessageBox.Show(s);
-                }
-                //statusGridColumnLastState.Header = statuses.StatusesList[0].Statuses[0].TheDate.ToString("MM/dd/yyyy HH:mm");
-                //statusesDataGrid.ItemsSource = statuses.StatusesList[0].Statuses;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, "Ошибка загрузки лога");
-            }
+           
         }
 
         private void helpWriteToDeveloper_Click(object sender, RoutedEventArgs e)
         {
             string subject = "Предложения и пожелания VPNMMapplication";
-            Process.Start("mailto:dmitriev_gv@ntagil.magnit.ru" + "?subject=" + subject/* + "&body="+ body*/);
+            Process.Start("mailto:dmitriev_gv@ntagil.magnit.ru" + "?subject=" + subject);
         }
 
         private void comboWhatToShow_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
-            if ((string)comboWhatToShow.SelectedValue == "Мониторинг")
+            try
             {
-                ////Написать код, который будет показывать только мониторинг и соответсвующие контролы
-                //statusesDataGrid.Visibility = Visibility.Visible;
-                //mM_MK_UnitDataGrid.Visibility = Visibility.Collapsed;
+                if ((string)comboWhatToShow.SelectedValue == "Мониторинг")
+                {
+                    statusesDataGrid.Visibility = Visibility.Collapsed;
+                    mM_MK_UnitDataGrid.Visibility = Visibility.Visible;
+                }
+                else
+                {
+                    SessionsLog = new SessionsArray(fullCollection);
+                    for (int i = 0; i < SessionsLog.SessionsLog.Count; i++)
+                    {
+                        DataGridTextColumn column = new DataGridTextColumn();
+                        column.Header = SessionsLog.SessionsLog[i].Statuses[0].TheDate.ToString("MM/dd/yyyy HH:mm");
+                        column.Binding = new Binding("TitleAndState");
+                        statusesDataGrid.Columns.Add(column);
+                        statusesDataGrid.ItemsSource = SessionsLog.SessionsLog[i].Statuses;
+                        statusesDataGrid.Visibility = Visibility.Visible;
+                        mM_MK_UnitDataGrid.Visibility = Visibility.Collapsed;
+
+                    }
+                }
             }
-            else
+            catch (Exception ex)
             {
-                ////Написать код, который будет показывать только логи и соответсвующие контролы
-                //statusesDataGrid.Visibility = Visibility.Collapsed;
-                //mM_MK_UnitDataGrid.Visibility = Visibility.Visible;
+                MessageBox.Show(ex.Message);
             }
+            
+        }
+
+
+        private void menuSettings_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }
