@@ -99,7 +99,7 @@ namespace VPNMMapplication
             {
                 if ((string)comboWhatToShow.SelectedValue == "Мониторинг")
                 {
-                    statusesDataGrid.Visibility = Visibility.Collapsed;
+                    stackSessionsView.Visibility = Visibility.Collapsed;
                     mM_MK_UnitDataGrid.Visibility = Visibility.Visible;
                 }
                 else
@@ -108,9 +108,9 @@ namespace VPNMMapplication
                     if (isTableSessionLoaded == false)
                     {
                         LoadSessionTable();
-                        statusesDataGrid.Visibility = Visibility.Visible;
-                        mM_MK_UnitDataGrid.Visibility = Visibility.Collapsed;
                     }
+                    stackSessionsView.Visibility = Visibility.Visible;
+                    mM_MK_UnitDataGrid.Visibility = Visibility.Collapsed;
 
                 }
             }
@@ -127,23 +127,18 @@ namespace VPNMMapplication
             {
                 isTableSessionLoaded = true;
                 SessionsLog = new SessionsArray(fullCollection);
-                statusesDataGrid.ItemsSource = null;
-                statusesDataGrid.Columns.Clear();
-                statusesDataGrid.Items.Refresh();
                 for (int i = 0; i < SessionsLog.Sessions.Count; i++)
                 {
-                    DataGridTextColumn column = new DataGridTextColumn();
+                    ListView lstViewSessions = new ListView();
+                    GridView listViewGrid = new GridView();
+                    lstViewSessions.View = listViewGrid;
+                    GridViewColumn column = new GridViewColumn();
                     column.Header = SessionsLog.Sessions[i].Statuses[0].TheDate.ToString("dd/MM/yyyy HH:mm");
-                    column.Binding = new Binding("TitleAndState");
-                    statusesDataGrid.Columns.Add(column);
-                    //statusesDataGrid.ItemsSource = SessionsLog.Sessions[i].Statuses;
-                    //foreach (PreviousSessionState obj in SessionsLog.Sessions[i].Statuses)
-                    //{
-                    //    statusesDataGrid.Items.Add(obj);
-                    //}
+                    column.DisplayMemberBinding = new Binding("TitleAndState");
+                    listViewGrid.Columns.Add(column);
+                    lstViewSessions.ItemsSource = SessionsLog.Sessions[i].Statuses;
+                    stackSessionsView.Children.Add(lstViewSessions);
                 }
-                statusesDataGrid.ItemsSource = SessionsLog.Sessions;
-                statusesDataGrid.LoadingRow += StatusesDataGrid_LoadingRow;
             }
             catch (Exception ex)
             {
