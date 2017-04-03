@@ -129,14 +129,19 @@ namespace VPNMMapplication
                 SessionsLog = new SessionsArray(fullCollection);
                 for (int i = 0; i < SessionsLog.Sessions.Count; i++)
                 {
-                    DataGrid lstViewSessions = new DataGrid();
+                    DataGrid dgLstViewSessions = new DataGrid();
                     DataGridTextColumn column = new DataGridTextColumn();
                     column.Header = SessionsLog.Sessions[i].Statuses[0].TheDate.ToString("dd/MM/yyyy HH:mm");
                     column.Binding = new Binding("TitleAndState");
-                    lstViewSessions.Columns.Add(column);
-                    lstViewSessions.ItemsSource = SessionsLog.Sessions[i].Statuses;
-                    stackSessionsView.Children.Add(lstViewSessions);
-                    lstViewSessions.LoadingRow += LstViewSessions_LoadingRow;
+                    dgLstViewSessions.Columns.Add(column);
+                    
+                    foreach (var item in SessionsLog.Sessions[i].Statuses)
+                    {
+                        dgLstViewSessions.Items.Add(item);
+                    }
+                    
+                    stackSessionsView.Children.Add(dgLstViewSessions);
+                    dgLstViewSessions.LoadingRow += LstViewSessions_LoadingRow;
                 }
             }
             catch (Exception ex)
