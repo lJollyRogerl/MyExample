@@ -127,27 +127,42 @@ namespace VPNMMapplication
             {
                 isTableSessionLoaded = true;
                 SessionsLog = new SessionsArray(fullCollection);
+                //SessionsLog.OnSessionAded += SessionsLog_OnSessionAded;
                 for (int i = 0; i < SessionsLog.Sessions.Count; i++)
                 {
-                    DataGrid dgLstViewSessions = new DataGrid();
-                    DataGridTextColumn column = new DataGridTextColumn();
-                    column.Header = SessionsLog.Sessions[i].Statuses[0].TheDate.ToString("dd/MM/yyyy HH:mm");
-                    column.Binding = new Binding("TitleAndState");
-                    dgLstViewSessions.Columns.Add(column);
-                    
-                    foreach (var item in SessionsLog.Sessions[i].Statuses)
-                    {
-                        dgLstViewSessions.Items.Add(item);
-                    }
-                    
-                    stackSessionsView.Children.Add(dgLstViewSessions);
-                    dgLstViewSessions.LoadingRow += LstViewSessions_LoadingRow;
+                    AddNewSessionAtTable(i);
                 }
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, ex.Source);
             }
+        }
+
+        //Добавляет новый список в таблицу логов
+        private void AddNewSessionAtTable(int index)
+        {
+            if (stackSessionsView.Children.Count > 4)
+                stackSessionsView.Children.RemoveAt(0);
+            DataGrid dgLstViewSessions = new DataGrid();
+            DataGridTextColumn column = new DataGridTextColumn();
+            column.Header = SessionsLog.Sessions[index].Statuses[0].TheDate.ToString("dd/MM/yyyy HH:mm");
+            column.Binding = new Binding("TitleAndState");
+            dgLstViewSessions.Columns.Add(column);
+
+            foreach (var item in SessionsLog.Sessions[index].Statuses)
+            {
+                dgLstViewSessions.Items.Add(item);
+            }
+
+            stackSessionsView.Children.Add(dgLstViewSessions);
+            dgLstViewSessions.LoadingRow += LstViewSessions_LoadingRow;
+        }
+
+        //Когда в лог добавляются новые данные - выводит их в таблицу
+        private void SessionsLog_OnSessionAded()
+        {
+            //AddNewSessionAtTable(SessionsLog.Sessions.Count - 1);
         }
 
         private void LstViewSessions_LoadingRow(object sender, DataGridRowEventArgs e)
@@ -167,29 +182,15 @@ namespace VPNMMapplication
             }
         }
 
-        //private void StatusesDataGrid_LoadingRow(object sender, System.Windows.Controls.DataGridRowEventArgs e)
-        //{
-        //    //Ели в предыдущей сесси данный объект не был в сети, то окрашиваем в красный
-        //    if (e.Row.DataContext is PreviousSessionState)
-        //    {
-        //        PreviousSessionState state = (PreviousSessionState)e.Row.DataContext;
-        //        if (state.TitleAndState.Contains("Не"))
-        //        {
-        //            e.Row.Background = new SolidColorBrush(Color.FromRgb(245, 0, 41));
-        //        }
-        //        else
-        //        {
-        //            e.Row.Background = new SolidColorBrush(Colors.LightGreen);
-        //        }
-        //    }
-        //}
-
+        //Создает и открывает окно настроек
         private void menuSettings_Click(object sender, RoutedEventArgs e)
         {
-            settingsWindow = new SettingsWindow(settings);
+            settingsWindow = new SettingsWindow(ref settings);
             settingsWindow.Owner = this;
             if (settingsWindow.ShowDialog() == true)
             {
+                logSerializationTimer.Stop();
+                logSerializationTimer.Start();
                 logSerializationTimer.Interval = new TimeSpan(settings.TimePerLogging, 0, 0);
             }
         }

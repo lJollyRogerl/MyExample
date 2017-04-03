@@ -26,7 +26,7 @@ namespace VPNMMapplication
             InitializeComponent();
         }
 
-        public SettingsWindow(Settings settings)
+        public SettingsWindow(ref Settings settings)
         {
             InitializeComponent();
             this.settings = settings;

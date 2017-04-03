@@ -95,13 +95,14 @@ namespace VPNMMapplication
             logSerializationTimer.Tick += delegate (object s, EventArgs eArgs) 
             {
                 if (SessionsLog == null)
+                {
                     SessionsLog = new SessionsArray(fullCollection);
-                SessionsLog.Add(fullCollection);
+                }
+                else
+                    SessionsLog.Add(fullCollection);
             };
-            logSerializationTimer.Interval = new TimeSpan(4, 0, 0);
+            logSerializationTimer.Interval = new TimeSpan(0, 0, 20);
             logSerializationTimer.Start();
-
-            //SessionsLog = new SessionsArray(fullCollection);
         }
 
         private void HtmlGetter_OnAuthorizationProgress(string obj)

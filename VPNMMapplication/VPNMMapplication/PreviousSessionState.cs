@@ -60,7 +60,7 @@ namespace VPNMMapplication
         {
             try
             {
-                if (Sessions.Count > 5)
+                if (Sessions.Count > 4)
                     Sessions.RemoveAt(0);
                 PreviousSessionStatuses status = new PreviousSessionStatuses();
                 status.MakeStates(currentDisplayedCol);
@@ -71,7 +71,9 @@ namespace VPNMMapplication
             {
                 MessageBox.Show(ex.Message, "Ошибка добавления лога");
             }
+            OnSessionAded();
         }
+        public event Action OnSessionAded;
     }
 
 
@@ -119,6 +121,7 @@ namespace VPNMMapplication
         public string TitleAndState { get; set; } = "";
     }
 
+    [Serializable]
     public static class StateSerialiser
     {
         //Сериализует данные по поледним статусам в бин файл
@@ -149,7 +152,6 @@ namespace VPNMMapplication
                 using (Stream stream = new FileStream("LastStatuses.bin", FileMode.Open,
                     FileAccess.Read, FileShare.None))
                 {
-
                     statuses = (SessionsArray)binary.Deserialize(stream);
                     return statuses;
                 }
@@ -161,5 +163,6 @@ namespace VPNMMapplication
             }
 
         }
+
     }
 }

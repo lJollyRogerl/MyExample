@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace VPNMMapplication
 {
+    [Serializable]
     public class Settings
     {
         public int TimePerLogging { get; set; }
