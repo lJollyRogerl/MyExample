@@ -14,7 +14,7 @@
         <CollectionViewSource x:Key="lastStatusesVievSource" d:DesignSource="{d:DesignInstance {x:Type local:PreviousSessionState}, CreateList=True}"/>
     </Window.Resources>
     <DockPanel LastChildFill="True" DataContext="{StaticResource mM_MK_UnitViewSource}">
-        <Menu DockPanel.Dock="Top">
+        <Menu DockPanel.Dock="Top" Loaded="Menu_Loaded">
             <MenuItem x:Name="menuFile" Header="_Файл">
                 <MenuItem x:Name="menuNewSession" Header="_Новая сессия" Click="menuNewSession_Click"/>
                 <Separator/>

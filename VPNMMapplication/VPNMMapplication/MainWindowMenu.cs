@@ -188,5 +188,9 @@ namespace VPNMMapplication
                 logSerializationTimer.Interval = new TimeSpan(settings.TimePerLogging, 0, 0);
             }
         }
+        private void Menu_Loaded(object sender, RoutedEventArgs e)
+        {
+            comboWhatToShow.SelectedIndex = 0;
+        }
     }
 }

@@ -100,6 +100,7 @@ namespace VPNMMapplication
             };
             logSerializationTimer.Interval = new TimeSpan(4, 0, 0);
             logSerializationTimer.Start();
+
             //SessionsLog = new SessionsArray(fullCollection);
         }
 
@@ -209,7 +210,6 @@ namespace VPNMMapplication
             dispatcherTimer.Interval = TimeSpan.FromMinutes((int)e.NewValue);
         }
 
-        
 
     }
 }
