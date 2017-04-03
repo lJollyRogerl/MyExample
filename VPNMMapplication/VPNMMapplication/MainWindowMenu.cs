@@ -2,6 +2,7 @@
 using System.Data;
 using System.Diagnostics;
 using System.IO;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -13,6 +14,7 @@ namespace VPNMMapplication
 {
     public partial class MainWindow : Window
     {
+        private static bool isTableSessionLoaded = false;
         private void menuNewSession_Click(object sender, RoutedEventArgs e)
         {
             InvokeNewSession();
@@ -102,32 +104,53 @@ namespace VPNMMapplication
                 }
                 else
                 {
-                    //По идее не нужно каждый раз делать десереализацию и загружать таблицу.
-                    //При повторном переключении в лог просо нужно делать видимую уже существующую таблицу
-                    //А загружать только в случае добавлеия новой колонки по таймеру или при первом посещении
-                    SessionsLog = new SessionsArray(fullCollection);
-                    statusesDataGrid.ItemsSource = null;
-                    statusesDataGrid.Columns.Clear();
-                    statusesDataGrid.Items.Refresh();
-                    for (int i = 0; i < SessionsLog.Sessions.Count; i++)
+                    //Если таблица уже загружена - просто отобразить. Если нет - загрузить
+                    if (isTableSessionLoaded == false)
                     {
-                        DataGridTextColumn column = new DataGridTextColumn();
-                        column.Header = SessionsLog.Sessions[i].Statuses[0].TheDate.ToString("dd/MM/yyyy HH:mm");
-                        column.Binding = new Binding("TitleAndState");
-                        statusesDataGrid.Columns.Add(column);
-                        statusesDataGrid.ItemsSource = SessionsLog.Sessions[i].Statuses;
+                        LoadSessionTable();
+                        statusesDataGrid.Visibility = Visibility.Visible;
+                        mM_MK_UnitDataGrid.Visibility = Visibility.Collapsed;
                     }
-                    statusesDataGrid.LoadingRow += StatusesDataGrid_LoadingRow;
-                    statusesDataGrid.Visibility = Visibility.Visible;
-                    mM_MK_UnitDataGrid.Visibility = Visibility.Collapsed;
+
                 }
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
             }
-            
+
         }
+
+        private void LoadSessionTable()
+        {
+            try
+            {
+                isTableSessionLoaded = true;
+                SessionsLog = new SessionsArray(fullCollection);
+                statusesDataGrid.ItemsSource = null;
+                statusesDataGrid.Columns.Clear();
+                statusesDataGrid.Items.Refresh();
+                for (int i = 0; i < SessionsLog.Sessions.Count; i++)
+                {
+                    DataGridTextColumn column = new DataGridTextColumn();
+                    column.Header = SessionsLog.Sessions[i].Statuses[0].TheDate.ToString("dd/MM/yyyy HH:mm");
+                    column.Binding = new Binding("TitleAndState");
+                    statusesDataGrid.Columns.Add(column);
+                    //statusesDataGrid.ItemsSource = SessionsLog.Sessions[i].Statuses;
+                    //foreach (PreviousSessionState obj in SessionsLog.Sessions[i].Statuses)
+                    //{
+                    //    statusesDataGrid.Items.Add(obj);
+                    //}
+                }
+                statusesDataGrid.ItemsSource = SessionsLog.Sessions;
+                statusesDataGrid.LoadingRow += StatusesDataGrid_LoadingRow;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, ex.Source);
+            }
+        }
+
         private void StatusesDataGrid_LoadingRow(object sender, System.Windows.Controls.DataGridRowEventArgs e)
         {
             //Ели в предыдущей сесси данный объект не был в сети, то окрашиваем в красный

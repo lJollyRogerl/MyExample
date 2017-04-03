@@ -63,8 +63,7 @@
             <ProgressBar x:Name="progressBar" Height="13"/>
         </StatusBar>
         <DataGrid x:Name="mM_MK_UnitDataGrid" AutoGenerateColumns="False" ItemsSource="{Binding}" Visibility="Visible"
-                  RowDetailsVisibilityMode="VisibleWhenSelected" FontSize="14" FontWeight="SemiBold" EnableRowVirtualization="False" FontFamily="Sitka Display" HorizontalScrollBarVisibility="Auto"
-                  VerticalScrollBarVisibility="Auto">
+                  RowDetailsVisibilityMode="VisibleWhenSelected" FontSize="14" FontWeight="SemiBold" EnableRowVirtualization="False" FontFamily="Sitka Display">
             <DataGrid.Columns>
                 <DataGridTextColumn x:Name="titleColumn" Binding="{Binding Title}" Header="Название объекта" Width="170"/>
                 <DataGridTextColumn x:Name="iPColumn" Binding="{Binding IP}" Header="Внутренний IP" Width="105"/>

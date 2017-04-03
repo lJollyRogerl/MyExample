@@ -90,6 +90,7 @@
     <Compile Include="AddingNewFilialWindow.xaml.cs">
       <DependentUpon>AddingNewFilialWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="DepPropertyColumnCollection.cs" />
     <Compile Include="Divisions.cs" />
     <Compile Include="HTMLWithAutorization.cs" />
     <Compile Include="MainWindowMenu.cs" />

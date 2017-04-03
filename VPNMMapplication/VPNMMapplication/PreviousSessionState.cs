@@ -98,7 +98,7 @@ namespace VPNMMapplication
                         if (!string.IsNullOrWhiteSpace(unit.LastDateOnline))
                             status += $" Последняя сессия {unit.LastDateOnline}";
                     }
-                    state.TitleAndState = unit.Title+ unit.MainOrReserve + " " + status;
+                    state.TitleAndState = unit.Title + " " + unit.MainOrReserve + " " + status;
                     Statuses.Add(state);
                 }
             }
