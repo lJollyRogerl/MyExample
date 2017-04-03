@@ -129,21 +129,36 @@ namespace VPNMMapplication
                 SessionsLog = new SessionsArray(fullCollection);
                 for (int i = 0; i < SessionsLog.Sessions.Count; i++)
                 {
-                    ListView lstViewSessions = new ListView();
-                    GridView listViewGrid = new GridView();
-                    lstViewSessions.View = listViewGrid;
-                    GridViewColumn column = new GridViewColumn();
+                    DataGrid lstViewSessions = new DataGrid();
+                    DataGridTextColumn column = new DataGridTextColumn();
                     column.Header = SessionsLog.Sessions[i].Statuses[0].TheDate.ToString("dd/MM/yyyy HH:mm");
-                    column.DisplayMemberBinding = new Binding("TitleAndState");
-                    listViewGrid.Columns.Add(column);
+                    column.Binding = new Binding("TitleAndState");
+                    lstViewSessions.Columns.Add(column);
                     lstViewSessions.ItemsSource = SessionsLog.Sessions[i].Statuses;
                     stackSessionsView.Children.Add(lstViewSessions);
-
+                    lstViewSessions.LoadingRow += LstViewSessions_LoadingRow;
                 }
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, ex.Source);
+            }
+        }
+
+        private void LstViewSessions_LoadingRow(object sender, DataGridRowEventArgs e)
+        {
+            //Ели в предыдущей сесси данный объект не был в сети, то окрашиваем в красный
+            if (e.Row.DataContext is PreviousSessionState)
+            {
+                PreviousSessionState state = (PreviousSessionState)e.Row.DataContext;
+                if (state.TitleAndState.Contains("Не"))
+                {
+                    e.Row.Background = new SolidColorBrush(Color.FromRgb(245, 0, 41));
+                }
+                else
+                {
+                    e.Row.Background = new SolidColorBrush(Colors.LightGreen);
+                }
             }
         }
 
@@ -163,7 +178,7 @@ namespace VPNMMapplication
         //        }
         //    }
         //}
-            
+
         private void menuSettings_Click(object sender, RoutedEventArgs e)
         {
             settingsWindow = new SettingsWindow(settings);

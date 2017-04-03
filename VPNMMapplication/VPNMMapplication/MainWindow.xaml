@@ -23,15 +23,13 @@
                 <Separator/>
                 <MenuItem x:Name="menuClose" Header="_Закрыть" Click="menuClose_Click"/>
             </MenuItem>
-            <MenuItem x:Name="menuView" Header="_Вид">
-                <StackPanel Orientation="Horizontal">
-                    <Label Content="Промотр"/>
-                    <ComboBox x:Name="comboWhatToShow" Width="110" VerticalAlignment="Center" SelectionChanged="comboWhatToShow_SelectionChanged">
-                        <System:String>Мониторинг</System:String>
-                        <System:String>Просмотр лога</System:String>
-                    </ComboBox>
-                </StackPanel>
-            </MenuItem>
+            <StackPanel Orientation="Horizontal">
+                <Label Content="Промотр"/>
+                <ComboBox x:Name="comboWhatToShow" Width="110" VerticalAlignment="Center" SelectionChanged="comboWhatToShow_SelectionChanged">
+                    <System:String>Мониторинг</System:String>
+                    <System:String>Просмотр лога</System:String>
+                </ComboBox>
+            </StackPanel>
             <MenuItem x:Name="menuSettings" Header="_Настройки" Click="menuSettings_Click"/>
             <MenuItem x:Name="menuHelp" Header="_Помощь">
                 <MenuItem x:Name="helpDesription" Header="_О программе" Click="helpDesсription_Click"/>
