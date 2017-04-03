@@ -99,7 +99,7 @@ namespace VPNMMapplication
             {
                 if ((string)comboWhatToShow.SelectedValue == "Мониторинг")
                 {
-                    stackSessionsView.Visibility = Visibility.Collapsed;
+                    stackSessionScrollViewer.Visibility = Visibility.Collapsed;
                     mM_MK_UnitDataGrid.Visibility = Visibility.Visible;
                 }
                 else
@@ -109,7 +109,7 @@ namespace VPNMMapplication
                     {
                         LoadSessionTable();
                     }
-                    stackSessionsView.Visibility = Visibility.Visible;
+                    stackSessionScrollViewer.Visibility = Visibility.Visible;
                     mM_MK_UnitDataGrid.Visibility = Visibility.Collapsed;
 
                 }
@@ -138,6 +138,7 @@ namespace VPNMMapplication
                     listViewGrid.Columns.Add(column);
                     lstViewSessions.ItemsSource = SessionsLog.Sessions[i].Statuses;
                     stackSessionsView.Children.Add(lstViewSessions);
+
                 }
             }
             catch (Exception ex)
@@ -146,22 +147,22 @@ namespace VPNMMapplication
             }
         }
 
-        private void StatusesDataGrid_LoadingRow(object sender, System.Windows.Controls.DataGridRowEventArgs e)
-        {
-            //Ели в предыдущей сесси данный объект не был в сети, то окрашиваем в красный
-            if (e.Row.DataContext is PreviousSessionState)
-            {
-                PreviousSessionState state = (PreviousSessionState)e.Row.DataContext;
-                if (state.TitleAndState.Contains("Не"))
-                {
-                    e.Row.Background = new SolidColorBrush(Color.FromRgb(245, 0, 41));
-                }
-                else
-                {
-                    e.Row.Background = new SolidColorBrush(Colors.LightGreen);
-                }
-            }
-        }
+        //private void StatusesDataGrid_LoadingRow(object sender, System.Windows.Controls.DataGridRowEventArgs e)
+        //{
+        //    //Ели в предыдущей сесси данный объект не был в сети, то окрашиваем в красный
+        //    if (e.Row.DataContext is PreviousSessionState)
+        //    {
+        //        PreviousSessionState state = (PreviousSessionState)e.Row.DataContext;
+        //        if (state.TitleAndState.Contains("Не"))
+        //        {
+        //            e.Row.Background = new SolidColorBrush(Color.FromRgb(245, 0, 41));
+        //        }
+        //        else
+        //        {
+        //            e.Row.Background = new SolidColorBrush(Colors.LightGreen);
+        //        }
+        //    }
+        //}
             
         private void menuSettings_Click(object sender, RoutedEventArgs e)
         {

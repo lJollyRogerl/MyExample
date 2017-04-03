@@ -60,6 +60,8 @@ namespace VPNMMapplication
         {
             try
             {
+                if (Sessions.Count > 5)
+                    Sessions.RemoveAt(0);
                 PreviousSessionStatuses status = new PreviousSessionStatuses();
                 status.MakeStates(currentDisplayedCol);
                 Sessions.Add(status);

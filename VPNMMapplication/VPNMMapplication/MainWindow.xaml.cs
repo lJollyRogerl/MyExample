@@ -100,6 +100,7 @@ namespace VPNMMapplication
             };
             logSerializationTimer.Interval = new TimeSpan(4, 0, 0);
             logSerializationTimer.Start();
+            //SessionsLog = new SessionsArray(fullCollection);
         }
 
         private void HtmlGetter_OnAuthorizationProgress(string obj)
