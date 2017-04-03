@@ -14,7 +14,7 @@ namespace VPNMMapplication
     public class SessionsArray
     {
         private static bool isLoaded = false;
-        public List<PreviousSessionStatuses> SessionsLog { get; set; }
+        public List<PreviousSessionStatuses> Sessions { get; set; }
         public SessionsArray()
         {
         }
@@ -27,15 +27,15 @@ namespace VPNMMapplication
                 SessionsArray array = StateSerialiser.DeSerializeList();
                 if (array == null)
                 {
-                    SessionsLog = new List<PreviousSessionStatuses>();
+                    Sessions = new List<PreviousSessionStatuses>();
                     PreviousSessionStatuses status = new PreviousSessionStatuses();
                     status.MakeStates(currentDisplayedCol);
-                    SessionsLog.Add(status);
+                    Sessions.Add(status);
                     DoSerialization();
                 }
                 else
                 {
-                    SessionsLog = array.SessionsLog;
+                    Sessions = array.Sessions;
                     //Если лог уже есть, но в данной сессии загрузка происходит первый раз - добавить текущие значения в лог
                     if (isLoaded == false)
                     {
@@ -62,7 +62,7 @@ namespace VPNMMapplication
             {
                 PreviousSessionStatuses status = new PreviousSessionStatuses();
                 status.MakeStates(currentDisplayedCol);
-                SessionsLog.Add(status);
+                Sessions.Add(status);
                 DoSerialization();
             }
             catch (Exception ex)
@@ -98,7 +98,7 @@ namespace VPNMMapplication
                         if (!string.IsNullOrWhiteSpace(unit.LastDateOnline))
                             status += $" Последняя сессия {unit.LastDateOnline}";
                     }
-                    state.TitleAndState = unit.Title + " " + status;
+                    state.TitleAndState = unit.Title+ unit.MainOrReserve + " " + status;
                     Statuses.Add(state);
                 }
             }

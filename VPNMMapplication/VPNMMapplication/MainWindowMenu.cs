@@ -102,19 +102,24 @@ namespace VPNMMapplication
                 }
                 else
                 {
+                    //По идее не нужно каждый раз делать десереализацию и загружать таблицу.
+                    //При повторном переключении в лог просо нужно делать видимую уже существующую таблицу
+                    //А загружать только в случае добавлеия новой колонки по таймеру или при первом посещении
                     SessionsLog = new SessionsArray(fullCollection);
+                    statusesDataGrid.ItemsSource = null;
                     statusesDataGrid.Columns.Clear();
-                    for (int i = 0; i < SessionsLog.SessionsLog.Count; i++)
+                    statusesDataGrid.Items.Refresh();
+                    for (int i = 0; i < SessionsLog.Sessions.Count; i++)
                     {
                         DataGridTextColumn column = new DataGridTextColumn();
-                        column.Header = SessionsLog.SessionsLog[i].Statuses[0].TheDate.ToString("dd/MM/yyyy HH:mm");
+                        column.Header = SessionsLog.Sessions[i].Statuses[0].TheDate.ToString("dd/MM/yyyy HH:mm");
                         column.Binding = new Binding("TitleAndState");
                         statusesDataGrid.Columns.Add(column);
-                        statusesDataGrid.ItemsSource = SessionsLog.SessionsLog[i].Statuses;
-                        statusesDataGrid.Visibility = Visibility.Visible;
-                        mM_MK_UnitDataGrid.Visibility = Visibility.Collapsed;
-                        statusesDataGrid.LoadingRow += StatusesDataGrid_LoadingRow;
+                        statusesDataGrid.ItemsSource = SessionsLog.Sessions[i].Statuses;
                     }
+                    statusesDataGrid.LoadingRow += StatusesDataGrid_LoadingRow;
+                    statusesDataGrid.Visibility = Visibility.Visible;
+                    mM_MK_UnitDataGrid.Visibility = Visibility.Collapsed;
                 }
             }
             catch (Exception ex)
