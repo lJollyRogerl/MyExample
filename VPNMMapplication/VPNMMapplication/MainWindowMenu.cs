@@ -108,6 +108,7 @@ namespace VPNMMapplication
                     if (isTableSessionLoaded == false)
                     {
                         LoadSessionTable();
+                        //SessionsLog.OnSessionAded += SessionsLog_OnSessionAded;
                     }
                     stackSessionScrollViewer.Visibility = Visibility.Visible;
                     mM_MK_UnitDataGrid.Visibility = Visibility.Collapsed;
@@ -126,8 +127,8 @@ namespace VPNMMapplication
             try
             {
                 isTableSessionLoaded = true;
-                SessionsLog = new SessionsArray(fullCollection);
-                //SessionsLog.OnSessionAded += SessionsLog_OnSessionAded;
+                if(SessionsLog == null)
+                    SessionsLog = new SessionsArray(fullCollection);
                 for (int i = 0; i < SessionsLog.Sessions.Count; i++)
                 {
                     AddNewSessionAtTable(i);
@@ -154,16 +155,15 @@ namespace VPNMMapplication
             {
                 dgLstViewSessions.Items.Add(item);
             }
-
             stackSessionsView.Children.Add(dgLstViewSessions);
             dgLstViewSessions.LoadingRow += LstViewSessions_LoadingRow;
         }
 
         //Когда в лог добавляются новые данные - выводит их в таблицу
-        private void SessionsLog_OnSessionAded()
-        {
-            //AddNewSessionAtTable(SessionsLog.Sessions.Count - 1);
-        }
+        //private void SessionsLog_OnSessionAded()
+        //{
+        //    AddNewSessionAtTable(SessionsLog.Sessions.Count - 1);
+        //}
 
         private void LstViewSessions_LoadingRow(object sender, DataGridRowEventArgs e)
         {

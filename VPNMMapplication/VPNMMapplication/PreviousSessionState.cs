@@ -71,9 +71,9 @@ namespace VPNMMapplication
             {
                 MessageBox.Show(ex.Message, "Ошибка добавления лога");
             }
-            OnSessionAded();
+            //OnSessionAded();
         }
-        public event Action OnSessionAded;
+        //public event Action OnSessionAded;
     }
 
 

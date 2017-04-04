@@ -99,7 +99,10 @@ namespace VPNMMapplication
                     SessionsLog = new SessionsArray(fullCollection);
                 }
                 else
+                {
                     SessionsLog.Add(fullCollection);
+                    AddNewSessionAtTable(SessionsLog.Sessions.Count - 1);
+                }
             };
             logSerializationTimer.Interval = new TimeSpan(0, 0, 20);
             logSerializationTimer.Start();
