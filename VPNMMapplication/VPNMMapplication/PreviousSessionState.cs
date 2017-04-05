@@ -71,11 +71,8 @@ namespace VPNMMapplication
             {
                 MessageBox.Show(ex.Message, "Ошибка добавления лога");
             }
-            //OnSessionAded();
         }
-        //public event Action OnSessionAded;
     }
-
 
     [Serializable]
     public class PreviousSessionStatuses

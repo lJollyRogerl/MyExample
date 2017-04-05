@@ -27,7 +27,7 @@ namespace VPNMMapplication
         DispatcherTimer dispatcherTimer = new DispatcherTimer();
         DispatcherTimer logSerializationTimer = new DispatcherTimer();
         SessionsArray SessionsLog;
-        Settings settings = new Settings();
+        Settings settings;
         SettingsWindow settingsWindow;
 
         public MainWindow()
@@ -104,7 +104,7 @@ namespace VPNMMapplication
                     AddNewSessionAtTable(SessionsLog.Sessions.Count - 1);
                 }
             };
-            logSerializationTimer.Interval = new TimeSpan(0, 0, 20);
+            logSerializationTimer.Interval = new TimeSpan(4, 0, 0);
             logSerializationTimer.Start();
         }
 

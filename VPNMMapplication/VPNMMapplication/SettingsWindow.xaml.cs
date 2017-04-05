@@ -19,17 +19,18 @@ namespace VPNMMapplication
     /// </summary>
     public partial class SettingsWindow : Window
     {
-        private Settings settings = new Settings() { TimePerLogging = 4 };
+        public Settings settings = new Settings();
 
         public SettingsWindow()
         {
             InitializeComponent();
         }
 
-        public SettingsWindow(ref Settings settings)
+        public SettingsWindow(Settings incomingSettings)
         {
             InitializeComponent();
-            this.settings = settings;
+            this.settings = incomingSettings;
+            sliderTimePerLoggingSet.Value = settings.TimePerLogging;
         }
 
         private void sliderTimePerLoggingSet_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)

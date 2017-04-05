@@ -83,8 +83,7 @@ namespace VPNMMapplication
         private void helpDesсription_Click(object sender, RoutedEventArgs e)
         {
             //Написать код, который будет выводить окно с подсказками
-            //Загружаем логи. Если их нет - создаем первую запись лога
-           
+            MessageBox.Show("Описание не написал, т.к. недавно пришло письмо от Марата по поводу того, что VPNMM будут заменять на другой ресурс. Нет смылса дальше развивать это приложение.", "Тут должно быть описание");
         }
 
         private void helpWriteToDeveloper_Click(object sender, RoutedEventArgs e)
@@ -93,6 +92,7 @@ namespace VPNMMapplication
             Process.Start("mailto:dmitriev_gv@ntagil.magnit.ru" + "?subject=" + subject);
         }
 
+        //выбор таблицы для вывода на экран
         private void comboWhatToShow_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
             try
@@ -122,6 +122,7 @@ namespace VPNMMapplication
 
         }
 
+        //Загружает таблицу логов в первый раз
         private void LoadSessionTable()
         {
             try
@@ -159,12 +160,6 @@ namespace VPNMMapplication
             dgLstViewSessions.LoadingRow += LstViewSessions_LoadingRow;
         }
 
-        //Когда в лог добавляются новые данные - выводит их в таблицу
-        //private void SessionsLog_OnSessionAded()
-        //{
-        //    AddNewSessionAtTable(SessionsLog.Sessions.Count - 1);
-        //}
-
         private void LstViewSessions_LoadingRow(object sender, DataGridRowEventArgs e)
         {
             //Ели в предыдущей сесси данный объект не был в сети, то окрашиваем в красный
@@ -185,14 +180,27 @@ namespace VPNMMapplication
         //Создает и открывает окно настроек
         private void menuSettings_Click(object sender, RoutedEventArgs e)
         {
-            settingsWindow = new SettingsWindow(ref settings);
-            settingsWindow.Owner = this;
-            if (settingsWindow.ShowDialog() == true)
+            try
             {
-                logSerializationTimer.Stop();
-                logSerializationTimer.Start();
-                logSerializationTimer.Interval = new TimeSpan(settings.TimePerLogging, 0, 0);
+                if(settings == null)
+                    settings = new Settings() { TimePerLogging = 4 };
+                
+                settingsWindow = new SettingsWindow(settings);
+                settingsWindow.Owner = this;
+                if (settingsWindow.ShowDialog() == true)
+                {
+                    settings = settingsWindow.settings;
+                    logSerializationTimer.Stop();
+                    logSerializationTimer.Start();
+                    
+                    logSerializationTimer.Interval = new TimeSpan(settings.TimePerLogging, 0, 0);
+                }
             }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Ошибка открытия окна настроек");
+            }
+           
         }
         private void Menu_Loaded(object sender, RoutedEventArgs e)
         {
