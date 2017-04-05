@@ -13,23 +13,58 @@ namespace TestApplication
     {
         static void Main(string[] args)
         {
-            Form1 ff = new Form1();
-            ff.ShowDialog();
-            //FuncTwo();
-            //HttpWebResponse result = Post();
-            //CheckAutorisation(result);
-            //string site = "http://www.professorweb.ru";
+            AbstractFactoryFunc();
+        }
 
-            //HttpWebRequest req = (HttpWebRequest)HttpWebRequest.Create(site);
-            //HttpWebResponse resp = (HttpWebResponse)req.GetResponse();
+        private static void AbstractFactoryFunc()
+        {
+            Animal animal = null;
+            for (;;)
+            {
+                Console.WriteLine("Выберите животного: [1] - Тигр, [2] - Заяц, [0] - Выход");
+                switch (Console.ReadLine())
+                {
+                    case "0":
+                        return;
+                    case "1":
+                        animal = new Animal(new TigerFactory());
+                        break;
+                    case "2":
+                        animal = new Animal(new RabbitFactory());
+                        break;
+                    default:
+                        continue;
+                }
+                Console.WriteLine("Наше животное в случае опасности может:");
+                animal.SelfDefending();
+                Console.WriteLine("А если проголодается, то животное будет:");
+                animal.Eating();
+                animal.SayAboutItTeeth();
+            }
+        }
 
-            //using (StreamReader stream = new StreamReader(
-            //     resp.GetResponseStream(), Encoding.UTF8))
-            //{
-            //    System.Windows.Forms.MessageBox.Show(stream.ReadToEnd());
-            //}
-            //login_password
-            //login_username
+        private static void FactoryMethodFunction()
+        {
+            Factory factory = null;
+            for (;;)
+            {
+
+                Console.WriteLine("Выберите фабрику: [1] - Мороженного, [2] - Зефира, [0] - Выход");
+                switch (Console.ReadLine())
+                {
+                    case "0":
+                        return;
+                    case "1":
+                        factory = new IceCreamFactory();
+                        break;
+                    case "2":
+                        factory = new MarshMallowFactory();
+                        break;
+                    default:
+                        return;
+                }
+                var product = factory.MakeProduct();
+            }
         }
 
         
