@@ -19,7 +19,7 @@ namespace VPNMMapplication
         private MM_MK_CollectionMaker maker;
         private HTMLWithAutorization htmlGetter;
         private MM_MK_Collection currentDisplayedCol = new MM_MK_Collection();
-        private bool? isOnlineMode = false;
+        //private bool? isOnlineMode = false;
         private bool firstLoad = true;
         MM_MK_Collection onlineCollection = new MM_MK_Collection();
         MM_MK_Collection offlineCollection = new MM_MK_Collection();

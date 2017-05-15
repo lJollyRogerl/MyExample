@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
@@ -9,11 +10,14 @@ using System.Threading.Tasks;
 
 namespace TestApplication
 {
+
     class Program
     {
         static void Main(string[] args)
         {
-            AbstractFactoryFunc();
+            int i = 0;
+            int j = 5;
+            Assert.AreEqual(i, j);
         }
 
         private static void AbstractFactoryFunc()
