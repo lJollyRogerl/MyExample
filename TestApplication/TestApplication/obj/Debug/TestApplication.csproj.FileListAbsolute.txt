@@ -1,8 +1,0 @@
-C:\Users\Глеб\Documents\Visual Studio 2015\Projects\GitHub\TestApplication\TestApplication\bin\Debug\TestApplication.exe.config
-C:\Users\Глеб\Documents\Visual Studio 2015\Projects\GitHub\TestApplication\TestApplication\bin\Debug\TestApplication.exe
-C:\Users\Глеб\Documents\Visual Studio 2015\Projects\GitHub\TestApplication\TestApplication\bin\Debug\TestApplication.pdb
-C:\Users\Глеб\Documents\Visual Studio 2015\Projects\GitHub\TestApplication\TestApplication\obj\Debug\TestApplication.csprojResolveAssemblyReference.cache
-C:\Users\Глеб\Documents\Visual Studio 2015\Projects\GitHub\TestApplication\TestApplication\obj\Debug\TestApplication.exe
-C:\Users\Глеб\Documents\Visual Studio 2015\Projects\GitHub\TestApplication\TestApplication\obj\Debug\TestApplication.pdb
-C:\Users\Глеб\Documents\Visual Studio 2015\Projects\GitHub\TestApplication\TestApplication\obj\Debug\TestApplication.Form1.resources
-C:\Users\Глеб\Documents\Visual Studio 2015\Projects\GitHub\TestApplication\TestApplication\obj\Debug\TestApplication.csproj.GenerateResource.Cache
